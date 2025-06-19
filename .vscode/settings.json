@@ -1,17 +1,26 @@
 {
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
-  "[javascript]": {
-    "editor.formatOnSave": true
-  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // Para asegurar que funcione por lenguaje:
   "[typescript]": {
     "editor.formatOnSave": true
   },
   "[typescriptreact]": {
     "editor.formatOnSave": true
   },
+  "[javascript]": {
+    "editor.formatOnSave": true
+  },
   "[json]": {
     "editor.formatOnSave": true
   },
-  "eslint.validate": ["javascript", "typescript", "typescriptreact"]
+
+  // Para asegurar compatibilidad con eslint también (opcional)
+  "eslint.validate": ["javascript", "typescript", "typescriptreact"],
+  "prettier.enableDebugLogs": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "always",
+    "source.fixAll.eslint": "always"
+  }
 }
