@@ -1,17 +1,9 @@
-import '../src/styles/tailwind.css';
+import '../src/styles/tailwind.css'; // ← primera línea
 
-import type { Preview } from '@storybook/react-vite';
-
-const preview: Preview = {
+import type { Preview } from '@storybook/react';
+export default {
   parameters: {
     actions: { argTypesRegex: '^on[A-Z].*' },
-    controls: {
-      matchers: {
-        color: /(background|color)$/i,
-        date: /Date$/i,
-      },
-    },
+    controls: { matchers: { color: /(background|color)$/i, date: /Date$/ } },
   },
-};
-
-export default preview;
+} satisfies Preview;
