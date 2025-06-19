@@ -1,5 +1,5 @@
 import type { StorybookConfig } from '@storybook/react-vite';
-import tailwind from '@tailwindcss/postcss';
+import tailwindcss from '@tailwindcss/postcss';
 import autoprefixer from 'autoprefixer';
 
 const config: StorybookConfig = {
@@ -7,12 +7,12 @@ const config: StorybookConfig = {
   addons: ['@storybook/addon-docs'],
   framework: { name: '@storybook/react-vite', options: {} },
 
-  // Inyectamos Tailwind en el Vite que usa Storybook
-  viteFinal: async (cfg) => {
-    cfg.css = {
-      postcss: { plugins: [tailwind(), autoprefixer()] },
+  // ► Obligamos a Vite (el bundler de Storybook) a usar PostCSS + Tailwind
+  viteFinal: async (viteCfg) => {
+    viteCfg.css = {
+      postcss: { plugins: [tailwindcss(), autoprefixer()] },
     };
-    return cfg;
+    return viteCfg;
   },
 };
 
