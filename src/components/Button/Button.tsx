@@ -8,7 +8,7 @@ const variantClasses: Record<ButtonVariant, string> = {
   danger: 'bg-red-600 hover:bg-red-700 text-white',
 };
 
-export const Button: React.FC<ButtonProps> = ({ children, variant = 'primary', className, ...props }) => {
+const Button: React.FC<ButtonProps> = ({ children, variant = 'primary', className, ...props }) => {
   return (
     <button
       className={clsx(
@@ -22,3 +22,5 @@ export const Button: React.FC<ButtonProps> = ({ children, variant = 'primary', c
     </button>
   );
 };
+
+export default Button;
