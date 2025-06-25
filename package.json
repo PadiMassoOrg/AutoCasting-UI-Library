@@ -1,6 +1,6 @@
 {
   "name": "autocasting-ui-library",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "UI Library para el ecosistema de Auto Casting",
   "type": "module",
   "main": "dist/index.js",
@@ -11,6 +11,9 @@
     },
     "./dist/styles.css": "./dist/styles.css"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "rollup -c && npm run build:css",
     "build:css": "tailwindcss -i ./src/styles/tailwind.css -o ./dist/styles.css --minify",
