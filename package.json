@@ -34,7 +34,8 @@
   "homepage": "https://github.com/PadiMassoOrg/AutoCasting-UI-Library#readme",
   "peerDependencies": {
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "clsx": "^2.1.1"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.6",
@@ -48,7 +49,6 @@
     "@typescript-eslint/eslint-plugin": "^8.34.1",
     "@typescript-eslint/parser": "^8.34.1",
     "autoprefixer": "^10.4.21",
-    "clsx": "^2.1.1",
     "eslint": "^9.29.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-jsx-a11y": "^6.10.2",
