@@ -4,11 +4,11 @@ import type { ButtonProps, ButtonVariant } from './Button.types';
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary: 'bg-blue-600 hover:bg-blue-700 text-white',
-  secondary: 'bg-gray-600 hover:bg-gray-700 text-white',
+  secondary: 'bg-yellow-500 hover:bg-yellow-600 text-white',
   danger: 'bg-red-600 hover:bg-red-700 text-white',
 };
 
-export const Button: React.FC<ButtonProps> = ({ children, variant = 'primary', className, ...props }) => {
+const Button: React.FC<ButtonProps> = ({ children, variant = 'primary', className, ...props }) => {
   return (
     <button
       className={clsx(
@@ -22,3 +22,5 @@ export const Button: React.FC<ButtonProps> = ({ children, variant = 'primary', c
     </button>
   );
 };
+
+export default Button;
