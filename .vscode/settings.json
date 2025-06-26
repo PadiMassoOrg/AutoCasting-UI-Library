@@ -16,6 +16,9 @@
     "editor.formatOnSave": true
   },
 
+  //css stuff
+  "css.validate": false,
+
   // Para asegurar compatibilidad con eslint también (opcional)
   "eslint.validate": ["javascript", "typescript", "typescriptreact"],
   "prettier.enableDebugLogs": true,
