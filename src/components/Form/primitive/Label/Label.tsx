@@ -6,12 +6,12 @@ type LabelProps = React.LabelHTMLAttributes<HTMLLabelElement> & {
 
 const Label = ({ className, variant = 'default', ...props }: LabelProps) => {
   const variantClasses = {
-    default: 'text-gray-700',
-    error: 'text-red-600',
-    warning: 'text-yellow-600',
+    default: 'input-label-default',
+    error: 'input-label-error',
+    warning: 'input-label-warning',
   };
 
-  return <label className={clsx('block text-sm font-medium mb-1', variantClasses[variant], className)} {...props} />;
+  return <label className={clsx('input-label', variantClasses[variant], className)} {...props} />;
 };
 
 export default Label;

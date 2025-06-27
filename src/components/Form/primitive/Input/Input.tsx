@@ -1,7 +1,11 @@
 import { forwardRef } from 'react';
 import { clsx } from 'clsx';
 
-type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
+type AllowedTypes = 'text' | 'password' | 'email';
+
+interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
+  type?: AllowedTypes;
+}
 
 const Input = forwardRef<HTMLInputElement, InputProps>(({ className, type = 'text', ...props }, ref) => {
   return <input type={type} ref={ref} className={clsx('input-primary', className)} {...props} />;

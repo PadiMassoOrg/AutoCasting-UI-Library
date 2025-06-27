@@ -20,6 +20,7 @@
   /* Variables */
   :root {
     --color-input-primary: #f4f5ff;
+    --color-error: #ef0c0c;
     --font-inter: 'Inter', sans-serif;
     --font-serif: 'Source Serif 4', serif;
   }
@@ -32,9 +33,18 @@
 
 /* Styles */
 @layer utilities {
+  /* === Forms === */
   .input-primary {
     @apply w-full h-14 px-6 py-3 rounded-xl text-base;
     background-color: var(--color-input-primary);
     /* font-family: var(--font-inter); -- Ejemplo de como usar Font-Family */
+  }
+  .input-label {
+    @apply text-xs;
+  }
+  .input-label-default {
+  }
+  .input-label-error {
+    color: var(--color-error);
   }
 }

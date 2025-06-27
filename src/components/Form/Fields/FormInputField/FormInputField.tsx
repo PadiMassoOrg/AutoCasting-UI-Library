@@ -4,9 +4,10 @@ type FormInputFieldProps = React.InputHTMLAttributes<HTMLInputElement> & {
   id: string;
   label?: string;
   error?: string;
+  type?: 'text' | 'password' | 'email';
 };
 
-const FormInputField = ({ id, label, error, className, ...props }: FormInputFieldProps) => {
+const FormInputField = ({ id, label, error, type, className, ...props }: FormInputFieldProps) => {
   return (
     <div>
       {label && <Label htmlFor={id}>{label}</Label>}
@@ -15,6 +16,7 @@ const FormInputField = ({ id, label, error, className, ...props }: FormInputFiel
         aria-invalid={!!error}
         aria-describedby={error ? `${id}-error` : undefined}
         className={className}
+        type={type}
         {...props}
       />
       {error && (

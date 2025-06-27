@@ -27,10 +27,9 @@ export const WithError: Story = {
   },
 };
 
-export const PasswordField: Story = {
+export const NoLabel: Story = {
   args: {
     id: 'password',
-    label: 'Password',
     type: 'password',
     placeholder: 'Enter your password',
   },
