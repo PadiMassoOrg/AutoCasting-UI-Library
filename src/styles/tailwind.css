@@ -17,10 +17,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap');
 
 @layer base {
-  /* Variables */
   :root {
-    --color-input-primary: #f4f5ff;
-    --color-error: #ef0c0c;
+    /* Primary Colors */
+    --color-primary-white: #ffffff;
+    --color-primary-black: #070707;
+    --color-primary-greenyellow: #aeff00;
+    /* Secondary Colors */
+    --color-secondary-offwhite: #f4f5ff;
+    --color-secondary-offblack: #121314;
+    --color-secondary-outline: #e7e7e7;
+    ---color-secondary-grey: #b1b3c5;
+    /* Alert Colors */
+    --color-alert-error: #ef0c0c;
+    /* Fonts */
     --font-inter: 'Inter', sans-serif;
     --font-serif: 'Source Serif 4', serif;
   }
@@ -31,12 +40,39 @@
   }
 }
 
-/* Styles */
 @layer utilities {
-  /* === Forms === */
+  /* ==================================== */
+  /* Buttons  */
+  /* ==================================== */
+  .button-default {
+    @apply w-full h-14 px-6 py-3 rounded-2xl font-extrabold text-base text-center;
+    font-family: var(--font-inter);
+  }
+  .button-primary {
+    background-color: var(--color-primary-black);
+    color: var(--color-primary-white);
+  }
+  .button-secondary {
+    background-color: var(--color-primary-white);
+    color: var(--color-primary-black);
+  }
+  .button-danger {
+    background-color: var(--color-secondary-offblack);
+    color: var(--color-primary-white);
+  }
+  .button-disabled {
+    background-color: var(---color-secondary-grey);
+    color: var(--color-primary-white);
+  }
+  .google-button {
+    @apply flex items-center justify-center gap-4 font-light text-base;
+  }
+  /* ==================================== */
+  /* Forms  */
+  /* ==================================== */
   .input-primary {
     @apply w-full h-14 px-6 py-3 rounded-xl text-base;
-    background-color: var(--color-input-primary);
+    background-color: var(--color-secondary-offwhite);
     /* font-family: var(--font-inter); -- Ejemplo de como usar Font-Family */
   }
   .input-label {
@@ -45,6 +81,6 @@
   .input-label-default {
   }
   .input-label-error {
-    color: var(--color-error);
+    color: var(--color-alert-error);
   }
 }
