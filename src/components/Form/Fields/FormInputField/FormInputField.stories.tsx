@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import FormInputField from './FormInputField';
 
 const meta: Meta<typeof FormInputField> = {
-  title: 'Form/Field/FormInputField',
+  title: 'Form/FormInputField',
   component: FormInputField,
   tags: ['autodocs'],
 };
