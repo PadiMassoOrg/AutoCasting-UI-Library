@@ -9,7 +9,7 @@ type FormInputFieldProps = React.InputHTMLAttributes<HTMLInputElement> & {
 
 const FormInputField = ({ id, label, error, type, className, ...props }: FormInputFieldProps) => {
   return (
-    <div>
+    <div className="w-full flex flex-col">
       {label && <Label htmlFor={id}>{label}</Label>}
       <Input
         id={id}

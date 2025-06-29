@@ -1,2 +1,1 @@
-import GoogleButton from './GoogleButton';
-export default GoogleButton;
+export { default as GoogleButton } from './GoogleButton';

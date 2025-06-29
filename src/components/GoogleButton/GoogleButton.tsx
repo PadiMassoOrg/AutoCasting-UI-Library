@@ -4,8 +4,21 @@ import { clsx } from 'clsx';
 type GoogleButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
 const GoogleButton = ({ className, children = 'Iniciá sesión con Google', ...props }: GoogleButtonProps) => {
+  const hasBg = className?.includes('bg-');
+  const hasText = className?.includes('text-');
+
   return (
-    <button type="button" className={clsx('button-default button-secondary google-button', className)} {...props}>
+    <button
+      type="button"
+      className={clsx(
+        'w-full h-14 px-6 py-3 rounded-2xl text-center',
+        'flex items-center justify-center gap-4 font-light text-base drop-shadow-sm',
+        !hasBg && 'bg-[var(--color-primary-white)]',
+        !hasText && 'text-[var(--color-primary-black)]',
+        className
+      )}
+      {...props}
+    >
       <GoogleIcon />
       <span>{children}</span>
     </button>
