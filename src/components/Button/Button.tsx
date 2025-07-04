@@ -6,7 +6,8 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 
 const Button = ({ className, variant = 'primary', ...props }: ButtonProps) => {
   const variantClasses = {
-    primary: 'bg-[var(--color-primary-black)] text-[var(--color-primary-white)]',
+    primary:
+      'bg-[var(--color-primary-black)] text-[var(--color-primary-white)] hover:bg-[var(--color-secondary-offblack)]',
     secondary: 'bg-[var(--color-primary-white)] text-[var(--color-primary-black)]',
     danger: 'bg-[var(--color-secondary-offblack)] text-[var(--color-primary-white)]',
     disabled: 'bg-[var(---color-secondary-grey)] text-[var(--color-primary-white)]',

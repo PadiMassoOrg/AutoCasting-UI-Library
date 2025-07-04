@@ -20,7 +20,7 @@ const FormInputField = ({ id, label, error, type, className, ...props }: FormInp
         {...props}
       />
       {error && (
-        <Label id={`${id}-error`} variant="error">
+        <Label id={`${id}-error`} variant="error" className="mt-0.5 pl-0.5">
           {error}
         </Label>
       )}
