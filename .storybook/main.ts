@@ -3,8 +3,10 @@ import tailwind from '@tailwindcss/postcss';
 import autoprefixer from 'autoprefixer';
 
 const config: StorybookConfig = {
-  stories: ['../src/components/**/*.stories.@(ts|tsx)'],
-  addons: ['@storybook/addon-docs'],
+  stories: ['../src/components/**/*.stories.@(ts|tsx)', '../src/stories/**/*.stories.tsx'],
+  addons: [
+    //'@storybook/addon-docs'
+  ],
   framework: { name: '@storybook/react-vite', options: {} },
 
   viteFinal: async (viteCfg) => {

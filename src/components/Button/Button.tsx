@@ -1,25 +1,30 @@
-import React from 'react';
 import { clsx } from 'clsx';
-import type { ButtonProps, ButtonVariant } from './Button.types';
 
-const variantClasses: Record<ButtonVariant, string> = {
-  primary: 'bg-blue-600 hover:bg-blue-700 text-white',
-  secondary: 'bg-yellow-500 hover:bg-yellow-600 text-white',
-  danger: 'bg-red-600 hover:bg-red-700 text-white',
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  variant?: 'primary' | 'secondary' | 'danger' | 'disabled';
 };
 
-const Button: React.FC<ButtonProps> = ({ children, variant = 'primary', className, ...props }) => {
+const Button = ({ className, variant = 'primary', ...props }: ButtonProps) => {
+  const variantClasses = {
+    primary:
+      'bg-[var(--color-primary-black)] text-[var(--color-primary-white)] hover:bg-[var(--color-secondary-offblack)]',
+    secondary: 'bg-[var(--color-primary-white)] text-[var(--color-primary-black)]',
+    danger: 'bg-[var(--color-secondary-offblack)] text-[var(--color-primary-white)]',
+    disabled: 'bg-[var(---color-secondary-grey)] text-[var(--color-primary-white)]',
+  };
+
+  const hasBg = className?.includes('bg-');
+  const hasText = className?.includes('text-');
+
   return (
     <button
       className={clsx(
-        'px-4 py-2 rounded-md font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2',
-        variantClasses[variant],
+        'w-full h-14 px-6 py-3 rounded-2xl font-extrabold text-base text-center',
+        !hasBg && !hasText && variantClasses[variant],
         className
       )}
       {...props}
-    >
-      {children}
-    </button>
+    />
   );
 };
 

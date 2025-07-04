@@ -6,7 +6,7 @@ const meta: Meta<typeof Button> = {
   component: Button,
   tags: ['autodocs'],
   args: {
-    children: 'Click me',
+    children: 'Click Me',
   },
 };
 
@@ -14,26 +14,17 @@ export default meta;
 type Story = StoryObj<typeof Button>;
 
 export const Primary: Story = {
-  args: {
-    variant: 'primary',
-  },
+  args: { variant: 'primary' },
 };
 
 export const Secondary: Story = {
-  args: {
-    variant: 'secondary',
-  },
+  args: { variant: 'secondary' },
 };
 
 export const Danger: Story = {
-  args: {
-    variant: 'danger',
-  },
+  args: { variant: 'danger' },
 };
 
-export const CustomTailwind: Story = {
-  args: {
-    children: 'Custom Button',
-    className: 'bg-purple-600 hover:bg-purple-700 text-white',
-  },
+export const Disabled: Story = {
+  args: { variant: 'disabled' },
 };
