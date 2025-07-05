@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Modal from './Modal';
 import { useState } from 'react';
+import { FormInputField } from '../Form';
+import { Button } from '../Button';
 
 const meta: Meta<typeof Modal> = {
   title: 'Components/Modal',
@@ -33,7 +35,15 @@ const Wrapper = ({ title, children }: WrapperProps) => {
 export const WithTitle: Story = {
   render: () => (
     <Wrapper title="Título de prueba">
-      <p className="text-sm text-gray-600">Este es el contenido del modal con un título. Puedes probar estilos aquí.</p>
+      <div className="flex flex-col gap-4">
+        <p className="text-sm text-gray-600">
+          Este es el contenido del modal con un título. Puedes probar estilos aquí.
+        </p>
+        <FormInputField id={'asd'} placeholder="Input..."></FormInputField>
+      </div>
+      <Button className="mt-4" variant="primary">
+        Button
+      </Button>
     </Wrapper>
   ),
 };
