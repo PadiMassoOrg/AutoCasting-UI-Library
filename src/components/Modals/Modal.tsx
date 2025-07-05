@@ -25,7 +25,7 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
         >
           ✕
         </button>
-        {title && <h2 className="text-2xl font-bold mb-4 text-left">{title}</h2>}
+        {title && <h2 className="text-lg md:text-2xl font-bold mb-4 text-left">{title}</h2>}
         {children}
       </div>
     </div>
