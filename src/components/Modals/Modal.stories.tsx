@@ -56,10 +56,15 @@ export const SizeXL_3: Story = {
           Este es el contenido del modal con un título. Puedes probar estilos aquí.
         </p>
         <FormInputField id={'asd'} placeholder="Input..."></FormInputField>
+        <div className="flex gap-2 items-center">
+          <Button className="mt-4" variant="outline">
+            Close
+          </Button>
+          <Button className="mt-4" variant="primary">
+            Button Palabra
+          </Button>
+        </div>
       </div>
-      <Button className="mt-4" variant="primary">
-        Button
-      </Button>
     </Wrapper>
   ),
 };

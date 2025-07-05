@@ -20,7 +20,7 @@ const Button = ({ className, variant = 'primary', ...props }: ButtonProps) => {
   return (
     <button
       className={clsx(
-        'w-full h-14 px-6 py-3 rounded-2xl font-extrabold text-base text-center cursor-pointer transition duration-300 ease-in-out',
+        'w-full h-14 px-6 py-3 rounded-2xl font-extrabold text-xs sm:text-base text-center cursor-pointer transition duration-300 ease-in-out',
         !hasBg && !hasText && variantClasses[variant],
         className
       )}
