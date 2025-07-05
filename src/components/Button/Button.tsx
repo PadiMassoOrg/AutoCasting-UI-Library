@@ -1,14 +1,15 @@
 import { clsx } from 'clsx';
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: 'primary' | 'secondary' | 'danger' | 'disabled';
+  variant?: 'primary' | 'outline' | 'danger' | 'disabled';
 };
 
 const Button = ({ className, variant = 'primary', ...props }: ButtonProps) => {
   const variantClasses = {
     primary:
       'bg-[var(--color-primary-black)] text-[var(--color-primary-white)] hover:bg-[var(--color-secondary-offblack)]',
-    secondary: 'bg-[var(--color-primary-white)] text-[var(--color-primary-black)]',
+    outline:
+      'bg-[var(--color-primary-white)] text-[var(--color-primary-black)] border border-[var(--color-secondary-outline)]',
     danger: 'bg-[var(--color-secondary-offblack)] text-[var(--color-primary-white)]',
     disabled: 'bg-[var(---color-secondary-grey)] text-[var(--color-primary-white)]',
   };

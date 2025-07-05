@@ -31,14 +31,16 @@ export default function Modal({ isOpen, onClose, title, children, size }: ModalP
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60" onClick={handleBackdropClick}>
-      <div className={`relative bg-white rounded-2xl shadow-2xl p-6 pointer-events-auto ${sizeClasses[size || 'md']}`}>
+      <div
+        className={`relative bg-white rounded-2xl shadow-2xl py-8 px-10 pointer-events-auto ${sizeClasses[size || 'md']}`}
+      >
         <button
           onClick={onClose}
-          className="absolute top-2 right-4 text-gray-500 hover:text-black cursor-pointer transition duration-200 ease-in-out"
+          className="absolute text-base top-3 right-6 text-gray-500 hover:text-black cursor-pointer transition duration-200 ease-in-out"
         >
           ✕
         </button>
-        {title && <h2 className="text-lg md:text-2xl font-bold mb-4 text-left">{title}</h2>}
+        {title && <h2 className="text-lg md:text-2xl font-bold mb-8 text-left">{title}</h2>}
         {children}
       </div>
     </div>
