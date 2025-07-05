@@ -1,0 +1,49 @@
+import type { Meta, StoryObj } from '@storybook/react';
+import Modal from './Modal';
+import { useState } from 'react';
+
+const meta: Meta<typeof Modal> = {
+  title: 'Components/Modal',
+  component: Modal,
+  tags: ['autodocs'],
+};
+
+export default meta;
+type Story = StoryObj<typeof Modal>;
+
+type WrapperProps = Omit<React.ComponentProps<typeof Modal>, 'isOpen' | 'onClose'> & {
+  children: React.ReactNode;
+};
+
+const Wrapper = ({ title, children }: WrapperProps) => {
+  const [open, setOpen] = useState(true);
+
+  return (
+    <>
+      <button onClick={() => setOpen(true)} className="px-4 py-2 bg-blue-600 text-white rounded">
+        Abrir Modal
+      </button>
+      <Modal isOpen={open} onClose={() => setOpen(false)} title={title}>
+        {children}
+      </Modal>
+    </>
+  );
+};
+
+export const WithTitle: Story = {
+  render: () => (
+    <Wrapper title="Título de prueba">
+      <p className="text-sm text-gray-600">Este es el contenido del modal con un título. Puedes probar estilos aquí.</p>
+    </Wrapper>
+  ),
+};
+
+export const WithoutTitle: Story = {
+  render: () => (
+    <Wrapper>
+      <p className="text-sm text-gray-600">
+        Este es el contenido del modal sin título. Ajusta estilos y prueba el layout.
+      </p>
+    </Wrapper>
+  ),
+};
