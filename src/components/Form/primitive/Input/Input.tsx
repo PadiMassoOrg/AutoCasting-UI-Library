@@ -13,7 +13,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({ className, type = 'tex
       type={type}
       ref={ref}
       className={clsx(
-        'input-w-full h-14 px-6 py-3 rounded-xl text-base',
+        'input-w-full h-14 px-6 py-3 rounded-xl text-base placeholder:text-gray-400 placeholder:font-light',
         'bg-[var(--color-secondary-offwhite)]',
         className
       )}
