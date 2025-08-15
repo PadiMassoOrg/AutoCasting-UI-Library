@@ -2,7 +2,6 @@ import { forwardRef } from 'react';
 import { clsx } from 'clsx';
 
 type AllowedTypes = 'text' | 'password' | 'email';
-
 interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
   type?: AllowedTypes;
 }
@@ -13,8 +12,11 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({ className, type = 'tex
       type={type}
       ref={ref}
       className={clsx(
-        'input-w-full h-14 px-6 py-3 rounded-xl text-base placeholder:text-gray-400 placeholder:font-light',
-        'bg-[var(--color-secondary-offwhite)]',
+        'w-full h-14 px-6 py-3 rounded-xl text-sm',
+        'placeholder:text-[var(--color-secondary-grey)] placeholder:font-light',
+        'border border-[var(--color-secondary-outline)]',
+        // disabled
+        'disabled:bg-[var(--color-secondary-disabled-grey)] disabled:cursor-not-allowed',
         className
       )}
       {...props}

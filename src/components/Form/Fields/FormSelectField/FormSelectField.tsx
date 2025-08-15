@@ -1,15 +1,18 @@
-// FormInputField.tsx
-import { Input, Label } from '../../primitive';
+// FormSelectField.tsx
+import React from 'react';
+import Select, { SelectOption } from '../../primitive/Select/Select';
+import { Label } from '../../primitive';
 
-type FormInputFieldProps = React.InputHTMLAttributes<HTMLInputElement> & {
+type Props = React.SelectHTMLAttributes<HTMLSelectElement> & {
   id: string;
   label?: string;
   error?: string;
   labelClassName?: string;
-  type?: 'text' | 'password' | 'email';
+  placeholder?: string;
+  options?: SelectOption[];
 };
 
-const FormInputField = ({ id, label, error, labelClassName, type, className, ...props }: FormInputFieldProps) => {
+const FormSelectField = ({ id, label, labelClassName, error, placeholder, options, className, ...props }: Props) => {
   return (
     <div className="w-full flex flex-col gap-2">
       {label && (
@@ -17,12 +20,13 @@ const FormInputField = ({ id, label, error, labelClassName, type, className, ...
           {label}
         </Label>
       )}
-      <Input
+      <Select
         id={id}
         aria-invalid={!!error}
         aria-describedby={error ? `${id}-error` : undefined}
         className={className}
-        type={type}
+        placeholder={placeholder}
+        options={options}
         {...props}
       />
       {error && (
@@ -33,4 +37,4 @@ const FormInputField = ({ id, label, error, labelClassName, type, className, ...
     </div>
   );
 };
-export default FormInputField;
+export default FormSelectField;
