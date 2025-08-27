@@ -6,12 +6,11 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 
 const Button = ({ className, variant = 'primary', ...props }: ButtonProps) => {
   const variantClasses = {
-    primary:
-      'bg-[var(--color-primary-black)] text-[var(--color-primary-white)] hover:bg-[var(--color-secondary-offblack)]',
+    primary: 'bg-[var(--color-primary-black)] text-[var(--color-primary-white)]',
     outline:
       'bg-[var(--color-primary-white)] text-[var(--color-primary-black)] border border-[var(--color-secondary-outline)]',
     danger: 'bg-[var(--color-secondary-offblack)] text-[var(--color-primary-white)]',
-    disabled: 'bg-[var(---color-secondary-grey)] text-[var(--color-primary-white)]',
+    disabled: 'bg-[var(--color-secondary-disabled-grey)] text-[var(--color-primary-white)] cursor-default',
   };
 
   const hasBg = className?.includes('bg-');
@@ -20,7 +19,7 @@ const Button = ({ className, variant = 'primary', ...props }: ButtonProps) => {
   return (
     <button
       className={clsx(
-        'w-full h-14 px-6 py-3 rounded-2xl font-extrabold text-xs sm:text-base text-center cursor-pointer transition duration-300 ease-in-out',
+        'w-full h-14 px-6 py-3 rounded-full font-semibold text-xs sm:text-base text-center cursor-pointer transition duration-300 ease-in-out',
         !hasBg && !hasText && variantClasses[variant],
         className
       )}
