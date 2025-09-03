@@ -15,12 +15,13 @@ const Button = ({ className, variant = 'primary', ...props }: ButtonProps) => {
 
   const hasBg = className?.includes('bg-');
   const hasText = className?.includes('text-');
+  const hasFont = className?.includes('font-');
 
   return (
     <button
       className={clsx(
-        'w-full h-14 px-6 py-3 rounded-full font-semibold text-xs sm:text-base text-center cursor-pointer transition duration-300 ease-in-out',
-        !hasBg && !hasText && variantClasses[variant],
+        'w-full h-14 px-6 py-3 rounded-full font-semibold text-base text-center cursor-pointer transition duration-300 ease-in-out',
+        !hasBg && !hasText && !hasFont && variantClasses[variant],
         className
       )}
       {...props}
