@@ -1,15 +1,15 @@
 import { clsx } from 'clsx';
+import { BUTTON_STRUCTURE } from '../../styles/style_constants';
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: 'primary' | 'outline' | 'danger' | 'disabled';
+  variant?: 'primary' | 'outline' | 'disabled';
 };
 
 const Button = ({ className, variant = 'primary', ...props }: ButtonProps) => {
   const variantClasses = {
-    primary: 'bg-[var(--color-primary-black)] text-[var(--color-primary-white)]',
+    primary: 'bg-[var(--color-primary-black)] text-[var(--color-primary-white)] cursor-pointer',
     outline:
-      'bg-[var(--color-primary-white)] text-[var(--color-primary-black)] border border-[var(--color-secondary-outline)]',
-    danger: 'bg-[var(--color-secondary-offblack)] text-[var(--color-primary-white)]',
+      'bg-[var(--color-primary-white)] text-[var(--color-primary-black)] border border-[var(--color-secondary-outline)] cursor-pointer',
     disabled: 'bg-[var(--color-secondary-disabled-grey)] text-[var(--color-primary-white)] cursor-default',
   };
 
@@ -20,7 +20,8 @@ const Button = ({ className, variant = 'primary', ...props }: ButtonProps) => {
   return (
     <button
       className={clsx(
-        'w-full h-14 px-6 py-3 rounded-full font-semibold text-base text-center cursor-pointer transition duration-300 ease-in-out',
+        BUTTON_STRUCTURE,
+        'font-semibold text-base transition duration-300 ease-in-out',
         !hasBg && !hasText && !hasFont && variantClasses[variant],
         className
       )}
