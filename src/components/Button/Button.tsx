@@ -26,7 +26,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     const computedClass = clsx(
       BUTTON_STRUCTURE,
-      baseLayout, 
+      baseLayout,
       'font-semibold text-base transition duration-300 ease-in-out',
       !hasBg && !hasText && !hasFont && variantClasses[variant],
       className

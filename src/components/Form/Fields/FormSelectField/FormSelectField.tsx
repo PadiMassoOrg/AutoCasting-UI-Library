@@ -1,4 +1,3 @@
-// FormSelectField.tsx
 import React from 'react';
 import Select, { SelectOption } from '../../primitive/Select/Select';
 import { Label } from '../../primitive';
@@ -14,9 +13,9 @@ type Props = React.SelectHTMLAttributes<HTMLSelectElement> & {
 
 const FormSelectField = ({ id, label, labelClassName, error, placeholder, options, className, ...props }: Props) => {
   return (
-    <div className="w-full flex flex-col gap-2">
+    <div className="w-full flex flex-col">
       {label && (
-        <Label htmlFor={id} className={labelClassName}>
+        <Label htmlFor={id} className={labelClassName + ' mb-1'}>
           {label}
         </Label>
       )}
@@ -29,11 +28,13 @@ const FormSelectField = ({ id, label, labelClassName, error, placeholder, option
         options={options}
         {...props}
       />
-      {error && (
-        <Label id={`${id}-error`} variant="error" className="mt-0.5 pl-0.5">
-          {error}
-        </Label>
-      )}
+      <div className="min-h-[25px]">
+        {error && (
+          <Label id={`${id}-error`} variant="error" className="mt-0.4 pl-0.7">
+            {error}
+          </Label>
+        )}
+      </div>
     </div>
   );
 };

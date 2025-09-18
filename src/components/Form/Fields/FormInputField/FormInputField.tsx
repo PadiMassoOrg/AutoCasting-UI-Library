@@ -11,9 +11,9 @@ type FormInputFieldProps = React.InputHTMLAttributes<HTMLInputElement> & {
 
 const FormInputField = ({ id, label, error, labelClassName, type, className, ...props }: FormInputFieldProps) => {
   return (
-    <div className="w-full flex flex-col gap-2">
+    <div className="w-full flex flex-col">
       {label && (
-        <Label htmlFor={id} className={labelClassName}>
+        <Label htmlFor={id} className={labelClassName + ' mb-1'}>
           {label}
         </Label>
       )}
@@ -25,11 +25,13 @@ const FormInputField = ({ id, label, error, labelClassName, type, className, ...
         type={type}
         {...props}
       />
-      {error && (
-        <Label id={`${id}-error`} variant="error" className="mt-0.5 pl-0.5">
-          {error}
-        </Label>
-      )}
+      <div className="min-h-[25px]">
+        {error && (
+          <Label id={`${id}-error`} variant="error" className="mt-0.4 pl-0.7">
+            {error}
+          </Label>
+        )}
+      </div>
     </div>
   );
 };
