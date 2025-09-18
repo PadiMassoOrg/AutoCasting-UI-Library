@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { cloneElement, isValidElement, forwardRef } from 'react';
 import { clsx } from 'clsx';
 import { BUTTON_STRUCTURE } from '../../styles/style_constants';
@@ -17,12 +18,15 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       disabled: 'bg-[var(--color-secondary-disabled-grey)] text-[var(--color-primary-white)] cursor-default',
     };
 
+    const baseLayout = 'inline-flex items-center justify-center leading-none align-middle';
+
     const hasBg = className?.includes('bg-');
     const hasText = className?.includes('text-');
     const hasFont = className?.includes('font-');
 
     const computedClass = clsx(
       BUTTON_STRUCTURE,
+      baseLayout, 
       'font-semibold text-base transition duration-300 ease-in-out',
       !hasBg && !hasText && !hasFont && variantClasses[variant],
       className
@@ -30,10 +34,14 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     if (asChild && isValidElement(children)) {
       type ChildProps = typeof children.props & { className?: string };
+
+      const { type: _type, disabled: _disabled, ...safeRest } = rest;
+
       const childProps: Partial<ChildProps> = {
         className: clsx((children.props as { className?: string }).className, computedClass),
-        ...(rest as unknown as Partial<ChildProps>),
+        ...(safeRest as unknown as Partial<ChildProps>),
       };
+
       return cloneElement(children as React.ReactElement<ChildProps>, childProps);
     }
 
