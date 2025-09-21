@@ -36,7 +36,7 @@ export const Default: Story = {
   render: () => (
     <Wrapper title="Título de prueba">
       <div className="flex flex-col gap-4">
-        <p className="text-sm text-gray-600">
+        <p className="text-base text-gray-600">
           Este es el contenido del modal con un título. Puedes probar estilos aquí.
         </p>
         <FormInputField id={'asd'} placeholder="Input..."></FormInputField>
@@ -52,7 +52,7 @@ export const SizeXL_3: Story = {
   render: () => (
     <Wrapper title="Título de prueba" size="xl_3">
       <div className="flex flex-col gap-4">
-        <p className="text-sm text-gray-600">
+        <p className="text-base text-gray-600">
           Este es el contenido del modal con un título. Puedes probar estilos aquí.
         </p>
         <FormInputField id={'asd'} placeholder="Input..."></FormInputField>

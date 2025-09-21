@@ -12,8 +12,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({ className, type = 'tex
       type={type}
       ref={ref}
       className={clsx(
-        'w-full h-14 px-6 py-3 rounded-xl text-sm',
-        'placeholder:text-[var(--color-secondary-grey)] placeholder:font-light',
+        'w-full h-14 px-5 py-3 rounded-xl text-base',
+        'placeholder:text-[var(--color-secondary-grey)] placeholder:font-light placeholder:text-sm',
         'border border-[var(--color-secondary-outline)]',
         // disabled
         'disabled:bg-[var(--color-secondary-disabled-grey)] disabled:cursor-not-allowed',
