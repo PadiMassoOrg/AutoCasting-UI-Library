@@ -14,11 +14,11 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
         <select
           ref={ref}
           className={clsx(
-            'cursor-pointer w-full h-14 px-5 py-3 rounded-xl text-base',
+            'cursor-pointer w-full h-14 px-5 pr-10 py-3 rounded-xl text-base',
             'placeholder:text-[var(--color-secondary-grey)] placeholder:font-light placeholder:text-sm',
             'border border-[var(--color-secondary-outline)]',
-            'focus:outline-none focus:ring-2 focus:ring-black/10',
-            'appearance-none',
+            'focus:outline-none focus:ring-0 focus:border-[var(--color-primary-black)]',
+            'appearance-none transition-colors',
             className
           )}
           {...props}

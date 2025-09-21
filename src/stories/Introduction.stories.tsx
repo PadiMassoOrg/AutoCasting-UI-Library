@@ -11,7 +11,7 @@ export default meta;
 
 const IntroductionComponent = () => (
   <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 flex items-center justify-center p-6">
-    <div className="bg-white rounded-xl shadow-md p-10 max-w-3xl w-full space-y-6 border border-gray-200">
+    <div className="bg-[var(--color-primary-white)] rounded-xl shadow-md p-10 max-w-3xl w-full space-y-6 border border-gray-200">
       <header className="text-center space-y-2">
         <h1 className="text-4xl font-bold text-gray-800">AutoCasting UI Library</h1>
         <p className="text-gray-600 text-lg">Componentes reutilizables para un ecosistema visual sólido y coherente.</p>

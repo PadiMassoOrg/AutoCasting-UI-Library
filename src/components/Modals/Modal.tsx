@@ -55,7 +55,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
       {/* Wrapper con borde redondeado y CLIPPING */}
       <div
         className={`
-          relative bg-white rounded-2xl shadow-2xl
+          relative bg-[var(--color-primary-white)] rounded-2xl shadow-2xl
           ${sizeClasses[size]}
           overflow-hidden
         `}
@@ -73,7 +73,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
           {(title || true) && (
             <div
               className={`
-                sticky top-0 z-10 bg-white/95 backdrop-blur
+                sticky top-0 z-10 bg-[var(--color-primary-white)]/95 backdrop-blur
                 transition-shadow
                 ${scrolled ? 'shadow-md' : 'shadow-none'}
               `}
