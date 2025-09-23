@@ -13,7 +13,7 @@ const FormInputField = ({ id, label, error, labelClassName, type, className, ...
   return (
     <div className="w-full flex flex-col">
       {label && (
-        <Label htmlFor={id} className={labelClassName + ' mb-1'}>
+        <Label htmlFor={id} className={labelClassName + ' mb-2'}>
           {label}
         </Label>
       )}
