@@ -18,6 +18,15 @@ export const Default: Story = {
   },
 };
 
+export const Editable: Story = {
+  args: {
+    id: 'email',
+    label: 'Email',
+    editable: true,
+    placeholder: 'Enter your email',
+  },
+};
+
 export const WithError: Story = {
   args: {
     id: 'email',
