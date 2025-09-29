@@ -10,7 +10,7 @@ type EditableInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 };
 
 const EditableInput = forwardRef<HTMLInputElement, EditableInputProps>(
-  ({ className, onEdit, disabled, ...props }, ref) => {
+  ({ className, value, onEdit, disabled, ...props }, ref) => {
     return (
       <div
         className={clsx(
@@ -24,6 +24,7 @@ const EditableInput = forwardRef<HTMLInputElement, EditableInputProps>(
         )}
       >
         <input
+          value={value}
           ref={ref}
           disabled={disabled}
           className={clsx(
