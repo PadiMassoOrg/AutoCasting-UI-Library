@@ -35,7 +35,6 @@
     --font-inter: 'Inter', sans-serif;
     --font-serif: 'Source Serif 4', serif;
   }
-
   /* General */
   body {
     font-family: var(--font-inter);
