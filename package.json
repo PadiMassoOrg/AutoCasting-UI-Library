@@ -1,15 +1,17 @@
 {
   "name": "autocasting-ui-library-padimasso",
-  "version": "1.0.30",
+  "version": "1.0.31",
   "description": "UI Library para el ecosistema de Auto Casting by Padimasso",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
     },
-    "./dist/styles.css": "./dist/styles.css"
+    "./styles.css": "./dist/styles.css"
   },
   "scripts": {
     "build": "rollup -c && npm run build:css",
