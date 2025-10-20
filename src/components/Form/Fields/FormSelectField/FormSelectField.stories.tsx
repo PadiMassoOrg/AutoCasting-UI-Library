@@ -1,5 +1,5 @@
 // FormSelectField.stories.tsx
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import FormSelectField from './FormSelectField';
 import type { SelectOption } from '../../primitive/Select/Select';
 

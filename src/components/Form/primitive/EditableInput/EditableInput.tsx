@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { forwardRef } from 'react';
 import { clsx } from 'clsx';
-
-import editIconUrl from '@/shared/icons/edit.svg';
+import { EditIcon } from '../../../Icons';
 
 type EditableInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   onEdit?: () => void;
@@ -48,7 +47,7 @@ const EditableInput = forwardRef<HTMLInputElement, EditableInputProps>(
               disabled && 'opacity-60 cursor-not-allowed'
             )}
           >
-            <img src={editIconUrl} alt="" className="h-4 w-4" />
+            <EditIcon></EditIcon>
           </button>
         </div>
       </div>

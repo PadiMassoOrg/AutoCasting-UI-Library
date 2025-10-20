@@ -78,7 +78,11 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
                 ${scrolled ? 'shadow-md' : 'shadow-none'}
               `}
             >
-              <button onClick={onClose} className="absolute right-5 top-4 text-xl leading-none" aria-label="Close">
+              <button
+                onClick={onClose}
+                className="cursor-pointer absolute right-5 top-4 text-xl leading-none"
+                aria-label="Close"
+              >
                 ✕
               </button>
               {title && <h2 className="text-2xl font-bold px-6 pt-5 pb-3 pr-12">{title}</h2>}
