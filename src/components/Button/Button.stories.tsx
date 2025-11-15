@@ -17,6 +17,14 @@ export const Primary: Story = {
   args: { variant: 'primary', className: 'max-w-xl' },
 };
 
+export const Accent: Story = {
+  args: { variant: 'accent', className: 'max-w-xl' },
+};
+
+export const PrimaryOutline: Story = {
+  args: { variant: 'primaryOutline', className: 'max-w-xl' },
+};
+
 export const Outline: Story = {
   args: { variant: 'outline', className: 'max-w-xl' },
 };

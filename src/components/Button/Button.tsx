@@ -4,7 +4,7 @@ import { clsx } from 'clsx';
 import { BUTTON_STRUCTURE } from '../../styles/style_constants';
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: 'primary' | 'outline' | 'disabled';
+  variant?: 'primary' | 'accent' | 'primaryOutline' | 'outline' | 'disabled';
   asChild?: boolean;
   className?: string;
 };
@@ -12,7 +12,10 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = 'primary', asChild = false, children, ...rest }, ref) => {
     const variantClasses = {
-      primary: 'bg-[var(--color-primary-black)] text-[var(--color-primary-white)] cursor-pointer',
+      primary: 'bg-[var(--color-primary-purple)] text-[var(--color-primary-white)] cursor-pointer',
+      accent: 'bg-[var(--color-primary-greenyellow)] text-[var(--color-primary-white)] cursor-pointer',
+      primaryOutline:
+        'bg-[var(--color-primary-white)] text-[var(--color-primary-purple)] border border-[var(--color-primary-purple)] cursor-pointer',
       outline:
         'bg-[var(--color-primary-white)] text-[var(--color-primary-black)] border border-[var(--color-secondary-outline)] cursor-pointer',
       disabled: 'bg-[var(--color-secondary-disabled-grey)] text-[var(--color-primary-white)] cursor-default',
@@ -53,5 +56,4 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   }
 );
 
-Button.displayName = 'Button';
 export default Button;
