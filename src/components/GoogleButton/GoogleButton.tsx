@@ -1,9 +1,10 @@
 import { ButtonHTMLAttributes } from 'react';
 import { clsx } from 'clsx';
+import { BUTTON_STRUCTURE } from '../../styles/style_constants';
 
 type GoogleButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
-const GoogleButton = ({ className, children = 'Iniciá sesión con Google', ...props }: GoogleButtonProps) => {
+const GoogleButton = ({ className, children, ...props }: GoogleButtonProps) => {
   const hasBg = className?.includes('bg-');
   const hasText = className?.includes('text-');
 
@@ -11,7 +12,7 @@ const GoogleButton = ({ className, children = 'Iniciá sesión con Google', ...p
     <button
       type="button"
       className={clsx(
-        'w-full h-14 px-6 py-3 rounded-2xl text-center',
+        BUTTON_STRUCTURE,
         'flex items-center justify-center gap-4 font-light text-base drop-shadow-sm',
         !hasBg && 'bg-[var(--color-primary-white)]',
         !hasText && 'text-[var(--color-primary-black)]',
@@ -26,7 +27,7 @@ const GoogleButton = ({ className, children = 'Iniciá sesión con Google', ...p
 };
 
 const GoogleIcon = () => (
-  <svg className="w-8 h-8" viewBox="0 0 533.5 544.3" xmlns="http://www.w3.org/2000/svg">
+  <svg className="w-6 h-6" viewBox="0 0 533.5 544.3" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M533.5 278.4c0-17.4-1.6-34.1-4.7-50.4H272v95.3h146.9c-6.4 34-25.6 62.8-54.7 82l89.1 69.2c52.1-48 80.2-118.7 80.2-196.1z"
       fill="#4285f4"

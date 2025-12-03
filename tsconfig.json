@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "ES2020",
     "module": "ESNext",
     "jsx": "react-jsx",
     "moduleResolution": "Node",
-    "declaration": true,
-    "declarationDir": "dist",
-    "outDir": "dist",
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "strict": true
+    "strict": true,
+    "lib": ["ES2020", "DOM"],
+    "types": []
   },
   "include": ["src"]
 }

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import Input from './Input';
 
 const meta: Meta<typeof Input> = {
@@ -20,5 +20,13 @@ export const Password: Story = {
   args: {
     type: 'password',
     placeholder: 'Password',
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    type: 'password',
+    placeholder: 'Password',
+    disabled: true,
   },
 };

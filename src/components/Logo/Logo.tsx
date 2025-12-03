@@ -12,7 +12,7 @@ const Logo = ({ horizontal, text, imageSrc, imageSize = 40, className }: LogoPro
   return (
     <div
       className={clsx(
-        `flex ${horizontal ? 'flex-row' : 'flex-col'} gap-[6px] items-center justify-center cursor-pointer`,
+        `flex ${horizontal ? 'flex-row' : 'flex-col'} gap-[10px] items-center justify-center cursor-pointer`,
         className
       )}
     >

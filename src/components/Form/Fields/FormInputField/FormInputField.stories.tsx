@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import FormInputField from './FormInputField';
 
 const meta: Meta<typeof FormInputField> = {
@@ -15,6 +15,15 @@ export const Default: Story = {
     id: 'name',
     label: 'Name',
     placeholder: 'Enter your name',
+  },
+};
+
+export const Editable: Story = {
+  args: {
+    id: 'email',
+    label: 'Email',
+    editable: true,
+    placeholder: 'Enter your email',
   },
 };
 

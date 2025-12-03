@@ -1,8 +1,10 @@
-/* src/styles/tailwind.css */
 /*
   Declara las capas antes de importar (requisito v4)
   ─────────────────────────────────────────────────── */
 @layer theme, base, components, utilities;
+
+/* 4. Cualquier personalización tuya:  */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap');
 
 /* 1. Tema por defecto (paleta, tamaños, etc.) */
 @import 'tailwindcss/theme.css' layer(theme);
@@ -13,27 +15,26 @@
 /* 3. Utilidades clásicas  */
 @import 'tailwindcss/utilities.css' layer(utilities);
 
-/* 4. Cualquier personalización tuya:  */
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap');
-
 @layer base {
   :root {
     /* Primary Colors */
     --color-primary-white: #ffffff;
     --color-primary-black: #070707;
+    --color-primary-light-grey: #f3f4f9;
     --color-primary-greenyellow: #aeff00;
+    --color-primary-purple: #6f2df3;
     /* Secondary Colors */
-    --color-secondary-offwhite: #f4f5ff;
-    --color-secondary-offblack: #17171a;
-    --color-secondary-outline: #e7e7e7;
-    ---color-secondary-grey: #b1b3c5;
+    --color-secondary-offwhite: #ebedfd;
+    --color-secondary-outline: #e0e0e0;
+    --color-secondary-disabled-grey: #a1a3b2;
+    --color-secondary-grey: #767680;
+    --color-secondary-grey-fonts: #6c6e7c;
     /* Alert Colors */
     --color-alert-error: #ef0c0c;
     /* Fonts */
     --font-inter: 'Inter', sans-serif;
     --font-serif: 'Source Serif 4', serif;
   }
-
   /* General */
   body {
     font-family: var(--font-inter);

@@ -1,3 +1,6 @@
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+import storybook from 'eslint-plugin-storybook';
+
 // eslint.config.mjs  ——  Flat Config, válido ESLint v9
 import tseslint from 'typescript-eslint';
 import react from 'eslint-plugin-react';
@@ -8,12 +11,8 @@ export default [
   /* 1. Ignorar rutas */
   {
     ignores: ['dist/**', 'node_modules/**', '.storybook/**'],
-  },
-
-  /* 2. Config base de TypeScript  */
-  ...tseslint.configs.recommended,
-
-  /* 3. Reglas para tus fuentes */
+  } /* 2. Config base de TypeScript  */,
+  ...tseslint.configs.recommended /* 3. Reglas para tus fuentes */,
   {
     files: ['src/**/*.{ts,tsx}'],
     plugins: { '@typescript-eslint': tseslint.plugin, react, 'react-hooks': hooks, 'jsx-a11y': a11y },
@@ -31,4 +30,5 @@ export default [
       'react/prop-types': 'off',
     },
   },
+  ...storybook.configs['flat/recommended'],
 ];
