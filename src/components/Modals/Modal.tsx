@@ -43,7 +43,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
   return (
     <div
       className="
-        fixed inset-0 z-50
+        fixed inset-0 z-1000
         flex items-center justify-center
         p-4 sm:p-6 md:p-8
         bg-black/60
