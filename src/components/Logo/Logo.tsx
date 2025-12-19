@@ -20,7 +20,7 @@ const Logo = ({ horizontal, text, imageSrc, imageSize = 40, className }: LogoPro
         <img
           src={imageSrc}
           alt={text}
-          width={`${horizontal ? 47 : imageSize}`}
+          width={`${horizontal ? 40 : imageSize}`}
           height={imageSize}
           className="object-contain"
         />
