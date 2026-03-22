@@ -24,6 +24,7 @@ const FormInputField = ({
   type = 'text',
   className,
   value,
+  required,
   ...props
 }: FormInputFieldProps) => {
   return (
@@ -31,6 +32,11 @@ const FormInputField = ({
       {label && (
         <Label htmlFor={id} className={clsx('mb-2', labelClassName)}>
           {label}
+          {required ? (
+            <span className="text-red-500 ml-1" aria-hidden="true">
+              *
+            </span>
+          ) : null}
         </Label>
       )}
 

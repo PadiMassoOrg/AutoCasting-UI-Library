@@ -1,4 +1,4 @@
-import { ReactNode, MouseEvent, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 
 type ModalSize = 'auto' | 'sm' | 'md' | 'lg' | 'xl' | 'xl_2' | 'xl_3';
 
@@ -34,21 +34,16 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
     xl_3: 'max-w-3xl w-full',
   };
 
-  const handleBackdropClick = (e: MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) onClose();
-  };
-
   if (!isOpen) return null;
 
   return (
     <div
       className="
-        fixed inset-0 z-50
+        fixed inset-0 z-1000
         flex items-center justify-center
         p-4 sm:p-6 md:p-8
         bg-black/60
       "
-      onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
     >

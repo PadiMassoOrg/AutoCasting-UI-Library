@@ -11,12 +11,27 @@ type Props = React.SelectHTMLAttributes<HTMLSelectElement> & {
   options?: SelectOption[];
 };
 
-const FormSelectField = ({ id, label, labelClassName, error, placeholder, options, className, ...props }: Props) => {
+const FormSelectField = ({
+  id,
+  label,
+  labelClassName,
+  error,
+  placeholder,
+  options,
+  className,
+  required,
+  ...props
+}: Props) => {
   return (
     <div className="w-full flex flex-col">
       {label && (
         <Label htmlFor={id} className={labelClassName + ' mb-2'}>
           {label}
+          {required ? (
+            <span className="text-red-500 ml-1" aria-hidden="true">
+              *
+            </span>
+          ) : null}
         </Label>
       )}
       <Select
