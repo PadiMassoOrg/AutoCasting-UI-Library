@@ -8,3 +8,4 @@ export * from './components/GoogleButton';
 export * from './components/Form';
 export * from './components/Modals';
 export * from './components/Wizard';
+export * from './components/Pills';
