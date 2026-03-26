@@ -20,7 +20,7 @@ function svgAssetPlugin() {
         source,
       });
 
-      return `export default import.meta.ROLLUP_FILE_URL_${referenceId};`;
+      return `export default new URL(import.meta.ROLLUP_FILE_URL_${referenceId}, import.meta.url).href;`;
     },
   };
 }
