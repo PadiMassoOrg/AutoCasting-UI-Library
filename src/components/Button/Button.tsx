@@ -3,7 +3,7 @@ import { clsx } from 'clsx';
 import { BUTTON_STRUCTURE } from '../../styles/style_constants';
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: 'primary' | 'accent' | 'primaryOutline' | 'outline' | 'disabled';
+  variant?: 'primary' | 'danger' | 'primaryOutline' | 'outline' | 'disabled';
   asChild?: boolean;
   className?: string;
 };
@@ -14,7 +14,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
 
   const variantClasses = {
     primary: 'bg-[var(--color-primary-purple)] text-[var(--color-primary-white)] cursor-pointer',
-    accent: 'bg-[var(--color-primary-greenyellow)] text-[var(--color-primary-white)] cursor-pointer',
+    danger: 'bg-[var(--color-alert-error)] text-[var(--color-primary-white)] cursor-pointer',
     primaryOutline:
       'bg-[var(--color-primary-white)] text-[var(--color-primary-purple)] border border-[var(--color-primary-purple)] cursor-pointer',
     outline:

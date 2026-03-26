@@ -17,8 +17,8 @@ export const Primary: Story = {
   args: { variant: 'primary', className: 'max-w-xl' },
 };
 
-export const Accent: Story = {
-  args: { variant: 'accent', className: 'max-w-xl' },
+export const Danger: Story = {
+  args: { variant: 'danger', className: 'max-w-xl' },
 };
 
 export const PrimaryOutline: Story = {

@@ -24,8 +24,11 @@
     --color-primary-greenyellow: #aeff00;
     --color-primary-purple: #6f2df3;
     /* Secondary Colors */
+    --color-secondary-white: #f8f8fe;
+    --color-secondary-white-nav: #fafafa;
     --color-secondary-offwhite: #ebedfd;
     --color-secondary-outline: #e0e0e0;
+    --color-secondary-gray: #73737d;
     --color-secondary-disabled-grey: #a1a3b2;
     --color-secondary-grey: #767680;
     --color-secondary-grey-fonts: #6c6e7c;
@@ -34,7 +37,19 @@
     /* Fonts */
     --font-inter: 'Inter', sans-serif;
     --font-serif: 'Source Serif 4', serif;
+    /* SiteMetadata */
+    --casting-status-draft: #a1a3b2;
+    --casting-status-published: #008856;
+    --casting-status-paused: #fdc200;
+    --casting-status-closed: #ef0c0c;
+    --casting-status-archived: #73737d;
+    --casting-application-status-blank: #e9ebee;
+    --casting-application-status-preselected: #0083e6;
+    --casting-application-status-selected: #008856;
+    --casting-application-status-not-proceeding: #ef0c0c;
+    --casting-application-status-viewed: #a1a3b2;
   }
+
   /* General */
   body {
     font-family: var(--font-inter);
