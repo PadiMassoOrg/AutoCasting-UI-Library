@@ -9,3 +9,4 @@ export * from './components/Form';
 export * from './components/Modals';
 export * from './components/Wizard';
 export * from './components/Pills';
+export * from './components/ImageCarousel';
