@@ -5,28 +5,33 @@ import { nodeResolve as resolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import dts from 'rollup-plugin-dts';
 import { readFile } from 'node:fs/promises';
-import path from 'node:path';
 
-function svgAssetPlugin() {
+function svgToDataUrlPlugin() {
   return {
-    name: 'svg-asset-plugin',
+    name: 'svg-to-data-url-plugin',
     async load(id) {
       if (!id.endsWith('.svg')) return null;
 
-      const source = await readFile(id);
-      const referenceId = this.emitFile({
-        type: 'asset',
-        name: path.basename(id),
-        source,
-      });
+      const svg = await readFile(id, 'utf8');
 
-      return `export default new URL(import.meta.ROLLUP_FILE_URL_${referenceId}, import.meta.url).href;`;
+      const cleaned = svg
+        .replace(/\r?\n|\r/g, '')
+        .replace(/\t/g, ' ')
+        .replace(/>\s+</g, '><')
+        .trim();
+
+      const encoded = encodeURIComponent(cleaned)
+        .replace(/%20/g, ' ')
+        .replace(/%3D/g, '=')
+        .replace(/%3A/g, ':')
+        .replace(/%2F/g, '/');
+
+      return `export default "data:image/svg+xml,${encoded}";`;
     },
   };
 }
 
 export default defineConfig([
-  // 1) JS
   {
     input: 'src/index.ts',
     output: {
@@ -35,13 +40,12 @@ export default defineConfig([
       preserveModules: true,
       preserveModulesRoot: 'src',
       entryFileNames: '[name].js',
-      assetFileNames: 'assets/[name][extname]',
       sourcemap: false,
     },
     external: ['react', 'react-dom', 'clsx'],
     plugins: [
       peerDepsExternal(),
-      svgAssetPlugin(),
+      svgToDataUrlPlugin(),
       resolve({ extensions: ['.ts', '.tsx', '.js'] }),
       commonjs(),
       typescript({
@@ -52,8 +56,6 @@ export default defineConfig([
       }),
     ],
   },
-
-  // 2) DTS
   {
     input: 'src/index.ts',
     output: { file: 'dist/index.d.ts', format: 'es' },
