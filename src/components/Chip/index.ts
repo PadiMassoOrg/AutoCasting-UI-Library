@@ -1,3 +1,4 @@
 // TODO Stories
 import Chip from './Chip';
-export { Chip };
+import StatusChip from './StatusChip';
+export { Chip, StatusChip };
