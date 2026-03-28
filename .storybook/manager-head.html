@@ -1,0 +1,11 @@
+<script>
+  (() => {
+    const INTRO_PATH = '/story/start-here-introduction--home';
+    const url = new URL(window.location.href);
+
+    if (!url.searchParams.has('path')) {
+      url.searchParams.set('path', INTRO_PATH);
+      window.location.replace(url.toString());
+    }
+  })();
+</script>

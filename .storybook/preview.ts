@@ -7,7 +7,19 @@ export default {
     controls: { matchers: { color: /(background|color)$/i, date: /Date$/ }, disableSaveFromUi: true },
     options: {
       storySort: {
-        order: ['📘 Introduction', '*'],
+        order: [
+          'Start Here',
+          'Actions',
+          'Forms',
+          'Media',
+          'Overlays',
+          'Feedback',
+          'Navigation',
+          'Flows',
+          'Brand',
+          'Layout',
+          '*',
+        ],
       },
     },
   },
