@@ -1,2 +1,4 @@
 import FullscreenCenter from './FullscreenCenter';
-export { FullscreenCenter };
+import { Separator } from './Separator';
+
+export { FullscreenCenter, Separator };
