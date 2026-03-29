@@ -43,9 +43,9 @@ const FormSelectField = ({
         options={options}
         {...props}
       />
-      <div className="min-h-[25px]">
+      <div className="min-h-[25px] overflow-visible">
         {error && (
-          <Label id={`${id}-error`} variant="error" className="mt-0.4 pl-0.7">
+          <Label id={`${id}-error`} variant="error" className="mt-0.4 pl-0.7 inline-block whitespace-nowrap">
             {error}
           </Label>
         )}

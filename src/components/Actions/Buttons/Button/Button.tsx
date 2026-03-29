@@ -26,15 +26,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
 
   const baseLayout = 'inline-flex items-center justify-center leading-none align-middle rounded-lg';
 
-  const hasBg = className?.includes('bg-');
-  const hasText = className?.includes('text-');
-  const hasFont = className?.includes('font-');
-
   const computedClass = clsx(
     BUTTON_STRUCTURE,
     baseLayout,
     'font-semibold text-base transition duration-300 ease-in-out',
-    !hasBg && !hasText && !hasFont && variantClasses[effectiveVariant],
+    variantClasses[effectiveVariant],
     className
   );
 

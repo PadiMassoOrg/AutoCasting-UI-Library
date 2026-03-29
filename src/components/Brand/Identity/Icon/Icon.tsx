@@ -1,4 +1,5 @@
 import type { ImgHTMLAttributes } from 'react';
+import { clsx } from 'clsx';
 
 import ApplicantsIconDisabled from '../../../../icons/applicants-disabled.svg';
 import ApplicantsIconPurple from '../../../../icons/applicants-purple.svg';
@@ -332,8 +333,12 @@ export function Icon({ name, variant = 'default', size = 18, className, alt = ''
     ...style,
   };
 
-  const baseClassName = `inline-block ${variant === 'disabled' ? 'cursor-not-allowed' : 'cursor-pointer'}`;
-  const finalClassName = className ? `${baseClassName} ${className}` : baseClassName;
+  const hasCustomCursor = /\bcursor-[^\s]+\b/.test(className ?? '');
+  const finalClassName = clsx(
+    'inline-block',
+    variant === 'disabled' ? 'cursor-not-allowed' : !hasCustomCursor && 'cursor-pointer',
+    className
+  );
 
   return <img src={src} alt={alt} className={finalClassName} style={finalStyle} {...rest} />;
 }

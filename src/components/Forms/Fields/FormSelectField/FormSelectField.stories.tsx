@@ -38,6 +38,20 @@ export const WithError: Story = {
   },
 };
 
+export const WithLongErrorOverflow: Story = {
+  render: (args) => (
+    <div className="w-48">
+      <FormSelectField {...args} />
+    </div>
+  ),
+  args: {
+    id: 'agency-country',
+    label: 'Country',
+    placeholder: 'Select an option',
+    error: 'This validation message is intentionally long so it can overflow beyond the field width.',
+  },
+};
+
 export const NoLabel: Story = {
   args: {
     id: 'plan',

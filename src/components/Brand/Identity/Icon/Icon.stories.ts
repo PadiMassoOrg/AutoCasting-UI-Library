@@ -39,3 +39,19 @@ export const Disabled: Story = {
     variant: 'disabled',
   },
 };
+
+export const CustomCursor: Story = {
+  args: {
+    name: 'edit',
+    variant: 'default',
+    className: 'cursor-default',
+  },
+};
+
+export const DisabledKeepsNotAllowed: Story = {
+  args: {
+    name: 'search',
+    variant: 'disabled',
+    className: 'cursor-default',
+  },
+};

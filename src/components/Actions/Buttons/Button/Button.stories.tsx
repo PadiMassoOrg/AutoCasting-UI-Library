@@ -32,3 +32,12 @@ export const Outline: Story = {
 export const Disabled: Story = {
   args: { variant: 'disabled', className: 'max-w-xl' },
 };
+
+export const CustomClassesMerged: Story = {
+  args: {
+    children: 'Custom Classes',
+    variant: 'primary',
+    className:
+      'max-w-xl bg-(--color-primary-black) text-(--color-primary-white) font-normal border border-(--color-primary-black)',
+  },
+};
