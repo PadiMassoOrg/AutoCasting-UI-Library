@@ -67,7 +67,7 @@ export default function SearchInput({ value, onChange, onCommit, placeholder, cl
       />
 
       <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
-        <Icon name="search" variant="primary" size={18} />
+        <Icon name="search" variant="default" size={18} />
       </div>
     </div>
   );

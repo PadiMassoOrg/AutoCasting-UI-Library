@@ -15,7 +15,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({ className, type = 'tex
         'w-full h-12 px-5 rounded-xl text-base',
         'placeholder:text-(--color-secondary-grey) placeholder:font-light placeholder:text-sm',
         'border border-(--color-secondary-outline)',
-        'focus:outline-none focus:ring-0 focus:border-(--color-primary-black)',
+        'focus:outline-none focus:ring-0 focus:border-(--color-primary-purple)',
         'disabled:bg-(--color-secondary-offwhite) disabled:cursor-not-allowed',
         'transition-colors',
         className

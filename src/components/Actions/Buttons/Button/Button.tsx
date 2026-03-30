@@ -13,12 +13,12 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
   const { disabled, ...delegated } = rest;
 
   const variantClasses = {
-    primary: 'bg-(--color-primary-purple) text-(--color-primary-white) cursor-pointer',
-    danger: 'bg-(--color-alert-error) text-(--color-primary-white) cursor-pointer',
+    primary: 'bg-(--color-primary-purple) text-(--color-primary-white) cursor-pointer hover:bg-(--hover-color-primary)',
+    danger: 'bg-(--color-alert-error) text-(--color-primary-white) cursor-pointer hover:bg-(--hover-color-danger)',
     primaryOutline:
-      'bg-(--color-primary-white) text-(--color-primary-purple) border border-(--color-primary-purple) cursor-pointer',
+      'bg-(--color-primary-white) text-(--color-primary-purple) border border-(--color-primary-purple) cursor-pointer hover:border-(--hover-color-primary-outline) hover:text-(--hover-color-primary-outline)',
     outline:
-      'bg-(--color-primary-white) text-(--color-primary-black) border border-(--color-secondary-outline) cursor-pointer',
+      'bg-(--color-primary-white) text-(--color-primary-black) border border-(--color-secondary-outline) cursor-pointer hover:border-(--hover-color-outline) hover:text-(--hover-color-outline)',
     disabled: 'bg-(--color-secondary-disabled-grey) text-(--color-primary-white) cursor-not-allowed',
   };
 
