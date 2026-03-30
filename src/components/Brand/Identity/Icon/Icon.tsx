@@ -37,6 +37,7 @@ import FilterIconPurple from '../../../../icons/filter-purple.svg';
 import FilterIcon from '../../../../icons/filter.svg';
 import ImdbIconPurple from '../../../../icons/imdb-purple.svg';
 import ImdbIcon from '../../../../icons/imdb.svg';
+import InfoIconAlertRed from '../../../../icons/info-alert-red.svg';
 import InfoIconPurple from '../../../../icons/info-purple.svg';
 import InfoIcon from '../../../../icons/info.svg';
 import InstagramIconPurple from '../../../../icons/instagram-purple.svg';
@@ -74,6 +75,7 @@ import SettingsIcon from '../../../../icons/settings.svg';
 import SwitcherIconPurple from '../../../../icons/switcher-purple.svg';
 import SwitcherIcon from '../../../../icons/switcher.svg';
 import TickIconPurple from '../../../../icons/tick-2-purple.svg';
+import TickIconAlertGreen from '../../../../icons/tick-2-alert-green.svg';
 import TickIcon from '../../../../icons/tick-2.svg';
 import TikTokIcon from '../../../../icons/tikTok.svg';
 import ViewIconPurple from '../../../../icons/view-purple.svg';
@@ -86,6 +88,7 @@ import XIconPurple from '../../../../icons/x-purple.svg';
 import XIcon from '../../../../icons/x.svg';
 import WebIcon from '../../../../icons/web.svg';
 import WebIconPurple from '../../../../icons/web-purple.svg';
+import WarningIconAlertYellow from '../../../../icons/warning-alert-yellow.svg';
 
 export type IconName =
   | 'ogIcon'
@@ -128,14 +131,16 @@ export type IconName =
   | 'info'
   | 'play'
   | 'web'
+  | 'warning'
   | 'logout';
 
-export type IconVariant = 'default' | 'primary' | 'white' | 'danger' | 'disabled';
+export type IconVariant = 'default' | 'primary' | 'white' | 'success' | 'danger' | 'disabled';
 
 type BaseIconConfig = {
   default: string;
   primary?: string;
   white?: string;
+  success?: string;
   danger?: string;
   disabled?: string;
 };
@@ -148,6 +153,7 @@ const ICONS: Record<IconName, BaseIconConfig> = {
   tick: {
     default: TickIcon,
     primary: TickIconPurple,
+    success: TickIconAlertGreen,
   },
   view: {
     default: ViewIcon,
@@ -300,6 +306,7 @@ const ICONS: Record<IconName, BaseIconConfig> = {
   info: {
     default: InfoIcon,
     primary: InfoIconPurple,
+    danger: InfoIconAlertRed,
   },
   play: {
     default: PlayIcon,
@@ -308,6 +315,9 @@ const ICONS: Record<IconName, BaseIconConfig> = {
   web: {
     default: WebIcon,
     primary: WebIconPurple,
+  },
+  warning: {
+    default: WarningIconAlertYellow,
   },
 };
 
@@ -323,6 +333,7 @@ export function Icon({ name, variant = 'default', size = 18, className, alt = ''
   const src =
     (variant === 'primary' && config.primary) ||
     (variant === 'white' && config.white) ||
+    (variant === 'success' && config.success) ||
     (variant === 'danger' && config.danger) ||
     (variant === 'disabled' && config.disabled) ||
     config.default;
