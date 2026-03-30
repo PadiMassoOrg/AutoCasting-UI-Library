@@ -10,6 +10,7 @@ export * from './components/Brand/Identity/Icon';
 export * from './components/Brand/Identity/Logo';
 export * from './components/Feedback/Loading/Spinner';
 export * from './components/Feedback/Status/Chip';
+export * from './components/Feedback/Toast';
 export * from './components/Forms';
 export * from './components/Media/Images/ImageCarousel';
 export * from './components/Media/Images/PhotoZoomOverlay';

@@ -34,6 +34,10 @@
     --color-secondary-grey-fonts: #6c6e7c;
     /* Alert Colors */
     --color-alert-error: #ef0c0c;
+    --color-toast-default-bg: #f7f3ff;
+    --color-toast-success-bg: #f1fff7;
+    --color-toast-warning-bg: #fffbed;
+    --color-toast-danger-bg: #fff0f0;
     /* Hover Colors */
     --hover-color-primary: #8752f1;
     --hover-color-danger: #f84a4a;
