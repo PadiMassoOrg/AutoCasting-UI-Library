@@ -50,7 +50,7 @@ export default function SearchInput({ value, onChange, onCommit, placeholder, cl
         className={[
           'w-full h-10 rounded-full border border-(--color-secondary-outline)',
           'bg-white px-5 text-base outline-none',
-          'placeholder:text-(--color-secondary-grey-fonts)',
+          'placeholder:text-(--color-secondary-grey) placeholder:font-light placeholder:text-sm',
           'focus:ring-1 focus:ring-(--color-primary-purple)',
           disabled ? 'opacity-60 cursor-not-allowed' : '',
         ].join(' ')}
