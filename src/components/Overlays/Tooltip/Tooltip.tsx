@@ -8,6 +8,8 @@ export type TooltipProps = {
   children: React.ReactNode;
   title: string;
   position?: TooltipPosition;
+  nudgeX?: number;
+  nudgeY?: number;
 };
 
 type TooltipCoordinates = {
@@ -53,36 +55,38 @@ const POSITION_STYLES: Record<
 function getTooltipCoordinates(
   triggerRect: DOMRect,
   tooltipRect: DOMRect,
-  position: TooltipPosition
+  position: TooltipPosition,
+  nudgeX = 0,
+  nudgeY = 0
 ): TooltipCoordinates {
   if (position === 'topLeft') {
     return {
-      left: triggerRect.left,
-      top: triggerRect.top - tooltipRect.height - TOOLTIP_GAP,
+      left: triggerRect.left + nudgeX,
+      top: triggerRect.top - tooltipRect.height - TOOLTIP_GAP + nudgeY,
     };
   }
 
   if (position === 'topRight') {
     return {
-      left: triggerRect.right - tooltipRect.width,
-      top: triggerRect.top - tooltipRect.height - TOOLTIP_GAP,
+      left: triggerRect.right - tooltipRect.width + nudgeX,
+      top: triggerRect.top - tooltipRect.height - TOOLTIP_GAP + nudgeY,
     };
   }
 
   if (position === 'bottomLeft') {
     return {
-      left: triggerRect.left,
-      top: triggerRect.bottom + TOOLTIP_GAP,
+      left: triggerRect.left + nudgeX,
+      top: triggerRect.bottom + TOOLTIP_GAP + nudgeY,
     };
   }
 
   return {
-    left: triggerRect.right - tooltipRect.width,
-    top: triggerRect.bottom + TOOLTIP_GAP,
+    left: triggerRect.right - tooltipRect.width + nudgeX,
+    top: triggerRect.bottom + TOOLTIP_GAP + nudgeY,
   };
 }
 
-export default function Tooltip({ children, title, position = 'topLeft' }: TooltipProps) {
+export default function Tooltip({ children, title, position = 'topLeft', nudgeX = 0, nudgeY = 0 }: TooltipProps) {
   const tooltipId = useId();
   const triggerRef = useRef<HTMLSpanElement | null>(null);
   const tooltipRef = useRef<HTMLSpanElement | null>(null);
@@ -100,7 +104,9 @@ export default function Tooltip({ children, title, position = 'topLeft' }: Toolt
     const nextCoordinates = getTooltipCoordinates(
       triggerElement.getBoundingClientRect(),
       tooltipElement.getBoundingClientRect(),
-      position
+      position,
+      nudgeX,
+      nudgeY
     );
 
     setCoordinates((currentCoordinates) => {
@@ -112,7 +118,7 @@ export default function Tooltip({ children, title, position = 'topLeft' }: Toolt
     });
 
     setIsPositioned(true);
-  }, [position]);
+  }, [nudgeX, nudgeY, position]);
 
   useLayoutEffect(() => {
     if (!open) return;
