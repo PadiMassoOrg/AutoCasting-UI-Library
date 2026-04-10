@@ -9,7 +9,7 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
-  const { className, variant = 'primary', asChild = false, children, ...rest } = props;
+  const { className, variant = 'primary', asChild = false, children, type, ...rest } = props;
   const { disabled, ...delegated } = rest;
 
   const variantClasses = {
@@ -47,7 +47,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
   }
 
   return (
-    <button ref={ref} className={computedClass} disabled={disabled} {...delegated}>
+    <button ref={ref} type={type ?? 'button'} className={computedClass} disabled={disabled} {...delegated}>
       {children}
     </button>
   );

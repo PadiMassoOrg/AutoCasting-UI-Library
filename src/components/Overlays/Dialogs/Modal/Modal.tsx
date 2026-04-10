@@ -74,6 +74,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
               `}
             >
               <button
+                type="button"
                 onClick={onClose}
                 className="cursor-pointer absolute right-5 top-4 text-xl leading-none"
                 aria-label="Close"
