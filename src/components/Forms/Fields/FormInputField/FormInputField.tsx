@@ -14,19 +14,23 @@ type FormInputFieldProps = React.InputHTMLAttributes<HTMLInputElement> & {
   onEdit?: () => void;
 };
 
-const FormInputField = ({
-  id,
-  label,
-  error,
-  editable = false,
-  onEdit,
-  labelClassName,
-  type = 'text',
-  className,
-  value,
-  required,
-  ...props
-}: FormInputFieldProps) => {
+const FormInputField = (allProps: FormInputFieldProps) => {
+  const hasValueProp = Object.prototype.hasOwnProperty.call(allProps, 'value');
+  const {
+    id,
+    label,
+    error,
+    editable = false,
+    onEdit,
+    labelClassName,
+    type = 'text',
+    className,
+    value,
+    required,
+    ...props
+  } = allProps;
+  const inputValueProps = hasValueProp ? { value: (value ?? '') as string } : {};
+
   return (
     <div className="w-full flex flex-col">
       {label && (
@@ -48,8 +52,8 @@ const FormInputField = ({
           aria-describedby={error ? `${id}-error` : undefined}
           className={className}
           type={type}
-          value={value}
           onEdit={onEdit}
+          {...inputValueProps}
           {...props}
         />
       ) : (
@@ -60,7 +64,7 @@ const FormInputField = ({
           aria-describedby={error ? `${id}-error` : undefined}
           className={className}
           type={type}
-          value={value}
+          {...inputValueProps}
           {...props}
         />
       )}
