@@ -79,7 +79,9 @@ import TickIconAlertGreen from '../../../../icons/tick-2-alert-green.svg';
 import TickIcon from '../../../../icons/tick-2.svg';
 import TikTokIcon from '../../../../icons/tikTok.svg';
 import ViewIconPurple from '../../../../icons/view-purple.svg';
+import ViewHideIconPurple from '../../../../icons/view-hide-purple.svg';
 import ViewIcon from '../../../../icons/view.svg';
+import ViewHideIcon from '../../../../icons/view-hide.svg';
 import VimeoIconPurple from '../../../../icons/vimeo-purple.svg';
 import VimeoIcon from '../../../../icons/vimeo.svg';
 import WhatsappIconPurple from '../../../../icons/whatsapp-purple.svg';
@@ -95,6 +97,7 @@ export type IconName =
   | 'switcher'
   | 'tick'
   | 'view'
+  | 'viewHide'
   | 'open'
   | 'burger'
   | 'burgerClose'
@@ -318,6 +321,10 @@ const ICONS: Record<IconName, BaseIconConfig> = {
   },
   warning: {
     default: WarningIconAlertYellow,
+  },
+  viewHide: {
+    default: ViewHideIcon,
+    primary: ViewHideIconPurple,
   },
 };
 

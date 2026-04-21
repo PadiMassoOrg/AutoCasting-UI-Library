@@ -3,6 +3,7 @@ import Modal from './Modal';
 import { useState } from 'react';
 import { FormInputField } from '../../../Forms';
 import { Button } from '../../../Actions/Buttons/Button';
+import { Separator } from '../../../Layout';
 
 const meta: Meta<typeof Modal> = {
   title: 'Overlays/Dialogs/Modal',
@@ -41,6 +42,7 @@ export const Default: Story = {
         </p>
         <FormInputField id={'asd'} placeholder="Input..."></FormInputField>
       </div>
+      <Separator className="opacity-20 my-2"></Separator>
       <Button className="mt-4" variant="primary">
         Button
       </Button>
@@ -51,16 +53,17 @@ export const Default: Story = {
 export const SizeXL_3: Story = {
   render: () => (
     <Wrapper title="Título de prueba" size="xl_3">
-      <div className="flex flex-col gap-4">
-        <p className="text-base text-gray-600">
+      <div className="flex flex-col">
+        <p className="text-base text-gray-600 mb-2">
           Este es el contenido del modal con un título. Puedes probar estilos aquí.
         </p>
         <FormInputField id={'asd'} placeholder="Input..."></FormInputField>
-        <div className="flex gap-2 items-center">
-          <Button className="mt-4" variant="outline">
+        <Separator className="opacity-20 my-6"></Separator>
+        <div className="modal-actions flex items-center gap-2">
+          <Button className="modal-action" variant="outline">
             Close
           </Button>
-          <Button className="mt-4" variant="primary">
+          <Button className="modal-action" variant="primary">
             Button Palabra
           </Button>
         </div>

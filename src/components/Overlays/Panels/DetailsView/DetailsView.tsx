@@ -51,7 +51,7 @@ export default function DetailsView({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex justify-end items-stretch">
+    <div className="fixed inset-0 z-[140] flex justify-end items-stretch">
       {/* Overlay */}
       <button type="button" aria-label="Cerrar" onClick={onClose} className="absolute inset-0 bg-black/60" />
 
