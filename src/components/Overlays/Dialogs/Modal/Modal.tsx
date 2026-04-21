@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect } from 'react';
 
 type ModalSize = 'auto' | 'sm' | 'md' | 'lg' | 'xl' | 'xl_2' | 'xl_3';
 
@@ -11,9 +11,6 @@ type ModalProps = {
 };
 
 export default function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalProps) {
-  // Hooks siempre arriba
-  const [scrolled, setScrolled] = useState(false);
-
   // Bloquea el scroll del body solo si está abierto
   useEffect(() => {
     if (!isOpen) return;
@@ -57,22 +54,20 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
       >
         {/* Contenedor scrolleable interno (la scrollbar queda recortada por el borde) */}
         <div
-          className="overflow-y-auto modal-scroll"
+          className="
+            overflow-y-auto overflow-x-hidden modal-scroll
+            max-sm:[&_.modal-actions]:flex-col
+            max-sm:[&_.modal-actions]:items-stretch
+            max-sm:[&_.modal-actions_.modal-action]:w-full
+          "
           style={{
             // Alto máx. usando viewport visible + safe areas + margen exterior (2rem)
             maxHeight: 'calc(100dvh - max(env(safe-area-inset-top),0px) - max(env(safe-area-inset-bottom),0px) - 2rem)',
           }}
-          onScroll={(e) => setScrolled((e.currentTarget.scrollTop || 0) > 5)}
         >
-          {/* Header sticky con sombra dinámica cuando hay scroll */}
+          {/* Header sin sticky: título y contenido scrollean juntos */}
           {(title || true) && (
-            <div
-              className={`
-                sticky top-0 z-10 bg-(--color-primary-white)/95 backdrop-blur
-                transition-shadow
-                ${scrolled ? 'shadow-md' : 'shadow-none'}
-              `}
-            >
+            <div className="relative bg-(--color-primary-white)">
               <button
                 type="button"
                 onClick={onClose}
