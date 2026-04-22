@@ -27,3 +27,12 @@ export const Open: Story = {
     open: true,
   },
 };
+
+export const Double: Story = {
+  render: () => (
+    <div className="flex min-h-[120px] items-center justify-center gap-6 text-(--color-primary-black)">
+      <ChevronLeft double />
+      <ChevronRight double />
+    </div>
+  ),
+};
