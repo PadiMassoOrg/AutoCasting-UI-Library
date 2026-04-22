@@ -1,22 +1,24 @@
-import { useEffect, useMemo, useRef, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, type CSSProperties, type ReactNode } from 'react';
 import { OverflowMenu } from '../../Actions/Menus/OverflowMenu';
 import type { OverflowMenuAlign, OverflowMenuItem, OverflowMenuSide } from '../../Actions/Menus/OverflowMenu';
 import { ChevronLeft, ChevronRight } from '../../Navigation/Indicators/Chevron';
 
 type DataGridAlign = 'left' | 'center' | 'right';
-type DataGridJustify = 'start' | 'center' | 'end';
 
 export type DataGridColumn<T> = {
-  id: string;
+  id?: string;
+  name?: keyof T;
+  stringCode?: string;
   header: ReactNode;
   accessor?: keyof T | ((row: T) => unknown);
   render?: (row: T) => ReactNode;
-  align?: DataGridAlign;
-  justify?: DataGridJustify;
-  headerJustify?: DataGridJustify;
-  className?: string;
-  headerClassName?: string;
-  contentClassName?: string;
+  width?: number | string;
+  flex?: number;
+  headerAlignment?: DataGridAlign;
+  contentAlignment?: DataGridAlign;
+  cellClassName?: string;
+  headerCellClassName?: string;
+  cellContentClassName?: string;
   headerContentClassName?: string;
   sortable?: boolean;
   sortDirection?: 'asc' | 'desc';
@@ -26,11 +28,14 @@ export type DataGridColumn<T> = {
 export type DataGridActions<T> = {
   header?: ReactNode;
   items: (row: T) => OverflowMenuItem[];
+  columnWidth?: number | string;
   align?: OverflowMenuAlign;
   side?: OverflowMenuSide;
+  headerCellClassName?: string;
+  cellClassName?: string;
+  headerContentClassName?: string;
   triggerClassName?: string;
   menuClassName?: string;
-  widthClassName?: string;
 };
 
 export type DataGridPagination = {
@@ -66,6 +71,11 @@ type Props<T> = {
 function resolveCell<T>(column: DataGridColumn<T>, row: T): ReactNode {
   if (column.render) return column.render(row);
 
+  if (column.name) {
+    const value = row[column.name];
+    return value == null ? null : String(value);
+  }
+
   if (typeof column.accessor === 'function') {
     const value = column.accessor(row);
     return value == null ? null : String(value);
@@ -85,14 +95,58 @@ function resolveAlignClass(align: DataGridAlign = 'left') {
   return 'text-left';
 }
 
-function resolveJustifyClass(justify?: DataGridJustify, align: DataGridAlign = 'left') {
-  if (justify === 'center') return 'justify-center';
-  if (justify === 'end') return 'justify-end';
-  if (justify === 'start') return 'justify-start';
-
+function resolveJustifyClass(align: DataGridAlign = 'left') {
   if (align === 'center') return 'justify-center';
   if (align === 'right') return 'justify-end';
   return 'justify-start';
+}
+
+function resolveColumnKey<T>(column: DataGridColumn<T>, index: number): string {
+  if (column.id) return column.id;
+  if (column.stringCode) return column.stringCode;
+  if (column.name) return String(column.name);
+  return `column-${index}`;
+}
+
+function resolveHeaderAlign<T>(column: DataGridColumn<T>): DataGridAlign {
+  return column.headerAlignment ?? 'left';
+}
+
+function resolveContentAlign<T>(column: DataGridColumn<T>): DataGridAlign {
+  return column.contentAlignment ?? 'left';
+}
+
+function resolveSizeValue(value?: number | string): string | undefined {
+  if (value == null) return undefined;
+  return typeof value === 'number' ? `${value}px` : value;
+}
+
+function resolveColumnStyle<T>(column: DataGridColumn<T>, totalFlex: number): CSSProperties | undefined {
+  const width = resolveSizeValue(column.width);
+  if (width) {
+    return { width, minWidth: width };
+  }
+
+  const columnFlex = column.flex ?? 1;
+  if (columnFlex > 0 && totalFlex > 0) {
+    return {
+      width: `${(columnFlex / totalFlex) * 100}%`,
+      minWidth: 'max-content',
+    };
+  }
+
+  return { minWidth: 'max-content' };
+}
+
+function resolveFixedWidthStyle(width?: number | string): CSSProperties | undefined {
+  const resolvedWidth = resolveSizeValue(width);
+  if (!resolvedWidth) return undefined;
+  return { width: resolvedWidth, minWidth: resolvedWidth };
+}
+
+function resolveActionsColumnStyle(width?: number | string): CSSProperties {
+  if (width != null) return resolveFixedWidthStyle(width) ?? { width: '1%', minWidth: 'max-content' };
+  return { width: '1%', minWidth: 'max-content' };
 }
 
 const DataGrid = <T,>({
@@ -106,6 +160,7 @@ const DataGrid = <T,>({
   emptyMessage = 'No data',
   pagination,
 }: Props<T>) => {
+  const selectionColumnClassName = 'w-[72px]';
   const headerCheckboxRef = useRef<HTMLInputElement | null>(null);
 
   const resolvedRowKeys = useMemo(
@@ -134,6 +189,10 @@ const DataGrid = <T,>({
   }, [allVisibleSelected, someVisibleSelected]);
 
   const colCount = columns.length + (actions ? 1 : 0) + (selection ? 1 : 0);
+  const totalFlex = useMemo(
+    () => columns.reduce((acc, column) => acc + (column.width == null ? (column.flex ?? 1) : 0), 0),
+    [columns]
+  );
 
   const handleToggleAll = () => {
     if (!selection) return;
@@ -171,7 +230,7 @@ const DataGrid = <T,>({
           <thead>
             <tr className="border-b border-[var(--color-secondary-outline)]">
               {selection ? (
-                <th className="w-[56px] p-0 text-center align-middle">
+                <th className={[selectionColumnClassName, 'p-0 text-center align-middle'].join(' ')}>
                   {selection.showSelectAll === false ? null : (
                     <div className="flex h-14 items-center justify-center px-4">
                       <span className="relative inline-flex items-center justify-center h-6 w-6">
@@ -222,27 +281,30 @@ const DataGrid = <T,>({
                 </th>
               ) : null}
 
-              {columns.map((column) => {
-                const alignClass = resolveAlignClass(column.align);
+              {columns.map((column, columnIndex) => {
+                const columnKey = resolveColumnKey(column, columnIndex);
+                const headerAlign = resolveHeaderAlign(column);
+                const alignClass = resolveAlignClass(headerAlign);
                 const isSortable = Boolean(column.sortable && column.onSort);
                 const sortIndicator =
                   column.sortDirection === 'asc' ? ' ↑' : column.sortDirection === 'desc' ? ' ↓' : '';
 
                 return (
                   <th
-                    key={column.id}
+                    key={columnKey}
+                    style={resolveColumnStyle(column, totalFlex)}
                     className={[
                       'p-0 text-sm font-semibold text-[var(--color-primary-black)] align-middle',
                       alignClass,
-                      column.headerClassName,
+                      column.headerCellClassName,
                     ]
                       .filter(Boolean)
                       .join(' ')}
                   >
                     <div
                       className={[
-                        'flex h-14 items-center px-6',
-                        resolveJustifyClass(column.headerJustify ?? column.justify, column.align),
+                        'flex h-14 items-center',
+                        resolveJustifyClass(headerAlign),
                         column.headerContentClassName,
                       ]
                         .filter(Boolean)
@@ -266,9 +328,17 @@ const DataGrid = <T,>({
               })}
 
               {actions ? (
-                <th className="p-0 text-center text-sm font-semibold text-[var(--color-primary-black)] align-middle">
+                <th
+                  style={resolveActionsColumnStyle(actions.columnWidth)}
+                  className={[
+                    'whitespace-nowrap p-0 text-center text-sm font-semibold text-[var(--color-primary-black)] align-middle',
+                    actions.headerCellClassName,
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
+                >
                   <div
-                    className={['flex h-14 items-center justify-center px-6', actions.widthClassName]
+                    className={['flex h-14 items-center justify-center px-4', actions.headerContentClassName]
                       .filter(Boolean)
                       .join(' ')}
                   >
@@ -287,8 +357,8 @@ const DataGrid = <T,>({
                 return (
                   <tr key={key} className="h-14 border-b border-[var(--color-secondary-outline)] last:border-b-0">
                     {selection ? (
-                      <td className="w-[56px] p-0 text-center align-middle">
-                        <span className="relative inline-flex h-14 w-full items-center justify-center">
+                      <td className={[selectionColumnClassName, 'p-0 text-center align-middle'].join(' ')}>
+                        <span className="relative inline-flex h-14 w-full items-center justify-center px-4">
                           <input
                             type="checkbox"
                             checked={selectedKeySet.has(key)}
@@ -333,24 +403,27 @@ const DataGrid = <T,>({
                       </td>
                     ) : null}
 
-                    {columns.map((column) => {
-                      const alignClass = resolveAlignClass(column.align);
+                    {columns.map((column, columnIndex) => {
+                      const columnKey = resolveColumnKey(column, columnIndex);
+                      const contentAlign = resolveContentAlign(column);
+                      const alignClass = resolveAlignClass(contentAlign);
                       return (
                         <td
-                          key={`${key}-${column.id}`}
+                          key={`${key}-${columnKey}`}
+                          style={resolveColumnStyle(column, totalFlex)}
                           className={[
                             'p-0 text-sm text-[var(--color-primary-black)] align-middle',
                             alignClass,
-                            column.className,
+                            column.cellClassName,
                           ]
                             .filter(Boolean)
                             .join(' ')}
                         >
                           <div
                             className={[
-                              'flex h-14 items-center px-6',
-                              resolveJustifyClass(column.justify, column.align),
-                              column.contentClassName,
+                              'flex h-14 items-center',
+                              resolveJustifyClass(contentAlign),
+                              column.cellContentClassName,
                             ]
                               .filter(Boolean)
                               .join(' ')}
@@ -363,14 +436,17 @@ const DataGrid = <T,>({
 
                     {actions ? (
                       <td
-                        className={['p-0 text-center align-middle', actions.widthClassName].filter(Boolean).join(' ')}
+                        style={resolveActionsColumnStyle(actions.columnWidth)}
+                        className={['whitespace-nowrap p-0 text-center align-middle', actions.cellClassName]
+                          .filter(Boolean)
+                          .join(' ')}
                       >
                         <OverflowMenu
                           items={actions.items(row)}
                           align={actions.align ?? 'end'}
                           side={actions.side ?? 'bottom'}
                           triggerClassName={[
-                            'inline-flex h-14 w-full items-center justify-center',
+                            'inline-flex h-14 w-full items-center justify-center px-4',
                             actions.triggerClassName,
                           ]
                             .filter(Boolean)

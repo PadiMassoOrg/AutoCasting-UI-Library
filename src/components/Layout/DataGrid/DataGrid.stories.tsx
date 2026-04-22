@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useMemo, useState } from 'react';
 import type { OverflowMenuItem } from '../../Actions/Menus/OverflowMenu';
 import { Icon } from '../../Brand/Identity/Icon';
+import { ChevronUpDown } from '../../Navigation/Indicators/Chevron';
 import DataGrid, { type DataGridColumn } from './DataGrid';
 
 type ApplicantRow = {
@@ -40,12 +41,32 @@ const rows: ApplicantRow[] = [
   },
 ];
 
+const STATUS_COLOR_BY_LABEL: Record<string, string> = {
+  Preseleccionado: 'var(--casting-application-status-preselected)',
+  Visto: 'var(--casting-application-status-viewed)',
+  Seleccionado: 'var(--casting-application-status-selected)',
+};
+
+function StaticStatusDropdown({ label }: { label: string }) {
+  const dotColor = STATUS_COLOR_BY_LABEL[label] ?? 'var(--color-secondary-grey-fonts)';
+
+  return (
+    <div className="inline-flex items-center gap-1 rounded-full bg-[var(--color-primary-light-grey)] px-1.5 py-1 pl-2.5">
+      <span className="inline-flex items-center gap-2 text-[var(--color-primary-black)]">
+        <span className="text-sm">{label}</span>
+        <span className="inline-block h-4 w-4 shrink-0 rounded-full" style={{ background: dotColor }} />
+      </span>
+      <ChevronUpDown open={false} sizePx={18} className="text-[var(--color-primary-black)]" />
+    </div>
+  );
+}
+
 const columns: DataGridColumn<ApplicantRow>[] = [
   {
     id: 'stageName',
     header: 'Postulante',
     render: (row) => (
-      <div className="flex items-center gap-3">
+      <div className="inline-flex items-center gap-3">
         <img src={row.avatarUrl} alt={row.stageName} className="h-10 w-10 rounded-full object-cover" />
         <span className="font-semibold">{row.stageName}</span>
       </div>
@@ -54,13 +75,13 @@ const columns: DataGridColumn<ApplicantRow>[] = [
   {
     id: 'role',
     header: 'Rol',
-    accessor: 'role',
+    name: 'role',
   },
   {
     id: 'requirements',
     header: 'Requerimientos',
     render: (row) => (
-      <div className="flex items-center gap-2">
+      <div className="inline-flex items-center justify-center gap-2">
         {row.requirements.map((requirement) => (
           <span
             key={`${row.id}-${requirement}`}
@@ -76,11 +97,9 @@ const columns: DataGridColumn<ApplicantRow>[] = [
   {
     id: 'status',
     header: 'Estado',
-    render: (row) => (
-      <span className="inline-flex items-center rounded-full bg-[var(--color-primary-light-grey)] px-3 py-1 text-sm">
-        {row.status}
-      </span>
-    ),
+    width: 200,
+    contentAlignment: 'right',
+    render: (row) => <StaticStatusDropdown label={row.status} />,
   },
 ];
 
