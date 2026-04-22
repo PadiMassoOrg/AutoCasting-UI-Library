@@ -303,7 +303,7 @@ const DataGrid = <T,>({
                   >
                     <div
                       className={[
-                        'flex h-14 items-center',
+                        'flex h-14 items-center px-2',
                         resolveJustifyClass(headerAlign),
                         column.headerContentClassName,
                       ]
@@ -421,7 +421,7 @@ const DataGrid = <T,>({
                         >
                           <div
                             className={[
-                              'flex h-14 items-center',
+                              'flex h-14 items-center px-2',
                               resolveJustifyClass(contentAlign),
                               column.cellContentClassName,
                             ]
