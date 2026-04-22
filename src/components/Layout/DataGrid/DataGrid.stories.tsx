@@ -109,7 +109,6 @@ const meta: Meta<typeof DataGrid<ApplicantRow>> = {
   tags: ['autodocs'],
   render: () => {
     const [page, setPage] = useState(0);
-    const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
 
     const actions = useMemo(
       () => ({
@@ -128,10 +127,6 @@ const meta: Meta<typeof DataGrid<ApplicantRow>> = {
           columns={columns}
           data={rows}
           rowKey="id"
-          selection={{
-            selectedRowKeys,
-            onSelectedRowKeysChange: setSelectedRowKeys,
-          }}
           actions={actions}
           pagination={{
             page,

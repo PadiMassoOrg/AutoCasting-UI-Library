@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { OverflowMenu } from '../../Actions/Menus/OverflowMenu';
 import type { OverflowMenuAlign, OverflowMenuItem, OverflowMenuSide } from '../../Actions/Menus/OverflowMenu';
 import { ChevronLeft, ChevronRight } from '../../Navigation/Indicators/Chevron';
@@ -61,6 +61,7 @@ type Props<T> = {
   data: T[];
   rowKey: keyof T | ((row: T, index: number) => string);
   actions?: DataGridActions<T>;
+  enableBulkSelection?: boolean;
   selection?: DataGridSelection;
   className?: string;
   tableClassName?: string;
@@ -154,6 +155,7 @@ const DataGrid = <T,>({
   data,
   rowKey,
   actions,
+  enableBulkSelection = false,
   selection,
   className,
   tableClassName,
@@ -161,7 +163,9 @@ const DataGrid = <T,>({
   pagination,
 }: Props<T>) => {
   const selectionColumnClassName = 'w-[72px]';
+  const leadingGutterColumnClassName = 'w-[24px]';
   const headerCheckboxRef = useRef<HTMLInputElement | null>(null);
+  const [internalSelectedRowKeys, setInternalSelectedRowKeys] = useState<string[]>([]);
 
   const resolvedRowKeys = useMemo(
     () =>
@@ -173,11 +177,25 @@ const DataGrid = <T,>({
     [data, rowKey]
   );
 
-  const selectedKeySet = useMemo(() => new Set(selection?.selectedRowKeys ?? []), [selection?.selectedRowKeys]);
+  const effectiveSelection = useMemo<DataGridSelection | undefined>(() => {
+    if (!enableBulkSelection) return undefined;
+    if (selection) return selection;
+
+    return {
+      selectedRowKeys: internalSelectedRowKeys,
+      onSelectedRowKeysChange: setInternalSelectedRowKeys,
+    };
+  }, [enableBulkSelection, internalSelectedRowKeys, selection]);
+
+  const selectedKeySet = useMemo(
+    () => new Set(effectiveSelection?.selectedRowKeys ?? []),
+    [effectiveSelection?.selectedRowKeys]
+  );
 
   const selectableRowKeys = useMemo(
-    () => (selection ? resolvedRowKeys.filter((key) => !selection.isRowDisabled?.(key)) : resolvedRowKeys),
-    [resolvedRowKeys, selection]
+    () =>
+      effectiveSelection ? resolvedRowKeys.filter((key) => !effectiveSelection.isRowDisabled?.(key)) : resolvedRowKeys,
+    [effectiveSelection, resolvedRowKeys]
   );
 
   const allVisibleSelected = selectableRowKeys.length > 0 && selectableRowKeys.every((key) => selectedKeySet.has(key));
@@ -188,32 +206,33 @@ const DataGrid = <T,>({
     headerCheckboxRef.current.indeterminate = !allVisibleSelected && someVisibleSelected;
   }, [allVisibleSelected, someVisibleSelected]);
 
-  const colCount = columns.length + (actions ? 1 : 0) + (selection ? 1 : 0);
+  const showLeadingGutter = !effectiveSelection;
+  const colCount = columns.length + (actions ? 1 : 0) + (effectiveSelection ? 1 : 0) + (showLeadingGutter ? 1 : 0);
   const totalFlex = useMemo(
     () => columns.reduce((acc, column) => acc + (column.width == null ? (column.flex ?? 1) : 0), 0),
     [columns]
   );
 
   const handleToggleAll = () => {
-    if (!selection) return;
+    if (!effectiveSelection) return;
     if (selectableRowKeys.length === 0) return;
     if (allVisibleSelected) {
-      const next = selection.selectedRowKeys.filter((key) => !selectableRowKeys.includes(key));
-      selection.onSelectedRowKeysChange(next);
+      const next = effectiveSelection.selectedRowKeys.filter((key) => !selectableRowKeys.includes(key));
+      effectiveSelection.onSelectedRowKeysChange(next);
       return;
     }
-    const next = Array.from(new Set([...selection.selectedRowKeys, ...selectableRowKeys]));
-    selection.onSelectedRowKeysChange(next);
+    const next = Array.from(new Set([...effectiveSelection.selectedRowKeys, ...selectableRowKeys]));
+    effectiveSelection.onSelectedRowKeysChange(next);
   };
 
   const handleToggleRow = (key: string, isDisabled: boolean) => {
-    if (!selection) return;
+    if (!effectiveSelection) return;
     if (isDisabled) return;
     if (selectedKeySet.has(key)) {
-      selection.onSelectedRowKeysChange(selection.selectedRowKeys.filter((it) => it !== key));
+      effectiveSelection.onSelectedRowKeysChange(effectiveSelection.selectedRowKeys.filter((it) => it !== key));
       return;
     }
-    selection.onSelectedRowKeysChange([...selection.selectedRowKeys, key]);
+    effectiveSelection.onSelectedRowKeysChange([...effectiveSelection.selectedRowKeys, key]);
   };
 
   return (
@@ -229,9 +248,9 @@ const DataGrid = <T,>({
         <table className={['w-full table-auto border-collapse', tableClassName].filter(Boolean).join(' ')}>
           <thead>
             <tr className="border-b border-[var(--color-secondary-outline)]">
-              {selection ? (
+              {effectiveSelection ? (
                 <th className={[selectionColumnClassName, 'p-0 text-center align-middle'].join(' ')}>
-                  {selection.showSelectAll === false ? null : (
+                  {effectiveSelection.showSelectAll === false ? null : (
                     <div className="flex h-14 items-center justify-center px-4">
                       <span className="relative inline-flex items-center justify-center h-6 w-6">
                         <input
@@ -240,7 +259,7 @@ const DataGrid = <T,>({
                           checked={allVisibleSelected}
                           onChange={handleToggleAll}
                           disabled={selectableRowKeys.length === 0}
-                          aria-label={selection.headerAriaLabel ?? 'Select all rows'}
+                          aria-label={effectiveSelection.headerAriaLabel ?? 'Select all rows'}
                           className="
                             peer
                             h-6 w-6
@@ -279,6 +298,9 @@ const DataGrid = <T,>({
                     </div>
                   )}
                 </th>
+              ) : null}
+              {showLeadingGutter ? (
+                <th className={[leadingGutterColumnClassName, 'px-1 align-middle'].join(' ')} />
               ) : null}
 
               {columns.map((column, columnIndex) => {
@@ -356,15 +378,15 @@ const DataGrid = <T,>({
 
                 return (
                   <tr key={key} className="h-14 border-b border-[var(--color-secondary-outline)] last:border-b-0">
-                    {selection ? (
+                    {effectiveSelection ? (
                       <td className={[selectionColumnClassName, 'p-0 text-center align-middle'].join(' ')}>
                         <span className="relative inline-flex h-14 w-full items-center justify-center px-4">
                           <input
                             type="checkbox"
                             checked={selectedKeySet.has(key)}
-                            onChange={() => handleToggleRow(key, Boolean(selection.isRowDisabled?.(key)))}
-                            disabled={Boolean(selection.isRowDisabled?.(key))}
-                            aria-label={selection.rowAriaLabel?.(key) ?? `Select row ${key}`}
+                            onChange={() => handleToggleRow(key, Boolean(effectiveSelection.isRowDisabled?.(key)))}
+                            disabled={Boolean(effectiveSelection.isRowDisabled?.(key))}
+                            aria-label={effectiveSelection.rowAriaLabel?.(key) ?? `Select row ${key}`}
                             className="
                               peer
                               h-6 w-6
@@ -401,6 +423,9 @@ const DataGrid = <T,>({
                           </svg>
                         </span>
                       </td>
+                    ) : null}
+                    {showLeadingGutter ? (
+                      <td className={[leadingGutterColumnClassName, 'p-0 align-middle'].join(' ')} />
                     ) : null}
 
                     {columns.map((column, columnIndex) => {
