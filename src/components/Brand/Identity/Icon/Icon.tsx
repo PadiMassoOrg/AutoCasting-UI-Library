@@ -91,6 +91,10 @@ import XIcon from '../../../../icons/x.svg';
 import WebIcon from '../../../../icons/web.svg';
 import WebIconPurple from '../../../../icons/web-purple.svg';
 import WarningIconAlertYellow from '../../../../icons/warning-alert-yellow.svg';
+import TableIconPurple from '../../../../icons/table-purple.svg';
+import TableIcon from '../../../../icons/table.svg';
+import GalleryIconPurple from '../../../../icons/gallery-purple.svg';
+import GalleryIcon from '../../../../icons/gallery.svg';
 
 export type IconName =
   | 'ogIcon'
@@ -134,6 +138,8 @@ export type IconName =
   | 'info'
   | 'play'
   | 'web'
+  | 'table'
+  | 'gallery'
   | 'warning'
   | 'logout';
 
@@ -325,6 +331,14 @@ const ICONS: Record<IconName, BaseIconConfig> = {
   viewHide: {
     default: ViewHideIcon,
     primary: ViewHideIconPurple,
+  },
+  table: {
+    default: TableIcon,
+    primary: TableIconPurple,
+  },
+  gallery: {
+    default: GalleryIcon,
+    primary: GalleryIconPurple,
   },
 };
 
