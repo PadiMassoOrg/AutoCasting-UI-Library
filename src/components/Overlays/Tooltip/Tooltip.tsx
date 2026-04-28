@@ -18,6 +18,7 @@ type TooltipCoordinates = {
 };
 
 const TOOLTIP_GAP = 16;
+const TOOLTIP_OPEN_DELAY_MS = 450;
 
 const POSITION_STYLES: Record<
   TooltipPosition,
@@ -93,7 +94,28 @@ export default function Tooltip({ children, title, position = 'topLeft', nudgeX 
   const [open, setOpen] = useState(false);
   const [isPositioned, setIsPositioned] = useState(false);
   const [coordinates, setCoordinates] = useState<TooltipCoordinates>({ left: 0, top: 0 });
+  const openDelayTimeoutRef = useRef<number | null>(null);
+  const positionRafRef = useRef<number | null>(null);
   const positionStyle = POSITION_STYLES[position];
+
+  const clearOpenDelay = useCallback(() => {
+    if (openDelayTimeoutRef.current === null) return;
+    window.clearTimeout(openDelayTimeoutRef.current);
+    openDelayTimeoutRef.current = null;
+  }, []);
+
+  const requestOpen = useCallback(() => {
+    clearOpenDelay();
+    openDelayTimeoutRef.current = window.setTimeout(() => {
+      setOpen(true);
+      openDelayTimeoutRef.current = null;
+    }, TOOLTIP_OPEN_DELAY_MS);
+  }, [clearOpenDelay]);
+
+  const requestClose = useCallback(() => {
+    clearOpenDelay();
+    setOpen(false);
+  }, [clearOpenDelay]);
 
   const updatePosition = useCallback(() => {
     const triggerElement = triggerRef.current;
@@ -125,6 +147,10 @@ export default function Tooltip({ children, title, position = 'topLeft', nudgeX 
 
     setIsPositioned(false);
     updatePosition();
+    positionRafRef.current = window.requestAnimationFrame(() => {
+      setIsPositioned(true);
+      positionRafRef.current = null;
+    });
 
     const handleViewportChange = () => updatePosition();
 
@@ -132,10 +158,23 @@ export default function Tooltip({ children, title, position = 'topLeft', nudgeX 
     window.addEventListener('scroll', handleViewportChange, true);
 
     return () => {
+      if (positionRafRef.current !== null) {
+        window.cancelAnimationFrame(positionRafRef.current);
+        positionRafRef.current = null;
+      }
       window.removeEventListener('resize', handleViewportChange);
       window.removeEventListener('scroll', handleViewportChange, true);
     };
   }, [open, updatePosition]);
+
+  useLayoutEffect(() => {
+    return () => {
+      clearOpenDelay();
+      if (positionRafRef.current !== null) {
+        window.cancelAnimationFrame(positionRafRef.current);
+      }
+    };
+  }, [clearOpenDelay]);
 
   if (!title) {
     return <>{children}</>;
@@ -153,10 +192,10 @@ export default function Tooltip({ children, title, position = 'topLeft', nudgeX 
       <span
         ref={triggerRef}
         className="inline-flex max-w-full"
-        onMouseEnter={() => setOpen(true)}
-        onMouseLeave={() => setOpen(false)}
-        onFocus={() => setOpen(true)}
-        onBlur={() => setOpen(false)}
+        onMouseEnter={requestOpen}
+        onMouseLeave={requestClose}
+        onFocus={requestOpen}
+        onBlur={requestClose}
         aria-describedby={!isValidElement(children) && open ? tooltipId : undefined}
       >
         {trigger}
@@ -169,7 +208,10 @@ export default function Tooltip({ children, title, position = 'topLeft', nudgeX 
               id={tooltipId}
               role="tooltip"
               aria-hidden="true"
-              className={clsx('pointer-events-none fixed z-[1200] ', isPositioned ? 'opacity-100' : 'opacity-0')}
+              className={clsx(
+                'pointer-events-none fixed z-[1200] transition-opacity duration-200 ease-in-out',
+                isPositioned ? 'opacity-100' : 'opacity-0'
+              )}
               style={{
                 left: coordinates.left,
                 top: coordinates.top,
