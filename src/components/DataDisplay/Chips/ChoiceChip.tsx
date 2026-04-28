@@ -1,18 +1,12 @@
 import { clsx } from 'clsx';
 import type { ButtonHTMLAttributes } from 'react';
 
-export type SelectableChipProps = {
+export type ChoiceChipProps = {
   label: string;
   selected?: boolean;
 } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'>;
 
-export default function SelectableChip({
-  label,
-  selected = false,
-  className,
-  type = 'button',
-  ...rest
-}: SelectableChipProps) {
+export default function ChoiceChip({ label, selected = false, className, type = 'button', ...rest }: ChoiceChipProps) {
   return (
     <button
       type={type}

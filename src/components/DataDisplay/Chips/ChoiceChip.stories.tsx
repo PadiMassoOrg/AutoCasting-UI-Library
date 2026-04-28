@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import SelectableChip from './SelectableChip';
+import ChoiceChip from './ChoiceChip';
 
-const meta: Meta<typeof SelectableChip> = {
-  title: 'Navigation/Selection/SelectableChip',
-  component: SelectableChip,
+const meta: Meta<typeof ChoiceChip> = {
+  title: 'DataDisplay/Chips/ChoiceChip',
+  component: ChoiceChip,
   tags: ['autodocs'],
   args: {
     label: 'Actor/Actriz',
@@ -15,7 +15,7 @@ const meta: Meta<typeof SelectableChip> = {
 
     return (
       <div className="p-4">
-        <SelectableChip {...args} selected={selected} onClick={() => setSelected((prev) => !prev)} />
+        <ChoiceChip {...args} selected={selected} onClick={() => setSelected((prev) => !prev)} />
       </div>
     );
   },

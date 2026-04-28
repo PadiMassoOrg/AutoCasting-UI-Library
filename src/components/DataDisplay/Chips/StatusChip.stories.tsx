@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import StatusChip from './StatusChip';
 
 const meta: Meta<typeof StatusChip> = {
-  title: 'Feedback/Status/Status Chip',
+  title: 'DataDisplay/Chips/StatusChip',
   component: StatusChip,
   tags: ['autodocs'],
   args: {
