@@ -16,3 +16,21 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const Subtle: Story = {
+  args: {
+    className: 'h-8 w-8',
+    speedMs: 2100,
+    arc: 0.4,
+    opacity: 0.45,
+  },
+};
+
+export const Fast: Story = {
+  args: {
+    speedMs: 900,
+    strokeWidth: 2.2,
+    arc: 0.65,
+    opacity: 0.8,
+  },
+};
