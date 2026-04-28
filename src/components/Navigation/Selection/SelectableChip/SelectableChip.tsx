@@ -1,0 +1,32 @@
+import { clsx } from 'clsx';
+import type { ButtonHTMLAttributes } from 'react';
+
+export type SelectableChipProps = {
+  label: string;
+  selected?: boolean;
+} & Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'>;
+
+export default function SelectableChip({
+  label,
+  selected = false,
+  className,
+  type = 'button',
+  ...rest
+}: SelectableChipProps) {
+  return (
+    <button
+      type={type}
+      className={clsx(
+        'px-4 py-1 rounded-full whitespace-nowrap cursor-pointer bg-transparent border-1',
+        selected
+          ? 'text-(--color-primary-purple) border-(--color-primary-purple)'
+          : 'text-(--color-secondary-grey-fonts) border-(--color-secondary-outline)',
+        className
+      )}
+      aria-pressed={selected}
+      {...rest}
+    >
+      {label}
+    </button>
+  );
+}

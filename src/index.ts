@@ -17,6 +17,7 @@ export * from './components/Media/Images/PhotoZoomOverlay';
 export * from './components/Media/Video';
 export * from './components/Navigation/Indicators/Chevron';
 export * from './components/Navigation/Selection/Pills';
+export * from './components/Navigation/Selection/SelectableChip';
 export * from './components/Overlays/Dialogs/Modal';
 export * from './components/Overlays/Tooltip';
 export * from './components/Overlays/Panels/DetailsView';
