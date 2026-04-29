@@ -11,10 +11,18 @@ const meta: Meta<typeof DetailsView> = {
   parameters: {
     layout: 'fullscreen',
   },
+  argTypes: {
+    loading: { control: 'boolean' },
+    isLoading: { control: 'boolean' },
+    loadingHeaderHeightClassName: { control: 'text' },
+  },
   args: {
     open: true,
     headerLeft: <h2>Name</h2>,
     headerRight: <Icon name="open" variant="primary"></Icon>,
+    loading: false,
+    isLoading: false,
+    loadingHeaderHeightClassName: 'h-8',
     children: (
       <div className="space-y-4">
         <section className="rounded-2xl bg-(--color-primary-white) p-4 shadow-sm">
@@ -52,3 +60,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const Loading: Story = {
+  args: {
+    loading: true,
+    isLoading: false,
+    loadingHeaderHeightClassName: 'h-12',
+  },
+};

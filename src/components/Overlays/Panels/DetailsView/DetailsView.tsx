@@ -1,14 +1,18 @@
 import clsx from 'clsx';
 import { type ReactNode, useEffect, useRef } from 'react';
 import { Icon } from '../../../Brand/Identity/Icon';
+import { Spinner } from '../../../Feedback/Loading/Spinner';
 
 type DetailsViewProps = {
   open: boolean;
   onClose: () => void;
   headerLeft: ReactNode;
   headerRight?: ReactNode;
-  children: ReactNode;
+  children?: ReactNode;
   className?: string;
+  loading?: boolean;
+  isLoading?: boolean;
+  loadingHeaderHeightClassName?: string;
 };
 
 export default function DetailsView({
@@ -18,6 +22,9 @@ export default function DetailsView({
   headerRight,
   children,
   className,
+  loading = false,
+  isLoading = false,
+  loadingHeaderHeightClassName = 'h-8',
 }: DetailsViewProps) {
   const bodyRef = useRef<HTMLDivElement | null>(null);
 
@@ -48,6 +55,9 @@ export default function DetailsView({
     };
   }, [open]);
 
+  const showLoading = loading || isLoading;
+  const resolvedHeaderLeft = showLoading ? <div className={loadingHeaderHeightClassName} /> : navigation;
+
   if (!open) return null;
 
   return (
@@ -64,7 +74,7 @@ export default function DetailsView({
       >
         {/* Header */}
         <header className="flex items-center justify-between p-5 border-b border-(--color-secondary-outline) bg-(--color-primary-white)">
-          {navigation}
+          {resolvedHeaderLeft}
           <div className="flex items-center gap-4">
             {headerRight}
             <Icon name="burgerClose" onClick={onClose} />
@@ -73,7 +83,13 @@ export default function DetailsView({
 
         {/* Body scrolleable */}
         <div ref={bodyRef} className="flex-1 min-h-0 overflow-auto px-8 py-10">
-          {children}
+          {showLoading ? (
+            <div className="w-full h-full min-h-[220px] flex items-center justify-center">
+              <Spinner className="h-8 w-8" />
+            </div>
+          ) : (
+            children
+          )}
         </div>
       </aside>
     </div>

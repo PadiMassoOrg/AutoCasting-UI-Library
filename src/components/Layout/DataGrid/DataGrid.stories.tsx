@@ -146,3 +146,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const Loading: Story = {
+  render: () => (
+    <div className="p-4">
+      <DataGrid columns={columns} data={[]} rowKey="id" loading loadingMessage="Cargando postulantes..." />
+    </div>
+  ),
+};

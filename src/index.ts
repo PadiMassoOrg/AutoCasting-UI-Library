@@ -8,7 +8,7 @@ export * from './components/Actions/Menus/OverflowMenu';
 export * from './components/Actions/Menus/TextDropdownTrigger';
 export * from './components/Brand/Identity/Icon';
 export * from './components/Brand/Identity/Logo';
-export * from './components/Feedback/Loading/Spinner';
+export * from './components/Feedback/Loading';
 export * from './components/DataDisplay/Chips';
 export * from './components/Feedback/Toast';
 export * from './components/Forms';

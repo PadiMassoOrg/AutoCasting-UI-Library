@@ -5,19 +5,22 @@ type SpinnerProps = {
   ariaLabel?: string;
   arc?: number;
   speedMs?: number;
+  opacity?: number;
 };
 
 export default function Spinner({
   color,
-  strokeWidth = 2,
+  strokeWidth = 1.8,
   className = 'h-9 w-9',
   ariaLabel = 'Loading...',
-  arc = 0.65,
-  speedMs = 1300,
+  arc = 0.45,
+  speedMs = 1800,
+  opacity = 0.6,
 }: SpinnerProps) {
   const style = {
-    ...(color ? { color } : {}),
+    ...(color ? { color } : { color: 'var(--color-secondary-grey-fonts)' }),
     animationDuration: `${speedMs}ms`,
+    opacity,
   } as React.CSSProperties;
 
   const r = 9;

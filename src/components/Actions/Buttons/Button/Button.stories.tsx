@@ -33,6 +33,16 @@ export const Disabled: Story = {
   args: { variant: 'disabled', className: 'max-w-xl' },
 };
 
+export const Loading: Story = {
+  args: {
+    variant: 'primary',
+    className: 'max-w-xl',
+    loading: true,
+    loadingText: 'Enviando...',
+    children: 'Enviar',
+  },
+};
+
 export const CustomClassesMerged: Story = {
   args: {
     children: 'Custom Classes',

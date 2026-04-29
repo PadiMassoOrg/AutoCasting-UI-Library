@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { OverflowMenu } from '../../Actions/Menus/OverflowMenu';
 import type { OverflowMenuAlign, OverflowMenuItem, OverflowMenuSide } from '../../Actions/Menus/OverflowMenu';
+import { Spinner } from '../../Feedback/Loading/Spinner';
 import { ChevronLeft, ChevronRight } from '../../Navigation/Indicators/Chevron';
 
 type DataGridAlign = 'left' | 'center' | 'right';
@@ -67,6 +68,8 @@ type Props<T> = {
   tableClassName?: string;
   emptyMessage?: ReactNode;
   pagination?: DataGridPagination;
+  loading?: boolean;
+  loadingMessage?: ReactNode;
 };
 
 function resolveCell<T>(column: DataGridColumn<T>, row: T): ReactNode {
@@ -161,6 +164,8 @@ const DataGrid = <T,>({
   tableClassName,
   emptyMessage = 'No data',
   pagination,
+  loading = false,
+  loadingMessage,
 }: Props<T>) => {
   const selectionColumnClassName = 'w-[72px]';
   const leadingGutterColumnClassName = 'w-[24px]';
@@ -372,7 +377,18 @@ const DataGrid = <T,>({
           </thead>
 
           <tbody>
-            {data.length > 0 ? (
+            {loading ? (
+              <tr>
+                <td colSpan={colCount} className="px-6 py-10 text-center">
+                  {loadingMessage ?? (
+                    <div className="inline-flex items-center justify-center gap-2 text-sm text-[var(--color-secondary-grey-fonts)]">
+                      <Spinner className="h-4 w-4" />
+                      <span>Cargando...</span>
+                    </div>
+                  )}
+                </td>
+              </tr>
+            ) : data.length > 0 ? (
               data.map((row, index) => {
                 const key = resolvedRowKeys[index];
 
