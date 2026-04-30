@@ -10,6 +10,7 @@ export * from './components/Brand/Identity/Icon';
 export * from './components/Brand/Identity/Logo';
 export * from './components/Feedback/Loading';
 export * from './components/DataDisplay/Chips';
+export * from './components/DataDisplay/InfoCarousel';
 export * from './components/Feedback/Toast';
 export * from './components/Forms';
 export * from './components/Media/Images/ImageCarousel';
