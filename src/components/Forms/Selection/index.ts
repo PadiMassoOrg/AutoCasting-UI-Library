@@ -1,8 +1,11 @@
 export { default as BooleanRadioGroup } from './BooleanRadioGroup';
 export { default as CheckboxField } from './CheckboxField';
 export { default as MultiRadioGroupField } from './MultiRadioGroupField';
+export { default as RangeCalendar } from './RangeCalendar';
 export { default as RadioGroupField } from './RadioGroupField';
 export { default as TextareaField } from './TextareaField';
+export { parseLocalISODate, toLocalISO } from './RangeCalendar';
 export type { BooleanRadioGroupProps } from './BooleanRadioGroup';
+export type { RangeCalendarProps } from './RangeCalendar';
 export type { RadioOption } from './RadioGroupField';
 export type { TextareaFieldProps } from './TextareaField';

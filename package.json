@@ -36,7 +36,9 @@
   "homepage": "https://github.com/PadiMassoOrg/AutoCasting-UI-Library#readme",
   "peerDependencies": {
     "react": "^18 || ^19",
-    "react-dom": "^18 || ^19"
+    "react-day-picker": "^9.13.0",
+    "react-dom": "^18 || ^19",
+    "react-router-dom": "^7.6.2"
   },
   "dependencies": {
     "clsx": "^2.1.1",
