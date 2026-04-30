@@ -1,6 +1,6 @@
 {
   "name": "autocasting-ui-library-padimasso",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "UI Library para el ecosistema de Auto Casting by Padimasso",
   "type": "module",
   "main": "dist/index.js",
@@ -37,8 +37,7 @@
   "peerDependencies": {
     "react": "^18 || ^19",
     "react-day-picker": "^9.13.0",
-    "react-dom": "^18 || ^19",
-    "react-router-dom": "^7.6.2"
+    "react-dom": "^18 || ^19"
   },
   "dependencies": {
     "clsx": "^2.1.1",

@@ -1,10 +1,9 @@
 import { Separator } from '../Separator';
 import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 export type MenuItem =
-  | { type: 'link'; to: string; label: React.ReactNode; className?: string }
+  | { type: 'link'; href: string; target?: React.HTMLAttributeAnchorTarget; label: React.ReactNode; className?: string }
   | { type: 'external'; href: string; label: React.ReactNode; className?: string }
   | { type: 'button'; onClick: () => void; label: React.ReactNode; className?: string }
   | { type: 'separator' };
@@ -112,13 +111,15 @@ export default function NavbarDropdown({
               }
               return (
                 <li key={`lnk-${i}`}>
-                  <Link
-                    to={it.to}
+                  <a
+                    href={it.href}
+                    target={it.target}
+                    rel={it.target === '_blank' ? 'noopener noreferrer' : undefined}
                     className={clsx(itemClassName, it.className)}
                     onClick={() => closeOnItemClick && setOpen(false)}
                   >
                     {it.label}
-                  </Link>
+                  </a>
                 </li>
               );
             })}

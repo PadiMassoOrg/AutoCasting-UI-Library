@@ -1,5 +1,4 @@
 import { useEffect, useLayoutEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 
 const MAX_FRAMES = 10;
 const TIMEOUT_MS = 180;
@@ -8,9 +7,11 @@ function scrollDocumentToTop() {
   window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
 }
 
-export default function ScrollToTop() {
-  const location = useLocation();
+type ScrollToTopProps = {
+  watch?: unknown;
+};
 
+export default function ScrollToTop({ watch }: ScrollToTopProps) {
   useEffect(() => {
     if (!('scrollRestoration' in window.history)) return;
 
@@ -56,7 +57,7 @@ export default function ScrollToTop() {
         window.clearTimeout(timeoutId);
       }
     };
-  }, [location.pathname, location.search]);
+  }, [watch]);
 
   return null;
 }
