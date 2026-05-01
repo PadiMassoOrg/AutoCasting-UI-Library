@@ -2,7 +2,7 @@ import { ChevronRight, ChevronUpDown } from '../../Navigation/Indicators/Chevron
 import { useChromeBoxHeights } from '../../../hooks/useChromeBoxHeights';
 import { LG_SCREEN_SIZE, useMedia } from '../../../hooks/useMedia';
 import type { ReactNode } from 'react';
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 export type DashboardSection<Key extends string = string> = {
   key: Key;
@@ -59,9 +59,12 @@ function DashboardShell<Key extends string = string>({
   const { header, footer } = useChromeBoxHeights();
   const hasSections = !!(sections && sections.length > 0);
   const desktopViewportHeight = `calc(var(--app-vh, 1vh) * 100 - ${header + footer}px)`;
+  const stickyOffset = 12;
+  const titleBlockRef = useRef<HTMLDivElement | null>(null);
 
   const [activeKey, setActiveKey] = useState<Key | null>((initialKey as Key) ?? sections?.[0]?.key ?? null);
   const [mobileView, setMobileView] = useState<'nav' | 'content'>('nav');
+  const [desktopTitleHeight, setDesktopTitleHeight] = useState(0);
 
   useEffect(() => {
     if (!hasSections) {
@@ -78,7 +81,29 @@ function DashboardShell<Key extends string = string>({
     else if (!isDesktop && hasSections) setMobileView('nav');
   }, [isDesktop, hasSections]);
 
+  useEffect(() => {
+    if (!isDesktop) {
+      setDesktopTitleHeight(0);
+      return;
+    }
+
+    const node = titleBlockRef.current;
+    if (!node) {
+      setDesktopTitleHeight(0);
+      return;
+    }
+
+    const updateHeight = () => setDesktopTitleHeight(node.getBoundingClientRect().height);
+    updateHeight();
+
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(node);
+
+    return () => observer.disconnect();
+  }, [isDesktop, title, titleActions]);
+
   const currentSection = useMemo(() => sections?.find((s) => s.key === activeKey) ?? null, [sections, activeKey]);
+  const desktopBodyHeight = `calc(var(--app-vh, 1vh) * 100 - ${header + footer + desktopTitleHeight + stickyOffset}px)`;
 
   const goToNav = useCallback(() => {
     if (!isDesktop && hasSections) {
@@ -177,27 +202,30 @@ function DashboardShell<Key extends string = string>({
   // Mobile (Content Only) & Desktop (Title + Content)
   return (
     <DashboardShellContext.Provider value={ctxValue}>
-      <section className="lg:p-10">
+      <section
+        className="w-full flex flex-col bg-(--color-secondary-white) lg:p-10"
+        style={isDesktop ? { minHeight: desktopViewportHeight } : undefined}
+      >
         {/* Desktop Title */}
-        <div className="w-full">
-          {isDesktop && <DashboardShellTitle title={title} actions={titleActions} className="mb-4" />}
+        <div ref={titleBlockRef} className="w-full shrink-0">
+          {isDesktop && <DashboardShellTitle title={title} actions={titleActions} className="pb-4" />}
         </div>
 
         <div
-          className="w-full flex flex-col lg:flex-row gap-0"
-          style={isDesktop ? { minHeight: desktopViewportHeight } : undefined}
+          className="w-full flex flex-col lg:flex-row gap-0 flex-1 min-h-0"
+          style={isDesktop ? { height: desktopBodyHeight } : undefined}
         >
           {/* Desktop Menu */}
           {isDesktop && (
             <aside
-              className="hidden lg:block w-[300px] shrink-0 bg-transparent lg:sticky"
+              className="hidden lg:block w-[300px] shrink-0 bg-transparent lg:sticky overflow-hidden"
               style={{
-                top: `${header}px`,
-                height: desktopViewportHeight,
+                top: `${header + stickyOffset}px`,
+                height: '100%',
               }}
             >
-              <div className="h-full flex flex-col">
-                <nav className="flex-1 min-h-0 overflow-y-auto flex flex-col gap-2">
+              <div className="h-full min-h-0 flex flex-col">
+                <nav className="flex-1 min-h-0 overflow-y-auto flex flex-col gap-2 pr-1">
                   {sections!.map((item) => {
                     const selected = item.key === activeKey;
                     return (
@@ -224,7 +252,7 @@ function DashboardShell<Key extends string = string>({
                   })}
                 </nav>
 
-                {bottomSection && <footer className="mt-auto shrink-0">{bottomSection}</footer>}
+                {bottomSection && <footer className="mt-auto shrink-0 p-4">{bottomSection}</footer>}
               </div>
             </aside>
           )}
