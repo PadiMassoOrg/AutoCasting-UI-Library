@@ -59,6 +59,7 @@ function DashboardShell<Key extends string = string>({
   const { header, footer } = useChromeBoxHeights();
   const hasSections = !!(sections && sections.length > 0);
   const desktopViewportHeight = `calc(var(--app-vh, 1vh) * 100 - ${header + footer}px)`;
+  const desktopSectionPaddingY = 50;
   const stickyOffset = 12;
   const titleBlockRef = useRef<HTMLDivElement | null>(null);
 
@@ -103,7 +104,7 @@ function DashboardShell<Key extends string = string>({
   }, [isDesktop, title, titleActions]);
 
   const currentSection = useMemo(() => sections?.find((s) => s.key === activeKey) ?? null, [sections, activeKey]);
-  const desktopBodyHeight = `calc(var(--app-vh, 1vh) * 100 - ${header + footer + desktopTitleHeight + stickyOffset}px)`;
+  const desktopBodyHeight = `calc(var(--app-vh, 1vh) * 100 - ${header + footer + desktopTitleHeight + stickyOffset + desktopSectionPaddingY}px)`;
 
   const goToNav = useCallback(() => {
     if (!isDesktop && hasSections) {
@@ -203,7 +204,7 @@ function DashboardShell<Key extends string = string>({
   return (
     <DashboardShellContext.Provider value={ctxValue}>
       <section
-        className="w-full flex flex-col bg-(--color-secondary-white) lg:p-10"
+        className="box-border w-full flex flex-col bg-(--color-secondary-white) lg:p-10"
         style={isDesktop ? { minHeight: desktopViewportHeight } : undefined}
       >
         {/* Desktop Title */}
@@ -221,7 +222,8 @@ function DashboardShell<Key extends string = string>({
               className="hidden lg:block w-[300px] shrink-0 bg-transparent lg:sticky overflow-hidden"
               style={{
                 top: `${header + stickyOffset}px`,
-                height: '100%',
+                height: desktopBodyHeight,
+                maxHeight: desktopBodyHeight,
               }}
             >
               <div className="h-full min-h-0 flex flex-col">
@@ -234,7 +236,7 @@ function DashboardShell<Key extends string = string>({
                         type="button"
                         onClick={() => setActiveKey(item.key)}
                         className={[
-                          'flex items-center justify-between gap-2 rounded-2xl border px-4 py-5 text-sm leading-5 font-semibold cursor-pointer w-full text-left',
+                          'flex items-center justify-between gap-2 rounded-2xl border px-4 py-5 text-sm font-semibold cursor-pointer w-full text-left',
                           selected
                             ? 'shadow-sm border-(--color-primary-purple) text-(--color-primary-purple) bg-(--color-primary-white)'
                             : 'border-(--color-secondary-outline) bg-(--color-primary-white) text-(--color-primary-black)',
