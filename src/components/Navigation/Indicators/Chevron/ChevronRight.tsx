@@ -4,7 +4,7 @@ type ChevronRightProps = {
   double?: boolean;
 };
 
-const ChevronRight = ({ sizePx = 30, className, double = false }: ChevronRightProps) => {
+const ChevronRight = ({ sizePx = 28, className, double = false }: ChevronRightProps) => {
   return (
     <svg
       width={sizePx}
