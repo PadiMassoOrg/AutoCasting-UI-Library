@@ -261,7 +261,7 @@ function DashboardShell<Key extends string = string>({
 
           <article className="flex-1 min-w-0 lg:pt-0">
             {/* Container */}
-            <div className="w-full max-w-[1500px] mx-auto lg:pl-6 lg:py-0">
+            <div className="w-full max-w-[1500px] mx-auto lg:pl-8 lg:py-0">
               {!isDesktop && mobileView === 'content' && currentSection && (
                 <div>
                   {contentHeader}
