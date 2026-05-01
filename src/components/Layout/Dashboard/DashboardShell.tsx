@@ -204,7 +204,7 @@ function DashboardShell<Key extends string = string>({
   return (
     <DashboardShellContext.Provider value={ctxValue}>
       <section
-        className="box-border w-full flex flex-col bg-(--color-secondary-white) lg:px-10 lg:py-6"
+        className="box-border w-full max-w-[1650px] m-auto flex flex-col bg-(--color-secondary-white) lg:px-10 lg:py-6"
         style={isDesktop ? { minHeight: desktopViewportHeight } : undefined}
       >
         {/* Desktop Title */}
