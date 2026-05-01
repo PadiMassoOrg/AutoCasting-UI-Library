@@ -197,7 +197,7 @@ function DashboardShell<Key extends string = string>({
               </div>
             )}
             {isDesktop && currentSection && (
-              <div className="flex flex-col gap-4 max-w-[850px] m-auto">
+              <div className="flex flex-col gap-4 m-auto">
                 {contentHeader}
                 {currentSection.render()}
               </div>
