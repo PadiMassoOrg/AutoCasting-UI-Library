@@ -177,76 +177,78 @@ function DashboardShell<Key extends string = string>({
   // Mobile (Content Only) & Desktop (Title + Content)
   return (
     <DashboardShellContext.Provider value={ctxValue}>
-      {/* Desktop Title */}
-      <div className="w-full">
-        {isDesktop && <DashboardShellTitle title={title} actions={titleActions} className="mb-4" />}
-      </div>
+      <section className="lg:p-10">
+        {/* Desktop Title */}
+        <div className="w-full">
+          {isDesktop && <DashboardShellTitle title={title} actions={titleActions} className="mb-4" />}
+        </div>
 
-      <div
-        className="w-full flex flex-col lg:flex-row gap-0"
-        style={isDesktop ? { minHeight: desktopViewportHeight } : undefined}
-      >
-        {/* Desktop Menu */}
-        {isDesktop && (
-          <aside
-            className="hidden lg:block w-[300px] shrink-0 bg-transparent lg:sticky"
-            style={{
-              top: `${header}px`,
-              height: desktopViewportHeight,
-            }}
-          >
-            <div className="h-full flex flex-col">
-              <nav className="flex-1 min-h-0 overflow-y-auto flex flex-col gap-2">
-                {sections!.map((item) => {
-                  const selected = item.key === activeKey;
-                  return (
-                    <button
-                      key={item.key}
-                      type="button"
-                      onClick={() => setActiveKey(item.key)}
-                      className={[
-                        'flex items-center justify-between gap-2 rounded-2xl border px-4 py-5 text-sm leading-5 font-semibold cursor-pointer w-full text-left',
-                        selected
-                          ? 'shadow-sm border-(--color-primary-purple) text-(--color-primary-purple) bg-(--color-primary-white)'
-                          : 'border-(--color-secondary-outline) bg-(--color-primary-white) text-(--color-primary-black)',
-                      ].join(' ')}
-                    >
-                      <span className="flex items-center gap-2">
-                        {item.icon && <span className="w-5 h-5">{item.icon}</span>}
-                        <span>{item.label}</span>
-                      </span>
-                      <span className={selected ? 'text-(--color-primary-purple)' : 'text-(--color-primary-black)'}>
-                        {selected ? <ChevronRight sizePx={24} /> : <ChevronUpDown open={false} sizePx={24} />}
-                      </span>
-                    </button>
-                  );
-                })}
-              </nav>
+        <div
+          className="w-full flex flex-col lg:flex-row gap-0"
+          style={isDesktop ? { minHeight: desktopViewportHeight } : undefined}
+        >
+          {/* Desktop Menu */}
+          {isDesktop && (
+            <aside
+              className="hidden lg:block w-[300px] shrink-0 bg-transparent lg:sticky"
+              style={{
+                top: `${header}px`,
+                height: desktopViewportHeight,
+              }}
+            >
+              <div className="h-full flex flex-col">
+                <nav className="flex-1 min-h-0 overflow-y-auto flex flex-col gap-2">
+                  {sections!.map((item) => {
+                    const selected = item.key === activeKey;
+                    return (
+                      <button
+                        key={item.key}
+                        type="button"
+                        onClick={() => setActiveKey(item.key)}
+                        className={[
+                          'flex items-center justify-between gap-2 rounded-2xl border px-4 py-5 text-sm leading-5 font-semibold cursor-pointer w-full text-left',
+                          selected
+                            ? 'shadow-sm border-(--color-primary-purple) text-(--color-primary-purple) bg-(--color-primary-white)'
+                            : 'border-(--color-secondary-outline) bg-(--color-primary-white) text-(--color-primary-black)',
+                        ].join(' ')}
+                      >
+                        <span className="flex items-center gap-2">
+                          {item.icon && <span className="w-5 h-5">{item.icon}</span>}
+                          <span>{item.label}</span>
+                        </span>
+                        <span className={selected ? 'text-(--color-primary-purple)' : 'text-(--color-primary-black)'}>
+                          {selected ? <ChevronRight sizePx={24} /> : <ChevronUpDown open={false} sizePx={24} />}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </nav>
 
-              {bottomSection && <footer className="mt-auto shrink-0">{bottomSection}</footer>}
+                {bottomSection && <footer className="mt-auto shrink-0">{bottomSection}</footer>}
+              </div>
+            </aside>
+          )}
+
+          <article className="flex-1 min-w-0 lg:pt-0">
+            {/* Container */}
+            <div className="w-full max-w-[1500px] mx-auto lg:pl-6 lg:py-0">
+              {!isDesktop && mobileView === 'content' && currentSection && (
+                <div>
+                  {contentHeader}
+                  {currentSection.render()}
+                </div>
+              )}
+              {isDesktop && currentSection && (
+                <div className="flex flex-col gap-8 m-auto">
+                  {contentHeader}
+                  {currentSection.render()}
+                </div>
+              )}
+              {children}
             </div>
-          </aside>
-        )}
-
-        <article className="flex-1 min-w-0 lg:pt-0">
-          {/* Container */}
-          <div className="w-full max-w-[1500px] mx-auto lg:pl-6 lg:py-0">
-            {!isDesktop && mobileView === 'content' && currentSection && (
-              <div>
-                {contentHeader}
-                {currentSection.render()}
-              </div>
-            )}
-            {isDesktop && currentSection && (
-              <div className="flex flex-col gap-8 m-auto">
-                {contentHeader}
-                {currentSection.render()}
-              </div>
-            )}
-            {children}
-          </div>
-        </article>
-      </div>
+          </article>
+        </div>
+      </section>
     </DashboardShellContext.Provider>
   );
 }
