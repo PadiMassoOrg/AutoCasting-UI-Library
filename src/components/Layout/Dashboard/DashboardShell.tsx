@@ -205,7 +205,15 @@ function DashboardShell<Key extends string = string>({
     <DashboardShellContext.Provider value={ctxValue}>
       <section
         className="box-border w-full max-w-[1650px] m-auto flex flex-col bg-(--color-secondary-white) lg:px-10 lg:py-6"
-        style={isDesktop ? { minHeight: desktopViewportHeight } : undefined}
+        style={
+          isDesktop
+            ? {
+                height: desktopViewportHeight,
+                maxHeight: desktopViewportHeight,
+                overflow: 'hidden',
+              }
+            : undefined
+        }
       >
         {/* Desktop Title */}
         <div ref={titleBlockRef} className="w-full shrink-0">
@@ -259,7 +267,7 @@ function DashboardShell<Key extends string = string>({
             </aside>
           )}
 
-          <article className="flex-1 min-w-0 lg:pt-0">
+          <article className="flex-1 min-w-0 min-h-0 lg:pt-0 lg:overflow-y-auto">
             {/* Container */}
             <div className="w-full max-w-[1500px] mx-auto lg:pl-8 lg:py-0">
               {!isDesktop && mobileView === 'content' && currentSection && (
