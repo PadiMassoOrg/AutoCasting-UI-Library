@@ -60,7 +60,7 @@ function DashboardShell<Key extends string = string>({
   const hasSections = !!(sections && sections.length > 0);
   const desktopViewportHeight = `calc(var(--app-vh, 1vh) * 100 - ${header + footer}px)`;
   const desktopSectionPaddingY = 50;
-  const stickyOffset = 12;
+  const stickyOffset = 0;
   const titleBlockRef = useRef<HTMLDivElement | null>(null);
 
   const [activeKey, setActiveKey] = useState<Key | null>((initialKey as Key) ?? sections?.[0]?.key ?? null);
