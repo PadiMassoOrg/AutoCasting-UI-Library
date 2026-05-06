@@ -34,7 +34,7 @@ export function DashboardShellTitle({ title, actions, className }: DashboardShel
   if (!title && !actions) return null;
 
   return (
-    <header className={['flex items-center justify-between', className ?? ''].filter(Boolean).join(' ')}>
+    <header className={['w-full flex items-center justify-between', className ?? ''].filter(Boolean).join(' ')}>
       <div className="min-w-0">
         {typeof title === 'string' ? (
           <h1 className="text-lg font-bold text-(--color-primary-black) leading-tight">{title}</h1>
