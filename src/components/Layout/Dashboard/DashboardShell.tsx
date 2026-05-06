@@ -61,8 +61,6 @@ function DashboardShell<Key extends string = string>({
   const { header, footer } = useChromeBoxHeights();
   const hasSections = !!(sections && sections.length > 0);
   const desktopViewportHeight = `calc(var(--app-vh, 1vh) * 100 - ${header + footer}px)`;
-  const desktopHeightOffset = 76;
-  const stickyOffset = 0;
 
   const [activeKey, setActiveKey] = useState<Key | null>((initialKey as Key) ?? sections?.[0]?.key ?? null);
   const [mobileView, setMobileView] = useState<'nav' | 'content'>('nav');
@@ -83,7 +81,6 @@ function DashboardShell<Key extends string = string>({
   }, [isDesktop, hasSections]);
 
   const currentSection = useMemo(() => sections?.find((s) => s.key === activeKey) ?? null, [sections, activeKey]);
-  const desktopBodyHeight = `calc(var(--app-vh, 1vh) * 100 - ${header + footer + stickyOffset + desktopHeightOffset}px)`;
 
   const goToNav = useCallback(() => {
     if (!isDesktop && hasSections) {
@@ -144,7 +141,7 @@ function DashboardShell<Key extends string = string>({
       {sectionUsesShellLayout ? (
         <article className="flex flex-1 min-h-0 flex-col overflow-hidden rounded-2xl border border-(--color-secondary-outline) bg-(--color-primary-white)">
           <div className="flex-1 min-h-0 overflow-y-auto">
-            <header className="border-b border-(--color-secondary-outline) px-6 py-4">
+            <header className="h-[76px] shrink-0 border-b border-(--color-secondary-outline) px-6 flex items-center">
               <DashboardShellTitle title={currentSection.sectionTitle} actions={currentSection.sectionActions} />
             </header>
             <div className="p-6">{currentSection.render()}</div>
@@ -242,22 +239,12 @@ function DashboardShell<Key extends string = string>({
           {isDesktop && <DashboardShellTitle title={title} actions={titleActions} className="pb-4" />}
         </div>
 
-        <div
-          className="w-full flex flex-col lg:flex-row gap-0 flex-1 min-h-0"
-          style={isDesktop ? { height: desktopBodyHeight } : undefined}
-        >
+        <div className="w-full flex flex-col lg:flex-row gap-0 flex-1 min-h-0">
           {/* Desktop Menu */}
           {isDesktop && (
-            <aside
-              className="hidden lg:block w-[300px] shrink-0 bg-transparent lg:sticky overflow-hidden"
-              style={{
-                top: `${header + stickyOffset}px`,
-                height: desktopBodyHeight,
-                maxHeight: desktopBodyHeight,
-              }}
-            >
-              <div className="h-full min-h-0 flex flex-col">
-                <nav className="flex-1 min-h-0 overflow-y-auto flex flex-col gap-2 pr-1">
+            <aside className="hidden lg:flex lg:basis-[300px] lg:min-w-[300px] lg:max-w-[300px] shrink-0 self-stretch min-h-0 bg-transparent overflow-hidden">
+              <div className="w-full flex-1 min-h-0 flex flex-col">
+                <nav className="flex-1 min-h-0 overflow-y-auto flex flex-col gap-2 w-full">
                   {sections!.map((item) => {
                     const selected = item.key === activeKey;
                     return (
