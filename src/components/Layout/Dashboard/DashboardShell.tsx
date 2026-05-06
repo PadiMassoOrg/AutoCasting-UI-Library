@@ -1,13 +1,15 @@
-import { ChevronRight, ChevronUpDown } from '../../Navigation/Indicators/Chevron';
+import { ChevronLeft, ChevronRight, ChevronUpDown } from '../../Navigation/Indicators/Chevron';
 import { useChromeBoxHeights } from '../../../hooks/useChromeBoxHeights';
 import { LG_SCREEN_SIZE, useMedia } from '../../../hooks/useMedia';
 import type { ReactNode } from 'react';
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 export type DashboardSection<Key extends string = string> = {
   key: Key;
   label: string;
   icon?: ReactNode;
+  sectionTitle?: ReactNode;
+  sectionActions?: ReactNode;
   render: () => ReactNode;
 };
 
@@ -35,7 +37,7 @@ export function DashboardShellTitle({ title, actions, className }: DashboardShel
     <header className={['flex items-center justify-between', className ?? ''].filter(Boolean).join(' ')}>
       <div className="min-w-0">
         {typeof title === 'string' ? (
-          <h1 className="text-2xl font-bold text-(--color-primary-black) leading-tight">{title}</h1>
+          <h1 className="text-lg font-bold text-(--color-primary-black) leading-tight">{title}</h1>
         ) : (
           title
         )}
@@ -59,13 +61,11 @@ function DashboardShell<Key extends string = string>({
   const { header, footer } = useChromeBoxHeights();
   const hasSections = !!(sections && sections.length > 0);
   const desktopViewportHeight = `calc(var(--app-vh, 1vh) * 100 - ${header + footer}px)`;
-  const desktopSectionPaddingY = 50;
+  const desktopHeightOffset = 76;
   const stickyOffset = 0;
-  const titleBlockRef = useRef<HTMLDivElement | null>(null);
 
   const [activeKey, setActiveKey] = useState<Key | null>((initialKey as Key) ?? sections?.[0]?.key ?? null);
   const [mobileView, setMobileView] = useState<'nav' | 'content'>('nav');
-  const [desktopTitleHeight, setDesktopTitleHeight] = useState(0);
 
   useEffect(() => {
     if (!hasSections) {
@@ -82,29 +82,8 @@ function DashboardShell<Key extends string = string>({
     else if (!isDesktop && hasSections) setMobileView('nav');
   }, [isDesktop, hasSections]);
 
-  useEffect(() => {
-    if (!isDesktop) {
-      setDesktopTitleHeight(0);
-      return;
-    }
-
-    const node = titleBlockRef.current;
-    if (!node) {
-      setDesktopTitleHeight(0);
-      return;
-    }
-
-    const updateHeight = () => setDesktopTitleHeight(node.getBoundingClientRect().height);
-    updateHeight();
-
-    const observer = new ResizeObserver(updateHeight);
-    observer.observe(node);
-
-    return () => observer.disconnect();
-  }, [isDesktop, title, titleActions]);
-
   const currentSection = useMemo(() => sections?.find((s) => s.key === activeKey) ?? null, [sections, activeKey]);
-  const desktopBodyHeight = `calc(var(--app-vh, 1vh) * 100 - ${header + footer + desktopTitleHeight + stickyOffset + desktopSectionPaddingY}px)`;
+  const desktopBodyHeight = `calc(var(--app-vh, 1vh) * 100 - ${header + footer + stickyOffset + desktopHeightOffset}px)`;
 
   const goToNav = useCallback(() => {
     if (!isDesktop && hasSections) {
@@ -132,6 +111,49 @@ function DashboardShell<Key extends string = string>({
       goToSection,
     }),
     [isDesktop, hasSections, activeKey, mobileView, goToNav, goToSection]
+  );
+
+  const sectionUsesShellLayout = Boolean(currentSection?.sectionTitle || currentSection?.sectionActions);
+  const mobileSectionHeader = currentSection && sectionUsesShellLayout && (
+    <div
+      className={
+        currentSection.sectionActions
+          ? 'flex flex-col gap-3 mb-4'
+          : 'flex flex-row gap-4 items-center justify-between mb-4'
+      }
+    >
+      <div className="flex items-center gap-2 min-w-0">
+        <button type="button" onClick={goToNav} className="cursor-pointer flex items-center gap-1">
+          <ChevronLeft />
+          {typeof currentSection.sectionTitle === 'string' ? (
+            <h2 className="text-lg font-semibold truncate">{currentSection.sectionTitle}</h2>
+          ) : (
+            currentSection.sectionTitle
+          )}
+        </button>
+      </div>
+      {currentSection.sectionActions ? (
+        <div className="w-full [&>*]:w-full">{currentSection.sectionActions}</div>
+      ) : null}
+    </div>
+  );
+
+  const desktopSectionContent = currentSection && (
+    <div className="flex w-full flex-col gap-4 lg:h-full lg:min-h-0">
+      {contentHeader}
+      {sectionUsesShellLayout ? (
+        <article className="flex flex-1 min-h-0 flex-col overflow-hidden rounded-2xl border border-(--color-secondary-outline) bg-(--color-primary-white)">
+          <div className="flex-1 min-h-0 overflow-y-auto">
+            <header className="border-b border-(--color-secondary-outline) px-6 py-4">
+              <DashboardShellTitle title={currentSection.sectionTitle} actions={currentSection.sectionActions} />
+            </header>
+            <div className="p-6">{currentSection.render()}</div>
+          </div>
+        </article>
+      ) : (
+        currentSection.render()
+      )}
+    </div>
   );
 
   // No Sections
@@ -216,7 +238,7 @@ function DashboardShell<Key extends string = string>({
         }
       >
         {/* Desktop Title */}
-        <div ref={titleBlockRef} className="w-full shrink-0">
+        <div className="w-full shrink-0">
           {isDesktop && <DashboardShellTitle title={title} actions={titleActions} className="pb-4" />}
         </div>
 
@@ -267,21 +289,25 @@ function DashboardShell<Key extends string = string>({
             </aside>
           )}
 
-          <article className="flex-1 min-w-0 min-h-0 lg:pt-0 lg:overflow-y-auto">
+          <article className="flex-1 min-w-0 min-h-0 lg:flex lg:flex-col lg:overflow-hidden">
             {/* Container */}
-            <div className="w-full max-w-[1500px] mx-auto lg:pl-8 lg:py-0">
+            <div className="w-full max-w-[1500px] mx-auto lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:pl-8 lg:py-0">
               {!isDesktop && mobileView === 'content' && currentSection && (
                 <div>
                   {contentHeader}
-                  {currentSection.render()}
+                  {sectionUsesShellLayout ? (
+                    <>
+                      {mobileSectionHeader}
+                      <article className="bg-(--color-primary-white) rounded-2xl border border-(--color-secondary-outline)">
+                        <div className="p-6">{currentSection.render()}</div>
+                      </article>
+                    </>
+                  ) : (
+                    currentSection.render()
+                  )}
                 </div>
               )}
-              {isDesktop && currentSection && (
-                <div className="flex flex-col gap-8 m-auto">
-                  {contentHeader}
-                  {currentSection.render()}
-                </div>
-              )}
+              {isDesktop && desktopSectionContent}
               {children}
             </div>
           </article>
