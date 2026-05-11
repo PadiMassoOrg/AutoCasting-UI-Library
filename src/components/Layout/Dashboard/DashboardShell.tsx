@@ -242,7 +242,7 @@ function DashboardShell<Key extends string = string>({
         <div className="w-full flex flex-col lg:flex-row gap-0 flex-1 min-h-0">
           {/* Desktop Menu */}
           {isDesktop && (
-            <aside className="hidden lg:flex lg:basis-[300px] lg:min-w-[300px] lg:max-w-[300px] shrink-0 self-stretch min-h-0 bg-transparent overflow-hidden">
+            <aside className="hidden lg:flex lg:basis-[225px] lg:min-w-[225px] lg:max-w-[225px] shrink-0 self-stretch min-h-0 bg-transparent overflow-hidden">
               <div className="w-full flex-1 min-h-0 flex flex-col">
                 <nav className="flex-1 min-h-0 overflow-y-auto flex flex-col gap-2 w-full">
                   {sections!.map((item) => {
@@ -278,7 +278,7 @@ function DashboardShell<Key extends string = string>({
 
           <article className="flex-1 min-w-0 min-h-0 lg:flex lg:flex-col lg:overflow-hidden">
             {/* Container */}
-            <div className="w-full max-w-[1500px] mx-auto lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:pl-8 lg:py-0">
+            <div className="w-full max-w-[1500px] mx-auto lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:pl-4 lg:py-0">
               {!isDesktop && mobileView === 'content' && currentSection && (
                 <div>
                   {contentHeader}
