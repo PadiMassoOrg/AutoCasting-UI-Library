@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import type {
   OverflowMenuActionItem,
@@ -15,6 +15,7 @@ type Props = {
   side?: OverflowMenuSide;
   offset?: number;
   triggerClassName?: string;
+  triggerIconSize?: number;
   menuClassName?: string;
   itemClassName?: string;
   disabled?: boolean;
@@ -43,6 +44,7 @@ const OverflowMenu = ({
   side = 'bottom',
   offset = 8,
   triggerClassName,
+  triggerIconSize = 18,
   menuClassName,
   itemClassName,
   disabled = false,
@@ -263,7 +265,7 @@ const OverflowMenu = ({
         disabled={disabled}
         className={cx('disabled:opacity-50 disabled:cursor-not-allowed', triggerClassName)}
       >
-        {trigger ? trigger({ open, disabled }) : <Icon name="overflowmenu" variant="default" />}
+        {trigger ? trigger({ open, disabled }) : <Icon name="overflowmenu" variant="default" size={triggerIconSize} />}
       </button>
       {MenuRenderer}
     </>

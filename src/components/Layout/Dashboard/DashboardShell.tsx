@@ -1,15 +1,35 @@
 import { ChevronLeft, ChevronRight, ChevronUpDown } from '../../Navigation/Indicators/Chevron';
+import { OverflowMenu } from '../../Actions/Menus/OverflowMenu';
+import type { OverflowMenuItem } from '../../Actions/Menus/OverflowMenu';
+import { Icon } from '../../Brand/Identity/Icon';
 import { useChromeBoxHeights } from '../../../hooks/useChromeBoxHeights';
 import { LG_SCREEN_SIZE, useMedia } from '../../../hooks/useMedia';
 import type { ReactNode } from 'react';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
+export type DashboardSectionMenuAction = {
+  label: ReactNode;
+  onClick: () => void;
+  active?: boolean;
+};
+
+export type DashboardSectionMenuItem = {
+  key: string;
+  label: ReactNode;
+  overflowMenuItems?: OverflowMenuItem[];
+  onClick?: () => void;
+  active?: boolean;
+};
+
 export type DashboardSection<Key extends string = string> = {
   key: Key;
   label: string;
   icon?: ReactNode;
+  onSelect?: () => void;
   sectionTitle?: ReactNode;
   sectionActions?: ReactNode;
+  menuAction?: DashboardSectionMenuAction;
+  menuItems?: DashboardSectionMenuItem[];
   render: () => ReactNode;
 };
 
@@ -17,6 +37,8 @@ type DashboardShellProps<Key extends string = string> = {
   title?: ReactNode;
   sections?: DashboardSection<Key>[];
   initialKey?: Key;
+  activeKey?: Key | null;
+  onActiveSectionChange?: (key: Key | null) => void;
   children?: ReactNode;
   bottomSection?: ReactNode;
   contentHeader?: ReactNode;
@@ -51,6 +73,8 @@ function DashboardShell<Key extends string = string>({
   title,
   sections,
   initialKey,
+  activeKey: controlledActiveKey,
+  onActiveSectionChange,
   children,
   bottomSection,
   contentHeader,
@@ -62,8 +86,21 @@ function DashboardShell<Key extends string = string>({
   const hasSections = !!(sections && sections.length > 0);
   const desktopViewportHeight = `calc(var(--app-vh, 1vh) * 100 - ${header + footer}px)`;
 
-  const [activeKey, setActiveKey] = useState<Key | null>((initialKey as Key) ?? sections?.[0]?.key ?? null);
+  const [uncontrolledActiveKey, setUncontrolledActiveKey] = useState<Key | null>(
+    (initialKey as Key) ?? sections?.[0]?.key ?? null
+  );
   const [mobileView, setMobileView] = useState<'nav' | 'content'>('nav');
+  const activeKey = controlledActiveKey ?? uncontrolledActiveKey;
+
+  const setActiveKey = useCallback(
+    (key: Key | null) => {
+      if (controlledActiveKey == null) {
+        setUncontrolledActiveKey(key);
+      }
+      onActiveSectionChange?.(key);
+    },
+    [controlledActiveKey, onActiveSectionChange]
+  );
 
   useEffect(() => {
     if (!hasSections) {
@@ -81,6 +118,15 @@ function DashboardShell<Key extends string = string>({
   }, [isDesktop, hasSections]);
 
   const currentSection = useMemo(() => sections?.find((s) => s.key === activeKey) ?? null, [sections, activeKey]);
+
+  const activateSection = useCallback(
+    (section: DashboardSection<Key>) => {
+      setActiveKey(section.key);
+      section.onSelect?.();
+      if (!isDesktop) setMobileView('content');
+    },
+    [isDesktop, setActiveKey]
+  );
 
   const goToNav = useCallback(() => {
     if (!isDesktop && hasSections) {
@@ -250,11 +296,108 @@ function DashboardShell<Key extends string = string>({
                   {/* Destkop Buttons per Section */}
                   {sections!.map((item) => {
                     const selected = item.key === activeKey;
+                    const hasNestedDesktopList = Boolean(item.menuAction && item.menuItems);
+
+                    if (hasNestedDesktopList) {
+                      return (
+                        <div
+                          key={item.key}
+                          className={[
+                            'rounded-2xl border overflow-hidden',
+                            selected
+                              ? 'shadow-sm border-(--color-primary-purple) text-(--color-primary-purple) bg-(--color-primary-white)'
+                              : 'border-(--color-secondary-outline) bg-(--color-primary-white) text-(--color-primary-black)',
+                          ].join(' ')}
+                        >
+                          {/* Main Button */}
+                          <button
+                            type="button"
+                            onClick={() => activateSection(item)}
+                            className="flex items-center justify-between gap-2 rounded-none border-none px-4 pt-5 pb-2 text-sm font-semibold cursor-pointer w-full text-left"
+                          >
+                            <span className="flex items-center gap-2">
+                              {item.icon && <span className="w-5 h-5">{item.icon}</span>}
+                              <span>{item.label}</span>
+                            </span>
+                            <span
+                              className={selected ? 'text-(--color-primary-purple)' : 'text-(--color-primary-black)'}
+                            >
+                              <ChevronUpDown open={true} sizePx={24} />
+                            </span>
+                          </button>
+
+                          <div className="flex flex-col px-2 pb-4">
+                            {/* Menu Aciton Button */}
+                            <div
+                              className={[
+                                'flex items-center rounded-lg px-4 py-2',
+                                item.menuAction.active ? 'bg-(--color-secondary-white)' : 'bg-transparent',
+                              ].join(' ')}
+                            >
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setActiveKey(item.key);
+                                  item.menuAction?.onClick();
+                                }}
+                                className={[
+                                  'cursor-pointer min-w-0 flex-1 text-left',
+                                  item.menuAction.active
+                                    ? 'text-(--color-primary-purple)'
+                                    : 'text-(--color-primary-black)',
+                                ].join(' ')}
+                              >
+                                <span className="block truncate text-sm leading-none font-semibold">
+                                  {item.menuAction.label}
+                                </span>
+                              </button>
+                              <Icon name="plus" size={14} variant={item.menuAction.active ? 'primary' : 'default'} />
+                            </div>
+
+                            {/* Items Buttons */}
+                            {item.menuItems.map((menuItem) => (
+                              <div
+                                key={menuItem.key}
+                                className={[
+                                  'flex items-center rounded-lg px-4 py-2',
+                                  menuItem.active ? 'bg-(--color-secondary-white)' : 'bg-transparent',
+                                ].join(' ')}
+                              >
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setActiveKey(item.key);
+                                    menuItem.onClick?.();
+                                  }}
+                                  className={[
+                                    'cursor-pointer min-w-0 flex-1 text-left',
+                                    menuItem.active ? 'text-(--color-primary-purple)' : 'text-(--color-primary-black)',
+                                  ].join(' ')}
+                                >
+                                  <span className="block truncate text-sm leading-none font-semibold">
+                                    {menuItem.label}
+                                  </span>
+                                </button>
+                                {menuItem.overflowMenuItems && menuItem.overflowMenuItems.length > 0 ? (
+                                  <OverflowMenu
+                                    items={menuItem.overflowMenuItems}
+                                    align="end"
+                                    side="bottom"
+                                    triggerIconSize={14}
+                                  />
+                                ) : null}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    }
+
                     return (
                       <button
                         key={item.key}
                         type="button"
-                        onClick={() => setActiveKey(item.key)}
+                        onClick={() => activateSection(item)}
                         className={[
                           'flex items-center justify-between gap-2 rounded-2xl border px-4 py-5 text-sm font-semibold cursor-pointer w-full text-left',
                           selected
