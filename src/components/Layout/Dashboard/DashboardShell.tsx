@@ -179,6 +179,7 @@ function DashboardShell<Key extends string = string>({
             )}
             {title && typeof title !== 'string' && <div className="my-6">{title}</div>}
 
+            {/* Mobile: Buttons per Section */}
             <div className="w-full bg-(--color-primary-white) rounded-2xl border border-(--color-secondary-outline) shadow-[0_4px_14px_rgba(16,24,40,0.06)] overflow-hidden">
               {sections!.map((item, index) => (
                 <button
@@ -202,6 +203,7 @@ function DashboardShell<Key extends string = string>({
             </div>
           </div>
 
+          {/* Mobile: BottomBar */}
           {mobileNavBottomBar && (
             <div className="fixed left-0 right-0 bottom-0 z-50 bg-(--color-primary-white) border-t border-(--color-secondary-outline)">
               <div
@@ -245,6 +247,7 @@ function DashboardShell<Key extends string = string>({
             <aside className="hidden lg:flex lg:basis-[225px] lg:min-w-[225px] lg:max-w-[225px] shrink-0 self-stretch min-h-0 bg-transparent overflow-hidden">
               <div className="w-full flex-1 min-h-0 flex flex-col">
                 <nav className="flex-1 min-h-0 overflow-y-auto flex flex-col gap-2 w-full">
+                  {/* Destkop Buttons per Section */}
                   {sections!.map((item) => {
                     const selected = item.key === activeKey;
                     return (
@@ -270,14 +273,14 @@ function DashboardShell<Key extends string = string>({
                     );
                   })}
                 </nav>
-
+                {/* Desktop: BottomSection */}
                 {bottomSection && <footer className="mt-auto shrink-0 p-4">{bottomSection}</footer>}
               </div>
             </aside>
           )}
 
           <article className="flex-1 min-w-0 min-h-0 lg:flex lg:flex-col lg:overflow-hidden">
-            {/* Container */}
+            {/* Container: MAIN CONTENT */}
             <div className="w-full max-w-[1500px] mx-auto lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:pl-4 lg:py-0">
               {!isDesktop && mobileView === 'content' && currentSection && (
                 <div>
