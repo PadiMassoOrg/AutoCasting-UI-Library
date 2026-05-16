@@ -95,6 +95,8 @@ import TableIconPurple from '../../../../icons/table-purple.svg';
 import TableIcon from '../../../../icons/table.svg';
 import GalleryIconPurple from '../../../../icons/gallery-purple.svg';
 import GalleryIcon from '../../../../icons/gallery.svg';
+import DuplicateIcon from '../../../../icons/duplicate.svg';
+import DuplicateIconPurple from '../../../../icons/duplicate-purple.svg';
 
 export type IconName =
   | 'ogIcon'
@@ -141,6 +143,7 @@ export type IconName =
   | 'table'
   | 'gallery'
   | 'warning'
+  | 'duplicate'
   | 'logout';
 
 export type IconVariant = 'default' | 'primary' | 'white' | 'success' | 'danger' | 'disabled';
@@ -339,6 +342,10 @@ const ICONS: Record<IconName, BaseIconConfig> = {
   gallery: {
     default: GalleryIcon,
     primary: GalleryIconPurple,
+  },
+  duplicate: {
+    default: DuplicateIcon,
+    primary: DuplicateIconPurple,
   },
 };
 
