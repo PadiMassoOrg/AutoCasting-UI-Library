@@ -235,7 +235,7 @@ function DashboardShell<Key extends string = string>({
       {sectionUsesShellLayout ? (
         <article className="flex flex-1 min-h-0 flex-col overflow-hidden rounded-2xl border border-(--color-secondary-outline) bg-(--color-primary-white)">
           <div className="flex-1 min-h-0 overflow-y-auto">
-            <header className="h-[76px] shrink-0 border-b border-(--color-secondary-outline) px-6 flex items-center">
+            <header className="h-[76px] shrink-0 border-b border-(--color-secondary-outline) px-6 flex items-center lg:sticky lg:top-0 lg:z-10 bg-(--color-primary-white)">
               <DashboardShellTitle title={currentSection.sectionTitle} actions={currentSection.sectionActions} />
             </header>
             <div className="p-6">{currentSection.render()}</div>
