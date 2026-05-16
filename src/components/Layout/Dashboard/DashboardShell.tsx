@@ -174,7 +174,7 @@ function DashboardShell<Key extends string = string>({
     [isDesktop, hasSections, activeKey, mobileView, goToNav, goToSection]
   );
 
-  const getNestedDesktopEntries = useCallback(
+  const getNestedSectionEntries = useCallback(
     (section: DashboardSection<Key>): DashboardNestedEntry[] => {
       if (!section.menuAction || !section.menuItems) return [];
 
@@ -275,25 +275,51 @@ function DashboardShell<Key extends string = string>({
 
             {/* Mobile: Buttons per Section */}
             <div className="w-full bg-(--color-primary-white) rounded-2xl border border-(--color-secondary-outline) shadow-[0_4px_14px_rgba(16,24,40,0.06)] overflow-hidden">
-              {sections!.map((item, index) => (
-                <button
-                  key={item.key}
-                  type="button"
-                  onClick={() => {
-                    setActiveKey(item.key);
-                    setMobileView('content');
-                  }}
-                  className={[
-                    'cursor-pointer w-full flex items-center justify-between px-6 py-4 text-[15px] leading-5 font-medium',
-                    index !== sections!.length - 1 && 'border-b border-(--color-secondary-outline)',
-                  ]
-                    .filter(Boolean)
-                    .join(' ')}
-                >
-                  <span>{item.label}</span>
-                  <ChevronRight sizePx={24} />
-                </button>
-              ))}
+              {sections!.map((item, index) => {
+                const hasNestedMobileList = Boolean(item.menuAction && item.menuItems);
+                const nestedMobileEntries = hasNestedMobileList ? getNestedSectionEntries(item) : [];
+
+                return (
+                  <div
+                    key={item.key}
+                    className={index !== sections!.length - 1 ? 'border-b border-(--color-secondary-outline)' : ''}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => activateSection(item)}
+                      className="cursor-pointer w-full flex items-center justify-between px-6 py-4 text-[15px] leading-5 font-medium"
+                    >
+                      <span>{item.label}</span>
+                      <ChevronRight sizePx={24} />
+                    </button>
+
+                    {hasNestedMobileList ? (
+                      <div className="flex flex-col px-2 pb-3">
+                        {nestedMobileEntries.map((entry) => (
+                          <div key={entry.key} className="flex items-center gap-2 px-4 py-2">
+                            <button
+                              type="button"
+                              onClick={entry.onClick}
+                              className="cursor-pointer min-w-0 flex-1 text-left text-[15px] leading-5 font-medium"
+                            >
+                              <span className="block truncate">{entry.label}</span>
+                            </button>
+                            {entry.leadingIconName ? <Icon name={entry.leadingIconName} size={14} /> : null}
+                            {entry.overflowMenuItems && entry.overflowMenuItems.length > 0 ? (
+                              <OverflowMenu
+                                items={entry.overflowMenuItems}
+                                align="end"
+                                side="bottom"
+                                triggerIconSize={14}
+                              />
+                            ) : null}
+                          </div>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+                );
+              })}
             </div>
           </div>
 
@@ -345,7 +371,7 @@ function DashboardShell<Key extends string = string>({
                   {sections!.map((item) => {
                     const selected = item.key === activeKey;
                     const hasNestedDesktopList = Boolean(item.menuAction && item.menuItems);
-                    const nestedDesktopEntries = hasNestedDesktopList ? getNestedDesktopEntries(item) : [];
+                    const nestedDesktopEntries = hasNestedDesktopList ? getNestedSectionEntries(item) : [];
 
                     if (hasNestedDesktopList) {
                       return (
