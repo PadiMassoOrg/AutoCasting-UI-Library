@@ -33,6 +33,24 @@ export type DashboardSection<Key extends string = string> = {
   render: () => ReactNode;
 };
 
+type DashboardNestedEntry =
+  | {
+      key: string;
+      label: ReactNode;
+      active: boolean;
+      onClick: () => void;
+      leadingIconName: 'plus';
+      overflowMenuItems?: undefined;
+    }
+  | {
+      key: string;
+      label: ReactNode;
+      active: boolean;
+      onClick: () => void;
+      leadingIconName?: undefined;
+      overflowMenuItems?: OverflowMenuItem[];
+    };
+
 type DashboardShellProps<Key extends string = string> = {
   title?: ReactNode;
   sections?: DashboardSection<Key>[];
@@ -154,6 +172,36 @@ function DashboardShell<Key extends string = string>({
       goToSection,
     }),
     [isDesktop, hasSections, activeKey, mobileView, goToNav, goToSection]
+  );
+
+  const getNestedDesktopEntries = useCallback(
+    (section: DashboardSection<Key>): DashboardNestedEntry[] => {
+      if (!section.menuAction || !section.menuItems) return [];
+
+      return [
+        {
+          key: `${String(section.key)}-menu-action`,
+          label: section.menuAction.label,
+          active: Boolean(section.menuAction.active),
+          onClick: () => {
+            setActiveKey(section.key);
+            section.menuAction?.onClick();
+          },
+          leadingIconName: 'plus',
+        },
+        ...section.menuItems.map((menuItem) => ({
+          key: menuItem.key,
+          label: menuItem.label,
+          active: Boolean(menuItem.active),
+          onClick: () => {
+            setActiveKey(section.key);
+            menuItem.onClick?.();
+          },
+          overflowMenuItems: menuItem.overflowMenuItems,
+        })),
+      ];
+    },
+    [setActiveKey]
   );
 
   const sectionUsesShellLayout = Boolean(currentSection?.sectionTitle || currentSection?.sectionActions);
@@ -290,13 +338,14 @@ function DashboardShell<Key extends string = string>({
         <div className="w-full flex flex-col lg:flex-row gap-0 flex-1 min-h-0">
           {/* Desktop Menu */}
           {isDesktop && (
-            <aside className="hidden lg:flex lg:basis-[225px] lg:min-w-[225px] lg:max-w-[225px] shrink-0 self-stretch min-h-0 bg-transparent overflow-hidden">
+            <aside className="hidden lg:flex lg:basis-[250px] lg:min-w-[250px] lg:max-w-[250px] shrink-0 self-stretch min-h-0 bg-transparent overflow-hidden">
               <div className="w-full flex-1 min-h-0 flex flex-col">
                 <nav className="flex-1 min-h-0 overflow-y-auto flex flex-col gap-2 w-full">
                   {/* Destkop Buttons per Section */}
                   {sections!.map((item) => {
                     const selected = item.key === activeKey;
                     const hasNestedDesktopList = Boolean(item.menuAction && item.menuItems);
+                    const nestedDesktopEntries = hasNestedDesktopList ? getNestedDesktopEntries(item) : [];
 
                     if (hasNestedDesktopList) {
                       return (
@@ -326,61 +375,38 @@ function DashboardShell<Key extends string = string>({
                             </span>
                           </button>
 
+                          {/* Menu Action + Items Buttons */}
                           <div className="flex flex-col px-2 pb-4">
-                            {/* Menu Aciton Button */}
-                            <div
-                              className={[
-                                'flex items-center rounded-lg px-4 py-2',
-                                item.menuAction.active ? 'bg-(--color-secondary-white)' : 'bg-transparent',
-                              ].join(' ')}
-                            >
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  setActiveKey(item.key);
-                                  item.menuAction?.onClick();
-                                }}
-                                className={[
-                                  'cursor-pointer min-w-0 flex-1 text-left',
-                                  item.menuAction.active
-                                    ? 'text-(--color-primary-purple)'
-                                    : 'text-(--color-primary-black)',
-                                ].join(' ')}
-                              >
-                                <span className="block truncate text-sm leading-none font-semibold">
-                                  {item.menuAction.label}
-                                </span>
-                              </button>
-                              <Icon name="plus" size={14} variant={item.menuAction.active ? 'primary' : 'default'} />
-                            </div>
-
-                            {/* Items Buttons */}
-                            {item.menuItems.map((menuItem) => (
+                            {nestedDesktopEntries.map((entry) => (
                               <div
-                                key={menuItem.key}
+                                key={entry.key}
                                 className={[
-                                  'flex items-center rounded-lg px-4 py-2',
-                                  menuItem.active ? 'bg-(--color-secondary-white)' : 'bg-transparent',
+                                  'flex items-center rounded-xl px-4 py-2',
+                                  entry.active ? 'bg-(--color-secondary-white)' : 'bg-transparent',
                                 ].join(' ')}
                               >
                                 <button
                                   type="button"
-                                  onClick={() => {
-                                    setActiveKey(item.key);
-                                    menuItem.onClick?.();
-                                  }}
+                                  onClick={entry.onClick}
                                   className={[
                                     'cursor-pointer min-w-0 flex-1 text-left',
-                                    menuItem.active ? 'text-(--color-primary-purple)' : 'text-(--color-primary-black)',
+                                    entry.active ? 'text-(--color-primary-purple)' : 'text-(--color-primary-black)',
                                   ].join(' ')}
                                 >
                                   <span className="block truncate text-sm leading-none font-semibold">
-                                    {menuItem.label}
+                                    {entry.label}
                                   </span>
                                 </button>
-                                {menuItem.overflowMenuItems && menuItem.overflowMenuItems.length > 0 ? (
+                                {entry.leadingIconName ? (
+                                  <Icon
+                                    name={entry.leadingIconName}
+                                    size={14}
+                                    variant={entry.active ? 'primary' : 'default'}
+                                  />
+                                ) : null}
+                                {entry.overflowMenuItems && entry.overflowMenuItems.length > 0 ? (
                                   <OverflowMenu
-                                    items={menuItem.overflowMenuItems}
+                                    items={entry.overflowMenuItems}
                                     align="end"
                                     side="bottom"
                                     triggerIconSize={14}
@@ -417,7 +443,7 @@ function DashboardShell<Key extends string = string>({
                   })}
                 </nav>
                 {/* Desktop: BottomSection */}
-                {bottomSection && <footer className="mt-auto shrink-0 p-4">{bottomSection}</footer>}
+                {bottomSection && <footer className="mt-auto shrink-0">{bottomSection}</footer>}
               </div>
             </aside>
           )}

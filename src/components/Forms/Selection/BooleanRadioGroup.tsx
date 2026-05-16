@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { useId } from 'react';
 
 type AnyValueMode = 'undefined' | 'null';
+type Orientation = 'horizontal' | 'vertical';
 
 export type BooleanRadioGroupProps = {
   label: string;
@@ -16,6 +17,7 @@ export type BooleanRadioGroupProps = {
   className?: string;
   legendClassName?: string;
   optionClassName?: string;
+  orientation?: Orientation;
   disabled?: boolean;
   required?: boolean;
 };
@@ -35,6 +37,7 @@ export default function BooleanRadioGroup({
   className,
   legendClassName,
   optionClassName,
+  orientation,
   disabled = false,
   required = false,
 }: BooleanRadioGroupProps) {
@@ -45,6 +48,11 @@ export default function BooleanRadioGroup({
   const finalClassName = clsx('flex flex-col gap-1', className);
   const finalLegendClassName = clsx('text-[14px] font-semibold', legendClassName);
   const finalOptionClassName = clsx('flex items-center gap-2 text-[14px] font-semibold', optionClassName);
+  const resolvedOrientation = orientation ?? (includeAnyOption ? 'vertical' : 'horizontal');
+  const optionsClassName = clsx('mt-2 pl-1', {
+    'flex flex-col gap-2': resolvedOrientation === 'vertical',
+    'flex flex-row items-center gap-6': resolvedOrientation === 'horizontal',
+  });
 
   const idAny = `${groupName}-any`;
   const idYes = `${groupName}-yes`;
@@ -75,9 +83,7 @@ export default function BooleanRadioGroup({
         ) : null}
       </legend>
 
-      <div
-        className={includeAnyOption ? 'mt-2 pl-1 flex flex-col gap-2' : 'mt-2 pl-1 flex flex-row items-center gap-6'}
-      >
+      <div className={optionsClassName}>
         {includeAnyOption ? (
           <label htmlFor={idAny} className={finalOptionClassName}>
             {renderRadioInput(tri === '', {

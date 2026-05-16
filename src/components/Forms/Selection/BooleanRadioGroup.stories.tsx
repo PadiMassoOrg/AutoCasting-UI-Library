@@ -33,3 +33,13 @@ export const WithAnyOption: Story = {
     anyOptionLabel: 'Any preference',
   },
 };
+
+export const Vertical: Story = {
+  render: (args) => {
+    const [value, setValue] = useState<boolean | null | undefined>(args.value);
+    return <BooleanRadioGroup {...args} value={value} onChange={setValue} />;
+  },
+  args: {
+    orientation: 'vertical',
+  },
+};

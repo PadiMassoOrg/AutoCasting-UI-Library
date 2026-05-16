@@ -9,7 +9,7 @@ import type {
 } from './overflowmenu.types';
 import { Icon } from '../../../Brand/Identity/Icon';
 
-type Props = {
+export type OverflowMenuProps = {
   items: OverflowMenuItem[];
   align?: OverflowMenuAlign;
   side?: OverflowMenuSide;
@@ -49,7 +49,7 @@ const OverflowMenu = ({
   itemClassName,
   disabled = false,
   trigger,
-}: Props) => {
+}: OverflowMenuProps) => {
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
