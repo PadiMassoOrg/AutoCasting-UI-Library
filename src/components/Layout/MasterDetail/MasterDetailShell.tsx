@@ -1,6 +1,7 @@
 import type { ReactNode, Ref } from 'react';
 import { useChromeBoxHeights } from '../../../hooks/useChromeBoxHeights';
 import { LG_SCREEN_SIZE, useMedia } from '../../../hooks/useMedia';
+import SectionCard from '../SectionCard/SectionCard';
 
 export type MasterDetailShellProps = {
   title?: ReactNode;
@@ -31,6 +32,17 @@ function renderHeaderContent(content?: ReactNode, fallbackTag: 'h1' | 'h2' = 'h2
   }
 
   return <h2 className="text-xl font-semibold text-(--color-primary-black) leading-tight">{content}</h2>;
+}
+
+function PaneHeader({ title, actions }: { title?: ReactNode; actions?: ReactNode }) {
+  if (!title && !actions) return null;
+
+  return (
+    <header className="flex items-center justify-between gap-4 border-b border-(--color-secondary-outline) px-6 py-5">
+      <div className="min-w-0">{renderHeaderContent(title)}</div>
+      {actions ? <div className="shrink-0">{actions}</div> : null}
+    </header>
+  );
 }
 
 export default function MasterDetailShell({
@@ -83,12 +95,7 @@ export default function MasterDetailShell({
               .filter(Boolean)
               .join(' ')}
           >
-            {(menuHeader || menuActions) && (
-              <header className="flex items-center justify-between gap-4 border-b border-(--color-secondary-outline) px-6 py-5">
-                <div className="min-w-0">{renderHeaderContent(menuHeader)}</div>
-                {menuActions ? <div className="shrink-0">{menuActions}</div> : null}
-              </header>
-            )}
+            <PaneHeader title={menuHeader} actions={menuActions} />
             <div
               ref={menuContentRef}
               className={['min-h-0 flex-1 overflow-y-auto', menuContentClassName].filter(Boolean).join(' ')}
@@ -97,22 +104,21 @@ export default function MasterDetailShell({
             </div>
           </aside>
 
-          <article
-            className={[
-              'flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-(--color-secondary-outline) bg-(--color-primary-white)',
-              contentPaneClassName,
-            ]
+          <SectionCard
+            className={['flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden', contentPaneClassName]
               .filter(Boolean)
               .join(' ')}
+            withContentWrapper={false}
           >
-            {(contentHeader || contentActions) && (
-              <header className="flex items-center justify-between gap-4 border-b border-(--color-secondary-outline) px-6 py-5">
-                <div className="min-w-0">{renderHeaderContent(contentHeader)}</div>
-                {contentActions ? <div className="shrink-0">{contentActions}</div> : null}
-              </header>
-            )}
-            <div className="min-h-0 flex-1 overflow-y-auto">{content}</div>
-          </article>
+            <div className="min-h-0 flex-1 overflow-y-auto">
+              <div className="flex min-h-full flex-col">
+                <div className="sticky top-0 z-10 bg-(--color-primary-white)">
+                  <PaneHeader title={contentHeader} actions={contentActions} />
+                </div>
+                <div className="flex-1 p-6">{content}</div>
+              </div>
+            </div>
+          </SectionCard>
         </div>
       </div>
     </section>

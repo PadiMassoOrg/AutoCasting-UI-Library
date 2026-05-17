@@ -4,9 +4,16 @@ type SectionCardProps = ComponentPropsWithoutRef<'article'> & {
   children: ReactNode;
   className?: string;
   contentClassName?: string;
+  withContentWrapper?: boolean;
 };
 
-export default function SectionCard({ children, className = '', contentClassName = '', ...props }: SectionCardProps) {
+export default function SectionCard({
+  children,
+  className = '',
+  contentClassName = '',
+  withContentWrapper = true,
+  ...props
+}: SectionCardProps) {
   return (
     <article
       {...props}
@@ -16,7 +23,7 @@ export default function SectionCard({ children, className = '', contentClassName
         className,
       ].join(' ')}
     >
-      <div className={['p-6', contentClassName].join(' ')}>{children}</div>
+      {withContentWrapper ? <div className={['p-6', contentClassName].join(' ')}>{children}</div> : children}
     </article>
   );
 }
