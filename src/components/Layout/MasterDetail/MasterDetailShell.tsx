@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactNode, Ref } from 'react';
 import { useChromeBoxHeights } from '../../../hooks/useChromeBoxHeights';
 import { LG_SCREEN_SIZE, useMedia } from '../../../hooks/useMedia';
 
@@ -16,6 +16,7 @@ export type MasterDetailShellProps = {
   panesClassName?: string;
   menuPaneClassName?: string;
   menuContentClassName?: string;
+  menuContentRef?: Ref<HTMLDivElement>;
   contentPaneClassName?: string;
   menuPaneWidthClassName?: string;
   desktopPaneHeight?: string;
@@ -46,6 +47,7 @@ export default function MasterDetailShell({
   panesClassName = '',
   menuPaneClassName = '',
   menuContentClassName = '',
+  menuContentRef,
   contentPaneClassName = '',
   menuPaneWidthClassName = 'lg:w-[36rem]',
   desktopPaneHeight,
@@ -87,7 +89,10 @@ export default function MasterDetailShell({
                 {menuActions ? <div className="shrink-0">{menuActions}</div> : null}
               </header>
             )}
-            <div className={['min-h-0 flex-1 overflow-y-auto', menuContentClassName].filter(Boolean).join(' ')}>
+            <div
+              ref={menuContentRef}
+              className={['min-h-0 flex-1 overflow-y-auto', menuContentClassName].filter(Boolean).join(' ')}
+            >
               {menu}
             </div>
           </aside>
