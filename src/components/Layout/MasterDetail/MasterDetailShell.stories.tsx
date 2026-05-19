@@ -30,9 +30,6 @@ export const Default: Story = {
       <div className="bg-(--color-secondary-white) p-4">
         <MasterDetailShell
           desktopPaneHeight="70vh"
-          menuPaneWidthClassName="lg:w-[390px]"
-          menuPaneClassName="border-0 bg-transparent rounded-none"
-          menuContentClassName="scrollbar-hide"
           menu={
             <div className="flex min-h-full flex-col gap-4 bg-(--color-secondary-white) p-4">
               <div className="sticky top-0 z-10 flex items-center justify-between bg-(--color-secondary-white) pb-4">

@@ -13,13 +13,7 @@ export type MasterDetailShellProps = {
   menuActions?: ReactNode;
   contentHeader?: ReactNode;
   contentActions?: ReactNode;
-  rootClassName?: string;
-  panesClassName?: string;
-  menuPaneClassName?: string;
-  menuContentClassName?: string;
   menuContentRef?: Ref<HTMLDivElement>;
-  contentPaneClassName?: string;
-  menuPaneWidthClassName?: string;
   desktopPaneHeight?: string;
 };
 
@@ -55,13 +49,7 @@ export default function MasterDetailShell({
   menuActions,
   contentHeader,
   contentActions,
-  rootClassName = 'w-full min-h-0 bg-(--color-secondary-white)',
-  panesClassName = '',
-  menuPaneClassName = '',
-  menuContentClassName = '',
   menuContentRef,
-  contentPaneClassName = '',
-  menuPaneWidthClassName = 'lg:w-[36rem]',
   desktopPaneHeight,
 }: MasterDetailShellProps) {
   const isDesktop = useMedia(LG_SCREEN_SIZE);
@@ -69,7 +57,7 @@ export default function MasterDetailShell({
   const desktopViewportHeight = desktopPaneHeight ?? `calc(var(--app-vh, 1vh) * 100 - ${header + footer}px)`;
 
   return (
-    <section className={rootClassName}>
+    <section className="w-full h-full min-h-0 bg-transparent">
       <div className="flex h-full min-h-0 w-full flex-col gap-6">
         {(title || titleActions) && (
           <header className="flex items-center justify-between gap-4">
@@ -81,35 +69,19 @@ export default function MasterDetailShell({
         {topBar ? <div className="shrink-0">{topBar}</div> : null}
 
         <div
-          className={['flex min-h-0 flex-1 flex-col gap-6 lg:flex-row lg:items-stretch', panesClassName]
-            .filter(Boolean)
-            .join(' ')}
+          className="flex min-h-0 flex-1 flex-col lg:flex-row lg:items-stretch"
           style={isDesktop ? { height: desktopViewportHeight } : undefined}
         >
-          <aside
-            className={[
-              'flex min-h-0 flex-col overflow-hidden rounded-2xl border border-(--color-secondary-outline) bg-(--color-primary-white)',
-              menuPaneWidthClassName,
-              menuPaneClassName,
-            ]
-              .filter(Boolean)
-              .join(' ')}
-          >
+          {/* Menu */}
+          <aside className="flex min-h-0 flex-col overflow-hidden rounded-none border-0 bg-transparent lg:w-[390px]">
             <PaneHeader title={menuHeader} actions={menuActions} />
-            <div
-              ref={menuContentRef}
-              className={['min-h-0 flex-1 overflow-y-auto', menuContentClassName].filter(Boolean).join(' ')}
-            >
+            <div ref={menuContentRef} className="scrollbar-hide min-h-0 flex-1 overflow-y-auto">
               {menu}
             </div>
           </aside>
 
-          <SectionCard
-            className={['flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden', contentPaneClassName]
-              .filter(Boolean)
-              .join(' ')}
-            withContentWrapper={false}
-          >
+          {/* Content */}
+          <SectionCard className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden" withContentWrapper={false}>
             <div className="min-h-0 flex-1 overflow-y-auto">
               <div className="flex min-h-full flex-col">
                 <div className="sticky top-0 z-10 bg-(--color-primary-white)">
