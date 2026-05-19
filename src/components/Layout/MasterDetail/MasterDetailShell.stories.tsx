@@ -87,7 +87,12 @@ export const Default: Story = {
               ))}
             </div>
           }
-          contentHeader={selectedCasting.title}
+          contentHeader={
+            <div className="flex flex-col gap-1">
+              <h2 className="text-2xl font-semibold text-(--color-primary-black)">{selectedCasting.title}</h2>
+              <p className="text-sm font-light text-(--color-secondary-grey-fonts)">{selectedCasting.subtitle}</p>
+            </div>
+          }
           contentActions={
             <Button variant="primary" onClick={() => window.alert(`Aplicar en ${selectedCasting.title}`)}>
               Aplicar
