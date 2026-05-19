@@ -131,10 +131,16 @@ const meta: Meta<typeof DataGrid<ApplicantRow>> = {
           pagination={{
             page,
             hasNext: page === 0,
+            pageCount: 2,
             onPageChange: setPage,
-            pageLabel: ({ page: currentPage }) => `Página ${currentPage + 1}`,
-            previousLabel: 'Anterior',
-            nextLabel: 'Siguiente',
+            labels: {
+              page: 'Página',
+              of: 'de',
+              firstPageAriaLabel: 'Primera página',
+              previousPageAriaLabel: 'Página anterior',
+              nextPageAriaLabel: 'Página siguiente',
+              lastPageAriaLabel: 'Última página',
+            },
           }}
         />
       </div>
