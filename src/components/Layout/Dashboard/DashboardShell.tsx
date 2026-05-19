@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight, ChevronUpDown } from '../../Navigation/Indic
 import { OverflowMenu } from '../../Actions/Menus/OverflowMenu';
 import type { OverflowMenuItem } from '../../Actions/Menus/OverflowMenu';
 import { Icon } from '../../Brand/Identity/Icon';
+import MobileBottomBar from '../MobileBottomBar/MobileBottomBar';
 import { useChromeBoxHeights } from '../../../hooks/useChromeBoxHeights';
 import { LG_SCREEN_SIZE, useMedia } from '../../../hooks/useMedia';
 import type { ReactNode } from 'react';
@@ -186,6 +187,7 @@ function DashboardShell<Key extends string = string>({
           onClick: () => {
             setActiveKey(section.key);
             section.menuAction?.onClick();
+            if (!isDesktop) setMobileView('content');
           },
           leadingIconName: 'plus',
         },
@@ -196,12 +198,13 @@ function DashboardShell<Key extends string = string>({
           onClick: () => {
             setActiveKey(section.key);
             menuItem.onClick?.();
+            if (!isDesktop) setMobileView('content');
           },
           overflowMenuItems: menuItem.overflowMenuItems,
         })),
       ];
     },
-    [setActiveKey]
+    [isDesktop, setActiveKey]
   );
 
   const sectionUsesShellLayout = Boolean(currentSection?.sectionTitle || currentSection?.sectionActions);
@@ -325,16 +328,9 @@ function DashboardShell<Key extends string = string>({
 
           {/* Mobile: BottomBar */}
           {mobileNavBottomBar && (
-            <div className="fixed left-0 right-0 bottom-0 z-50 bg-(--color-primary-white) border-t border-(--color-secondary-outline)">
-              <div
-                className="w-full mx-auto p-3"
-                style={{
-                  paddingBottom: `calc(env(safe-area-inset-bottom, 0px) + 16px)`,
-                }}
-              >
-                {mobileNavBottomBar}
-              </div>
-            </div>
+            <MobileBottomBar className="border-t border-(--color-secondary-outline) bg-(--color-primary-white)">
+              {mobileNavBottomBar}
+            </MobileBottomBar>
           )}
         </section>
       </DashboardShellContext.Provider>
@@ -478,7 +474,7 @@ function DashboardShell<Key extends string = string>({
             {/* Container: MAIN CONTENT */}
             <div className="w-full max-w-[1500px] mx-auto lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:pl-4 lg:py-0">
               {!isDesktop && mobileView === 'content' && currentSection && (
-                <div>
+                <div className={mobileNavBottomBar ? 'pb-28' : ''}>
                   {contentHeader}
                   {sectionUsesShellLayout ? (
                     <>

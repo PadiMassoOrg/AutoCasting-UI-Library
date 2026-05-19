@@ -2,6 +2,7 @@ import FullscreenCenter from './FullscreenCenter';
 import { DataGrid } from './DataGrid';
 import { DashboardLoadingLabel, DashboardSection, DashboardShell, useDashboardShell } from './Dashboard';
 import { MasterDetailShell } from './MasterDetail';
+import { MobileBottomBar } from './MobileBottomBar';
 import { DocumentScrollLayoutShell, EmptyLayoutShell, NoNavigationLayoutShell } from './PageLayouts';
 import { NavbarDropdown } from './NavbarDropdown';
 import { SectionCard } from './SectionCard';
@@ -16,6 +17,7 @@ export {
   EmptyLayoutShell,
   FullscreenCenter,
   MasterDetailShell,
+  MobileBottomBar,
   NavbarDropdown,
   NoNavigationLayoutShell,
   SectionCard,
