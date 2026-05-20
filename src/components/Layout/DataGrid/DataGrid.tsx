@@ -43,9 +43,18 @@ export type DataGridPagination = {
   page: number;
   hasNext: boolean;
   onPageChange: (nextPage: number) => void;
+  pageCount?: number | null;
   pageLabel?: (ctx: { page: number; hasNext: boolean }) => ReactNode;
   previousLabel?: ReactNode;
   nextLabel?: ReactNode;
+  labels?: {
+    page?: string;
+    of?: string;
+    firstPageAriaLabel?: string;
+    previousPageAriaLabel?: string;
+    nextPageAriaLabel?: string;
+    lastPageAriaLabel?: string;
+  };
 };
 
 export type DataGridSelection = {
@@ -517,14 +526,16 @@ const DataGrid = <T,>({
         <footer className="flex items-center justify-end gap-4 border-t border-[var(--color-secondary-outline)] px-6 py-4">
           <span className="text-sm text-[var(--color-primary-black)]">
             {pagination.pageLabel?.({ page: pagination.page, hasNext: pagination.hasNext }) ??
-              `Page ${pagination.page + 1}`}
+              (pagination.pageCount != null
+                ? `${pagination.labels?.page ?? 'Page'} ${pagination.page + 1} ${pagination.labels?.of ?? 'of'} ${pagination.pageCount}`
+                : `${pagination.labels?.page ?? 'Page'} ${pagination.page + 1}`)}
           </span>
           <div className="flex items-center gap-1 text-[var(--color-primary-black)]">
             <button
               type="button"
               onClick={() => pagination.onPageChange(0)}
               disabled={pagination.page <= 0}
-              aria-label="First page"
+              aria-label={pagination.labels?.firstPageAriaLabel ?? 'First page'}
               className="inline-flex h-8 w-8 items-center justify-center rounded-md disabled:cursor-not-allowed disabled:opacity-40"
             >
               <ChevronLeft double sizePx={18} />
@@ -533,7 +544,7 @@ const DataGrid = <T,>({
               type="button"
               onClick={() => pagination.onPageChange(Math.max(0, pagination.page - 1))}
               disabled={pagination.page <= 0}
-              aria-label="Previous page"
+              aria-label={pagination.labels?.previousPageAriaLabel ?? 'Previous page'}
               className="inline-flex h-8 w-8 items-center justify-center rounded-md disabled:cursor-not-allowed disabled:opacity-40"
             >
               <ChevronLeft sizePx={18} />
@@ -542,7 +553,7 @@ const DataGrid = <T,>({
               type="button"
               onClick={() => pagination.onPageChange(pagination.page + 1)}
               disabled={!pagination.hasNext}
-              aria-label="Next page"
+              aria-label={pagination.labels?.nextPageAriaLabel ?? 'Next page'}
               className="inline-flex h-8 w-8 items-center justify-center rounded-md disabled:cursor-not-allowed disabled:opacity-40"
             >
               <ChevronRight sizePx={18} />
@@ -551,7 +562,7 @@ const DataGrid = <T,>({
               type="button"
               onClick={() => pagination.onPageChange(pagination.page + 1)}
               disabled={!pagination.hasNext}
-              aria-label="Last page"
+              aria-label={pagination.labels?.lastPageAriaLabel ?? 'Last page'}
               className="inline-flex h-8 w-8 items-center justify-center rounded-md disabled:cursor-not-allowed disabled:opacity-40"
             >
               <ChevronRight double sizePx={18} />
