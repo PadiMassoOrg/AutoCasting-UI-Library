@@ -6,7 +6,7 @@ import MobileBottomBar from '../MobileBottomBar/MobileBottomBar';
 import { useChromeBoxHeights } from '../../../hooks/useChromeBoxHeights';
 import { LG_SCREEN_SIZE, useMedia } from '../../../hooks/useMedia';
 import type { ReactNode } from 'react';
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 export type DashboardSectionMenuAction = {
   label: ReactNode;
@@ -109,7 +109,19 @@ function DashboardShell<Key extends string = string>({
     (initialKey as Key) ?? sections?.[0]?.key ?? null
   );
   const [mobileView, setMobileView] = useState<'nav' | 'content'>('nav');
+  const contentScrollRef = useRef<HTMLDivElement | null>(null);
   const activeKey = controlledActiveKey ?? uncontrolledActiveKey;
+
+  const scrollContentToTop = useCallback(() => {
+    const target = contentScrollRef.current;
+    if (target) {
+      target.scrollTo({ top: 0, behavior: 'auto' });
+      target.scrollTop = 0;
+      return;
+    }
+
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, []);
 
   const setActiveKey = useCallback(
     (key: Key | null) => {
@@ -143,8 +155,9 @@ function DashboardShell<Key extends string = string>({
       setActiveKey(section.key);
       section.onSelect?.();
       if (!isDesktop) setMobileView('content');
+      requestAnimationFrame(() => scrollContentToTop());
     },
-    [isDesktop, setActiveKey]
+    [isDesktop, scrollContentToTop, setActiveKey]
   );
 
   const goToNav = useCallback(() => {
@@ -159,8 +172,9 @@ function DashboardShell<Key extends string = string>({
     (key: string) => {
       setActiveKey(key as Key);
       if (!isDesktop) setMobileView('content');
+      requestAnimationFrame(() => scrollContentToTop());
     },
-    [isDesktop]
+    [isDesktop, scrollContentToTop]
   );
 
   const ctxValue = useMemo<DashboardShellContextValue>(
@@ -188,6 +202,7 @@ function DashboardShell<Key extends string = string>({
             setActiveKey(section.key);
             section.menuAction?.onClick();
             if (!isDesktop) setMobileView('content');
+            requestAnimationFrame(() => scrollContentToTop());
           },
           leadingIconName: 'plus',
         },
@@ -199,6 +214,7 @@ function DashboardShell<Key extends string = string>({
             setActiveKey(section.key);
             menuItem.onClick?.();
             if (!isDesktop) setMobileView('content');
+            requestAnimationFrame(() => scrollContentToTop());
           },
           overflowMenuItems: menuItem.overflowMenuItems,
         })),
@@ -237,7 +253,7 @@ function DashboardShell<Key extends string = string>({
       {contentHeader}
       {sectionUsesShellLayout ? (
         <article className="flex flex-1 min-h-0 flex-col overflow-hidden rounded-xl border border-(--color-secondary-outline) bg-(--color-primary-white)">
-          <div className="flex-1 min-h-0 overflow-y-auto">
+          <div ref={contentScrollRef} className="flex-1 min-h-0 overflow-y-auto">
             <header className="h-[76px] shrink-0 border-b border-(--color-secondary-outline) px-6 flex items-center lg:sticky lg:top-0 lg:z-10 bg-(--color-primary-white)">
               <DashboardShellTitle title={currentSection.sectionTitle} actions={currentSection.sectionActions} />
             </header>
@@ -490,7 +506,7 @@ function DashboardShell<Key extends string = string>({
             {/* Container: MAIN CONTENT */}
             <div className="w-full max-w-[1500px] mx-auto lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:pl-4 lg:py-0">
               {!isDesktop && mobileView === 'content' && currentSection && (
-                <div className={mobileNavBottomBar ? 'pb-28' : ''}>
+                <div ref={contentScrollRef} className={mobileNavBottomBar ? 'pb-28' : ''}>
                   {contentHeader}
                   {sectionUsesShellLayout ? (
                     <>
