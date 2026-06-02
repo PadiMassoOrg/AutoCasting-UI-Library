@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { clsx } from 'clsx';
 import { Icon } from '../../Brand/Identity/Icon';
 
 export type TagChipProps = {
@@ -12,17 +13,17 @@ export type TagChipProps = {
 export default function TagChip({ label, onRemove, newItem = false, className, style }: TagChipProps) {
   return (
     <span
-      className={[
-        'inline-flex items-center gap-[6px] rounded-xl border px-3 py-1 lg:text-[14px]',
+      className={clsx(
+        'inline-flex items-center gap-2 rounded-full border-1 bg-(--color-primary-white) px-4 py-1 text-sm lg:text-[14px]',
         newItem
-          ? 'font-semibold bg-(--color-secondary-white) border-(--color-primary-purple) text-(--color-primary-purple)'
-          : 'bg-(--color-primary-white) border-(--color-secondary-outline) text-(--color-primary-black)',
-        className,
-      ].join(' ')}
+          ? 'border-(--color-primary-purple) text-(--color-primary-purple)'
+          : 'border-(--color-secondary-outline) text-(--color-secondary-grey-fonts)',
+        className
+      )}
       style={style}
     >
-      <p className="text-sm">{label}</p>
-      {onRemove && <Icon name="cross" variant="primary" size={11} onClick={onRemove} />}
+      <span>{label}</span>
+      {onRemove && <Icon name="cross" variant={newItem ? 'primary' : 'default'} size={11} onClick={onRemove} />}
     </span>
   );
 }

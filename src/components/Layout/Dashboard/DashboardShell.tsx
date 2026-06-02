@@ -236,7 +236,7 @@ function DashboardShell<Key extends string = string>({
     <div className="flex w-full flex-col gap-4 lg:h-full lg:min-h-0">
       {contentHeader}
       {sectionUsesShellLayout ? (
-        <article className="flex flex-1 min-h-0 flex-col overflow-hidden rounded-2xl border border-(--color-secondary-outline) bg-(--color-primary-white)">
+        <article className="flex flex-1 min-h-0 flex-col overflow-hidden rounded-xl border border-(--color-secondary-outline) bg-(--color-primary-white)">
           <div className="flex-1 min-h-0 overflow-y-auto">
             <header className="h-[76px] shrink-0 border-b border-(--color-secondary-outline) px-6 flex items-center lg:sticky lg:top-0 lg:z-10 bg-(--color-primary-white)">
               <DashboardShellTitle title={currentSection.sectionTitle} actions={currentSection.sectionActions} />
@@ -277,7 +277,7 @@ function DashboardShell<Key extends string = string>({
             {title && typeof title !== 'string' && <div className="my-6">{title}</div>}
 
             {/* Mobile: Buttons per Section */}
-            <div className="w-full bg-(--color-primary-white) rounded-2xl border border-(--color-secondary-outline) shadow-[0_4px_14px_rgba(16,24,40,0.06)] overflow-hidden">
+            <div className="w-full bg-(--color-primary-white) rounded-xl border border-(--color-secondary-outline) shadow-[0_4px_14px_rgba(16,24,40,0.06)] overflow-hidden">
               {sections!.map((item, index) => {
                 const hasNestedMobileList = Boolean(item.menuAction && item.menuItems);
                 const nestedMobileEntries = hasNestedMobileList ? getNestedSectionEntries(item) : [];
@@ -374,7 +374,7 @@ function DashboardShell<Key extends string = string>({
                         <div
                           key={item.key}
                           className={[
-                            'rounded-2xl border overflow-hidden',
+                            'rounded-xl border overflow-hidden',
                             selected
                               ? 'shadow-sm border-(--color-primary-purple) text-(--color-primary-purple) bg-(--color-primary-white)'
                               : 'border-(--color-secondary-outline) bg-(--color-primary-white) text-(--color-primary-black)',
@@ -447,7 +447,7 @@ function DashboardShell<Key extends string = string>({
                         type="button"
                         onClick={() => activateSection(item)}
                         className={[
-                          'flex items-center justify-between gap-2 rounded-2xl border px-4 py-5 text-sm font-semibold cursor-pointer w-full text-left',
+                          'flex items-center justify-between gap-2 rounded-xl border px-4 py-5 text-sm font-semibold cursor-pointer w-full text-left',
                           selected
                             ? 'shadow-sm border-(--color-primary-purple) text-(--color-primary-purple) bg-(--color-primary-white)'
                             : 'border-(--color-secondary-outline) bg-(--color-primary-white) text-(--color-primary-black)',
@@ -479,7 +479,7 @@ function DashboardShell<Key extends string = string>({
                   {sectionUsesShellLayout ? (
                     <>
                       {mobileSectionHeader}
-                      <article className="bg-(--color-primary-white) rounded-2xl border border-(--color-secondary-outline)">
+                      <article className="bg-(--color-primary-white) rounded-xl border border-(--color-secondary-outline)">
                         <div className="p-6">{currentSection.render()}</div>
                       </article>
                     </>
