@@ -20,6 +20,8 @@ import ClapperManageIconPurple from '../../../../icons/clapper-manage-purple.svg
 import ClapperManageIcon from '../../../../icons/clapper-manage.svg';
 import ClapperIconPurple from '../../../../icons/clapper-purple.svg';
 import ClapperIcon from '../../../../icons/clapper.svg';
+import ClapperCreateIcon from '../../../../icons/clapper-create.svg';
+import ClapperCreateIconPurple from '../../../../icons/clapper-create-purple.svg';
 import ClockIconPurple from '../../../../icons/clock-purple.svg';
 import ClockIcon from '../../../../icons/clock.svg';
 import CopyLinkIconDisabled from '../../../../icons/copy-link-disabled.svg';
@@ -112,6 +114,7 @@ export type IconName =
   | 'copyLink'
   | 'clapper'
   | 'clapperManage'
+  | 'clapperCreate'
   | 'clock'
   | 'file'
   | 'filter'
@@ -216,6 +219,10 @@ const ICONS: Record<IconName, BaseIconConfig> = {
   clapper: {
     default: ClapperIcon,
     primary: ClapperIconPurple,
+  },
+  clapperCreate: {
+    default: ClapperCreateIcon,
+    primary: ClapperCreateIconPurple,
   },
   file: {
     default: FileIcon,
