@@ -307,7 +307,16 @@ function DashboardShell<Key extends string = string>({
                             >
                               <span className="block truncate">{entry.label}</span>
                             </button>
-                            {entry.leadingIconName ? <Icon name={entry.leadingIconName} size={14} /> : null}
+                            {entry.leadingIconName ? (
+                              <button
+                                type="button"
+                                onClick={entry.onClick}
+                                aria-label={typeof entry.label === 'string' ? entry.label : undefined}
+                                className="cursor-pointer inline-flex items-center justify-center"
+                              >
+                                <Icon name={entry.leadingIconName} size={14} />
+                              </button>
+                            ) : null}
                             {entry.overflowMenuItems && entry.overflowMenuItems.length > 0 ? (
                               <OverflowMenu
                                 items={entry.overflowMenuItems}
@@ -420,11 +429,18 @@ function DashboardShell<Key extends string = string>({
                                   </span>
                                 </button>
                                 {entry.leadingIconName ? (
-                                  <Icon
-                                    name={entry.leadingIconName}
-                                    size={14}
-                                    variant={entry.active ? 'primary' : 'default'}
-                                  />
+                                  <button
+                                    type="button"
+                                    onClick={entry.onClick}
+                                    aria-label={typeof entry.label === 'string' ? entry.label : undefined}
+                                    className="cursor-pointer inline-flex items-center justify-center"
+                                  >
+                                    <Icon
+                                      name={entry.leadingIconName}
+                                      size={14}
+                                      variant={entry.active ? 'primary' : 'default'}
+                                    />
+                                  </button>
                                 ) : null}
                                 {entry.overflowMenuItems && entry.overflowMenuItems.length > 0 ? (
                                   <OverflowMenu
