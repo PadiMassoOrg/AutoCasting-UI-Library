@@ -14,7 +14,7 @@ export default function ButtonRow({ items, className, innerClassName }: ButtonRo
     <div className={clsx('flex items-center justify-center', className)}>
       <div
         className={clsx(
-          'inline-flex items-center justify-center rounded-lg bg-white shadow-sm h-11 px-4',
+          'inline-flex items-center justify-center rounded-lg bg-white h-11 px-3.5 border border-(--color-secondary-outline)',
           innerClassName
         )}
       >
