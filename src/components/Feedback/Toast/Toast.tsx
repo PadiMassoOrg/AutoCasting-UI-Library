@@ -59,7 +59,7 @@ export default function Toast({
       data-toast-part="root"
       role={role ?? (type === 'danger' ? 'alert' : 'status')}
       className={clsx(
-        'flex flex-row items-center w-full gap-3 rounded-lg p-3 shadow-md max-w-[330px]',
+        'flex w-full max-w-[330px] flex-row items-center gap-3 rounded-lg p-3 shadow-md',
         styles.container,
         className
       )}

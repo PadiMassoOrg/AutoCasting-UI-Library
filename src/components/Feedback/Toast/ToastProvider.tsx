@@ -60,10 +60,12 @@ function registerToastApi(api: ToastContextValue) {
 
 function ToastViewportItem({
   toast,
+  position,
   toastClassName,
   onDismiss,
 }: {
   toast: ToastRecord;
+  position: ToastPosition;
   toastClassName?: string;
   onDismiss: (id: string) => void;
 }) {
@@ -80,7 +82,13 @@ function ToastViewportItem({
   }, [onDismiss, toast.durationMs, toast.id]);
 
   return (
-    <div className="pointer-events-auto w-full">
+    <div
+      className={clsx('pointer-events-auto flex w-full', {
+        'justify-start': position === 'top-left' || position === 'bottom-left',
+        'justify-center': position === 'top-center' || position === 'bottom-center',
+        'justify-end': position === 'top-right' || position === 'bottom-right',
+      })}
+    >
       <Toast
         title={toast.title}
         description={toast.description}
@@ -207,6 +215,7 @@ export function ToastProvider({
                       <ToastViewportItem
                         key={toast.id}
                         toast={toast}
+                        position={position}
                         toastClassName={toastClassName}
                         onDismiss={dismissToastInternal}
                       />
