@@ -34,7 +34,7 @@ export default function IconViewSwitcher<T extends IconName>({
         role="tablist"
         aria-orientation="horizontal"
         className={clsx(
-          'inline-flex items-center justify-center rounded-lg bg-white shadow-sm h-11 p-1',
+          'inline-flex items-center justify-center rounded-xl bg-white shadow-sm h-11 p-1',
           innerClassName
         )}
       >
@@ -57,7 +57,7 @@ export default function IconViewSwitcher<T extends IconName>({
                 onChange?.(item);
               }}
               className={clsx(
-                'cursor-pointer h-9 min-w-9 px-3 rounded-lg',
+                'cursor-pointer h-9 min-w-9 px-3 rounded-xl',
                 'inline-flex items-center justify-center',
                 'transition-colors',
                 'disabled:opacity-50 disabled:cursor-not-allowed',

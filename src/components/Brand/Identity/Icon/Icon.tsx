@@ -26,6 +26,8 @@ import ClockIconPurple from '../../../../icons/clock-purple.svg';
 import ClockIcon from '../../../../icons/clock.svg';
 import CopyLinkIconDisabled from '../../../../icons/copy-link-disabled.svg';
 import CopyLinkIconPurple from '../../../../icons/copy-link-purple.svg';
+import CopyIcon from '../../../../icons/copy.svg';
+import CopyIconPurple from '../../../../icons/copy-purple.svg';
 import CopyLinkIcon from '../../../../icons/copy-link.svg';
 import CrossIconPurple from '../../../../icons/cross-purple.svg';
 import CrossIcon from '../../../../icons/cross.svg';
@@ -111,6 +113,7 @@ export type IconName =
   | 'burgerClose'
   | 'arrowLongLeft'
   | 'catalog'
+  | 'copy'
   | 'copyLink'
   | 'clapper'
   | 'clapperManage'
@@ -210,6 +213,10 @@ const ICONS: Record<IconName, BaseIconConfig> = {
   cross: {
     default: CrossIcon,
     primary: CrossIconPurple,
+  },
+  copy: {
+    default: CopyIcon,
+    primary: CopyIconPurple,
   },
   copyLink: {
     default: CopyLinkIcon,
