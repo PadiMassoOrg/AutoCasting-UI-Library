@@ -293,35 +293,40 @@ function DashboardShell<Key extends string = string>({
             {title && typeof title !== 'string' && <div className="my-6">{title}</div>}
 
             {/* Mobile: Buttons per Section */}
-            <div className="w-full bg-(--color-primary-white) rounded-xl border border-(--color-secondary-outline) shadow-[0_4px_14px_rgba(16,24,40,0.06)] overflow-hidden">
-              {sections!.map((item, index) => {
+            <div className="flex w-[90%] m-auto flex-col gap-2">
+              {sections!.map((item) => {
                 const hasNestedMobileList = Boolean(item.menuAction && item.menuItems);
                 const nestedMobileEntries = hasNestedMobileList ? getNestedSectionEntries(item) : [];
 
-                return (
-                  <div
-                    key={item.key}
-                    className={index !== sections!.length - 1 ? 'border-b border-(--color-secondary-outline)' : ''}
-                  >
-                    <button
-                      type="button"
-                      onClick={() => activateSection(item)}
-                      className="cursor-pointer w-full flex items-center justify-between px-6 py-4 text-[15px] leading-5 font-medium"
+                if (hasNestedMobileList) {
+                  return (
+                    <div
+                      key={item.key}
+                      className="rounded-xl border overflow-hidden border-(--color-secondary-outline) bg-(--color-primary-white) text-(--color-primary-black)"
                     >
-                      <span>{item.label}</span>
-                      <ChevronRight sizePx={24} />
-                    </button>
+                      <button
+                        type="button"
+                        onClick={() => activateSection(item)}
+                        className="flex items-center justify-between gap-2 rounded-none border-none px-5 pt-5 pb-2 text-sm font-semibold cursor-pointer w-full text-left"
+                      >
+                        <span className="flex items-center gap-2">
+                          {item.icon && <span className="w-5 h-5">{item.icon}</span>}
+                          <span>{item.label}</span>
+                        </span>
+                        <span className="text-(--color-primary-black)">
+                          <ChevronRight sizePx={24} />
+                        </span>
+                      </button>
 
-                    {hasNestedMobileList ? (
-                      <div className="flex flex-col px-2 pb-3">
+                      <div className="flex flex-col px-2 pb-4">
                         {nestedMobileEntries.map((entry) => (
-                          <div key={entry.key} className="flex items-center gap-2 px-4 py-2">
+                          <div key={entry.key} className="flex items-center rounded-xl px-4 py-2">
                             <button
                               type="button"
                               onClick={entry.onClick}
-                              className="cursor-pointer min-w-0 flex-1 text-left text-[15px] leading-5 font-medium"
+                              className="cursor-pointer min-w-0 flex-1 text-left text-(--color-primary-black)"
                             >
-                              <span className="block truncate">{entry.label}</span>
+                              <span className="block truncate text-sm leading-none font-semibold">{entry.label}</span>
                             </button>
                             {entry.leadingIconName ? (
                               <button
@@ -330,7 +335,7 @@ function DashboardShell<Key extends string = string>({
                                 aria-label={typeof entry.label === 'string' ? entry.label : undefined}
                                 className="cursor-pointer inline-flex items-center justify-center"
                               >
-                                <Icon name={entry.leadingIconName} size={14} />
+                                <Icon name={entry.leadingIconName} size={14} variant="default" />
                               </button>
                             ) : null}
                             {entry.overflowMenuItems && entry.overflowMenuItems.length > 0 ? (
@@ -344,8 +349,25 @@ function DashboardShell<Key extends string = string>({
                           </div>
                         ))}
                       </div>
-                    ) : null}
-                  </div>
+                    </div>
+                  );
+                }
+
+                return (
+                  <button
+                    key={item.key}
+                    type="button"
+                    onClick={() => activateSection(item)}
+                    className="flex items-center justify-between gap-2 rounded-xl border border-(--color-secondary-outline) bg-(--color-primary-white) px-5 py-5 text-sm font-semibold text-(--color-primary-black) cursor-pointer w-full text-left"
+                  >
+                    <span className="flex items-center gap-2">
+                      {item.icon && <span className="w-5 h-5">{item.icon}</span>}
+                      <span>{item.label}</span>
+                    </span>
+                    <span className="text-(--color-primary-black)">
+                      <ChevronRight sizePx={24} />
+                    </span>
+                  </button>
                 );
               })}
             </div>
