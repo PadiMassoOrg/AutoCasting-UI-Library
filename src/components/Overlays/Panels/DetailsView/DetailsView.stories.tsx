@@ -20,6 +20,11 @@ const meta: Meta<typeof DetailsView> = {
     open: true,
     headerLeft: <h2>Name</h2>,
     headerRight: <Icon name="open" variant="primary"></Icon>,
+    bottomBar: (
+      <div className="flex justify-end">
+        <Button variant="primary">Primary action</Button>
+      </div>
+    ),
     loading: false,
     isLoading: false,
     loadingHeaderHeightClassName: 'h-8',

@@ -56,6 +56,7 @@ import MailIcon from '../../../../icons/message.svg';
 import OGIcon from '../../../../icons/og-image.svg';
 import OpenIconDisabled from '../../../../icons/open-disabled.svg';
 import OpenIconPurple from '../../../../icons/open-purple.svg';
+import OpenIconWhite from '../../../../icons/open-white.svg';
 import OpenIcon from '../../../../icons/open.svg';
 import OverflowMenuIconPurple from '../../../../icons/overflowmenu-purple.svg';
 import OverflowMenuIcon from '../../../../icons/overflowmenu.svg';
@@ -181,6 +182,7 @@ const ICONS: Record<IconName, BaseIconConfig> = {
     default: OpenIcon,
     primary: OpenIconPurple,
     disabled: OpenIconDisabled,
+    white: OpenIconWhite,
   },
   burger: {
     default: BurgerIcon,
