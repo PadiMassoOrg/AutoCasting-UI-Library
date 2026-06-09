@@ -250,11 +250,11 @@ function DashboardShell<Key extends string = string>({
 
   const desktopSectionContent = currentSection && (
     <div className="flex w-full flex-col gap-4 lg:h-full lg:min-h-0">
-      {contentHeader}
+      {contentHeader ? <div className="relative z-4">{contentHeader}</div> : null}
       {sectionUsesShellLayout ? (
         <article className="flex flex-1 min-h-0 flex-col overflow-hidden rounded-xl border border-(--color-secondary-outline) bg-(--color-primary-white)">
           <div ref={contentScrollRef} className="flex-1 min-h-0 overflow-y-auto">
-            <header className="h-[76px] shrink-0 border-b border-(--color-secondary-outline) px-6 flex items-center lg:sticky lg:top-0 lg:z-10 bg-(--color-primary-white)">
+            <header className="h-[76px] shrink-0 border-b border-(--color-secondary-outline) px-6 flex items-center lg:sticky lg:top-0 lg:z-20 bg-(--color-primary-white)">
               <DashboardShellTitle title={currentSection.sectionTitle} actions={currentSection.sectionActions} />
             </header>
             <div className="p-6">{currentSection.render()}</div>
@@ -529,7 +529,7 @@ function DashboardShell<Key extends string = string>({
             <div className="w-full max-w-[1500px] mx-auto pb-6 lg:pb-0 lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:pl-4 lg:py-0">
               {!isDesktop && mobileView === 'content' && currentSection && (
                 <div ref={contentScrollRef} className={mobileNavBottomBar ? 'pb-28' : ''}>
-                  {contentHeader}
+                  {contentHeader ? <div className="relative z-4">{contentHeader}</div> : null}
                   {sectionUsesShellLayout ? (
                     <>
                       {mobileSectionHeader}
