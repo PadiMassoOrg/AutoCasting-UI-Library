@@ -31,7 +31,7 @@ export default function MasterDetailShell({
           className="flex min-h-0 flex-1 flex-col gap-4 lg:flex-row lg:items-stretch"
           style={isDesktop ? { height: desktopViewportHeight } : undefined}
         >
-          <aside className="flex min-h-0 flex-col overflow-hidden rounded-none border-0 bg-transparent lg:w-[350px]">
+          <aside className="flex min-h-0 flex-col overflow-hidden rounded-none border-0 bg-transparent lg:w-[365px]">
             <div ref={menuContentRef} className="scrollbar-hide min-h-0 flex-1 overflow-y-auto">
               {menu}
             </div>
