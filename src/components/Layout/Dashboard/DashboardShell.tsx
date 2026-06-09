@@ -526,7 +526,7 @@ function DashboardShell<Key extends string = string>({
 
           <article className="flex-1 min-w-0 min-h-0 lg:flex lg:flex-col lg:overflow-hidden">
             {/* Container: MAIN CONTENT */}
-            <div className="w-full max-w-[1500px] mx-auto lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:pl-4 lg:py-0">
+            <div className="w-full max-w-[1500px] mx-auto pb-6 lg:pb-0 lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:pl-4 lg:py-0">
               {!isDesktop && mobileView === 'content' && currentSection && (
                 <div ref={contentScrollRef} className={mobileNavBottomBar ? 'pb-28' : ''}>
                   {contentHeader}
