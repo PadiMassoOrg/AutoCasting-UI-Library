@@ -69,20 +69,20 @@ type DashboardShellTitleProps = {
   title?: ReactNode;
   actions?: ReactNode;
   className?: string;
+  size?: 'lg' | 'xl';
 };
 
-export function DashboardShellTitle({ title, actions, className }: DashboardShellTitleProps) {
+export function DashboardShellTitle({ title, actions, className, size = 'lg' }: DashboardShellTitleProps) {
   if (!title && !actions) return null;
+
+  const titleClassName =
+    size === 'xl'
+      ? 'text-2xl font-bold text-(--color-primary-black) leading-tight'
+      : 'text-lg font-bold text-(--color-primary-black) leading-tight';
 
   return (
     <header className={['w-full flex items-center justify-between', className ?? ''].filter(Boolean).join(' ')}>
-      <div className="min-w-0">
-        {typeof title === 'string' ? (
-          <h1 className="text-lg font-bold text-(--color-primary-black) leading-tight">{title}</h1>
-        ) : (
-          title
-        )}
-      </div>
+      <div className="min-w-0">{typeof title === 'string' ? <h1 className={titleClassName}>{title}</h1> : title}</div>
       {actions && <div className="shrink-0 flex items-center gap-3">{actions}</div>}
     </header>
   );
@@ -255,7 +255,11 @@ function DashboardShell<Key extends string = string>({
         <article className="flex flex-1 min-h-0 flex-col overflow-hidden rounded-xl border border-(--color-secondary-outline) bg-(--color-primary-white)">
           <div ref={contentScrollRef} className="flex-1 min-h-0 overflow-y-auto">
             <header className="h-[76px] shrink-0 border-b border-(--color-secondary-outline) px-6 flex items-center lg:sticky lg:top-0 lg:z-20 bg-(--color-primary-white)">
-              <DashboardShellTitle title={currentSection.sectionTitle} actions={currentSection.sectionActions} />
+              <DashboardShellTitle
+                title={currentSection.sectionTitle}
+                actions={currentSection.sectionActions}
+                size="lg"
+              />
             </header>
             <div className="p-6">{currentSection.render()}</div>
           </div>
@@ -288,7 +292,7 @@ function DashboardShell<Key extends string = string>({
         <section className="w-full bg-(--color-secondary-white) relative">
           <div className={['w-full max-w-[550px] mx-auto', bottomPad].filter(Boolean).join(' ')}>
             {title && typeof title === 'string' && (
-              <h1 className="my-6 text-2xl font-semibold text-(--color-primary-black) text-center">{title}</h1>
+              <h1 className="my-6 text-xl font-semibold text-(--color-primary-black) text-center">{title}</h1>
             )}
             {title && typeof title !== 'string' && <div className="my-6">{title}</div>}
 
@@ -401,7 +405,7 @@ function DashboardShell<Key extends string = string>({
       >
         {/* Desktop Title */}
         <div className="w-full shrink-0">
-          {isDesktop && <DashboardShellTitle title={title} actions={titleActions} className="pb-4" />}
+          {isDesktop && <DashboardShellTitle title={title} actions={titleActions} className="pb-4" size="xl" />}
         </div>
 
         <div className="w-full flex flex-col lg:flex-row gap-0 flex-1 min-h-0">
