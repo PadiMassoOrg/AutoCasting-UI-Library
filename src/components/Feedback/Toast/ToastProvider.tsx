@@ -83,18 +83,23 @@ function ToastViewportItem({
 
   return (
     <div
-      className={clsx('pointer-events-auto flex w-full', {
+      className={clsx('pointer-events-none flex w-full', {
         'justify-start': position === 'top-left' || position === 'bottom-left',
         'justify-center': position === 'top-center' || position === 'bottom-center',
         'justify-end': position === 'top-right' || position === 'bottom-right',
       })}
     >
-      <Toast
-        title={toast.title}
-        description={toast.description}
-        type={toast.type}
-        className={clsx(toastClassName, toast.className)}
-      />
+      <div className="pointer-events-auto">
+        <Toast
+          title={toast.title}
+          description={toast.description}
+          type={toast.type}
+          className={clsx(toastClassName, toast.className)}
+          fullWidth={toast.fullWidth}
+          closable={toast.closable}
+          onClose={() => onDismiss(toast.id)}
+        />
+      </div>
     </div>
   );
 }
@@ -151,6 +156,8 @@ export function ToastProvider({
       type = 'default',
       position = 'top-center',
       durationMs = defaultDurationMs,
+      fullWidth = false,
+      closable = false,
       ...toastOptions
     }: ShowToastOptions) => {
       const toastId = id ?? nextToastId();
@@ -159,6 +166,8 @@ export function ToastProvider({
         type,
         position,
         durationMs,
+        fullWidth,
+        closable,
         ...toastOptions,
       };
 
@@ -206,7 +215,7 @@ export function ToastProvider({
                     data-toast-position={position}
                     data-toast-part="viewport"
                     className={clsx(
-                      'pointer-events-none fixed z-[1100] flex w-[calc(100%-2rem)] max-w-sm flex-col gap-3',
+                      'pointer-events-none fixed z-[1100] flex w-[calc(100%-2rem)] max-w-[1400px] flex-col gap-3',
                       VIEWPORT_POSITION_CLASSES[position],
                       viewportClassName
                     )}

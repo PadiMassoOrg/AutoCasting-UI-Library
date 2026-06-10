@@ -37,6 +37,9 @@ export type ToastProps = Omit<HTMLAttributes<HTMLDivElement>, 'title'> & {
   titleClassName?: string;
   descriptionClassName?: string;
   iconClassName?: string;
+  fullWidth?: boolean;
+  closable?: boolean;
+  onClose?: () => void;
 };
 
 export default function Toast({
@@ -47,6 +50,9 @@ export default function Toast({
   titleClassName,
   descriptionClassName,
   iconClassName,
+  fullWidth = false,
+  closable = false,
+  onClose,
   role,
   ...rest
 }: ToastProps) {
@@ -59,7 +65,8 @@ export default function Toast({
       data-toast-part="root"
       role={role ?? (type === 'danger' ? 'alert' : 'status')}
       className={clsx(
-        'flex w-full max-w-[330px] flex-row items-center gap-3 rounded-lg p-3 shadow-md',
+        'flex w-full flex-row items-center gap-3 rounded-lg p-3 shadow-md',
+        fullWidth ? 'max-w-[650px]' : 'max-w-[330px]',
         styles.container,
         className
       )}
@@ -72,10 +79,17 @@ export default function Toast({
         className={clsx('cursor-default', iconClassName)}
       />
 
-      <div data-toast-part="content" className="flex-1">
-        <p data-toast-part="title" className={clsx('text-sm font-semibold', titleClassName)}>
-          {title}
-        </p>
+      <div data-toast-part="content" className={`flex min-w-0 flex-1 flex-col gap-1`}>
+        <div className="flex items-center justify-between">
+          <p data-toast-part="title" className={clsx('text-sm font-semibold', titleClassName)}>
+            {title}
+          </p>
+          {closable ? (
+            <button type="button" aria-label="Close toast" className="cursor-pointer" onClick={onClose}>
+              <Icon name="cross" variant="default" aria-hidden="true" size={10} />
+            </button>
+          ) : null}
+        </div>
         {description ? (
           <p
             data-toast-part="description"
