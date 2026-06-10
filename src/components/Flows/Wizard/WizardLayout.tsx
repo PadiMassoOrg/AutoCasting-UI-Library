@@ -105,22 +105,13 @@ type WizardActionsProps = {
   actionsClassName?: string;
 };
 
-export function WizardActions({
-  primaryAction,
-  secondaryAction,
-  tertiaryAction,
-  className,
-  actionsClassName,
-}: WizardActionsProps) {
-  if (!primaryAction && !secondaryAction && !tertiaryAction) return null;
+export function WizardActions({ primaryAction, secondaryAction, className }: WizardActionsProps) {
+  if (!primaryAction && !secondaryAction) return null;
 
   return (
-    <div className={clsx('flex w-full min-w-0 items-center justify-between gap-4', className)}>
-      <div className="min-w-0 shrink-0">{tertiaryAction}</div>
-      <div className={clsx('flex min-w-0 items-center gap-4', actionsClassName)}>
-        {secondaryAction ? <div className="shrink-0">{secondaryAction}</div> : null}
-        {primaryAction ? <div className="shrink-0">{primaryAction}</div> : null}
-      </div>
+    <div className={clsx('flex flex-col gap-2 sm:flex-row items-center justify-between', className)}>
+      {secondaryAction}
+      {primaryAction}
     </div>
   );
 }

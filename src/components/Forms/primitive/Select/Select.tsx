@@ -9,13 +9,21 @@ type SelectProps = Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'multiple
 
 const Select = forwardRef<HTMLSelectElement, SelectProps>(
   ({ className, options, placeholder, children, ...props }, ref) => {
+    const rawValue = props.value ?? props.defaultValue;
+    const hasEmptyValue =
+      rawValue === '' ||
+      rawValue === null ||
+      rawValue === undefined ||
+      (Array.isArray(rawValue) && rawValue.length === 0);
+
     return (
       <div className="relative">
         <select
           ref={ref}
           className={clsx(
             'cursor-pointer w-full h-12 px-5 pr-10 rounded-xl text-base',
-            'placeholder:text-(--color-secondary-grey) placeholder:font-light placeholder:text-sm',
+            hasEmptyValue && 'text-base text-(--color-secondary-grey)',
+            !hasEmptyValue && 'text-(--color-primary-black)',
             'border border-(--color-secondary-outline)',
             'focus:outline-none focus:ring-0 focus:border-(--color-primary-purple)',
             'appearance-none transition-colors duration-100 ease-in-out',
@@ -24,7 +32,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
           {...props}
         >
           {placeholder && (
-            <option value="" disabled hidden>
+            <option value="" hidden>
               {placeholder}
             </option>
           )}

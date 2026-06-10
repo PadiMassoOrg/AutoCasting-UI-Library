@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { Button } from '../../../Actions/Buttons/Button';
 import DetailsView from './DetailsView';
-import { Icon } from '../../../Brand/Identity/Icon';
 
 const meta: Meta<typeof DetailsView> = {
   title: 'Overlays/Panels/Details View',
@@ -19,7 +18,11 @@ const meta: Meta<typeof DetailsView> = {
   args: {
     open: true,
     headerLeft: <h2>Name</h2>,
-    headerRight: <Icon name="open" variant="primary"></Icon>,
+    bottomBar: (
+      <div className="flex justify-end">
+        <Button variant="primary">Primary action</Button>
+      </div>
+    ),
     loading: false,
     isLoading: false,
     loadingHeaderHeightClassName: 'h-8',

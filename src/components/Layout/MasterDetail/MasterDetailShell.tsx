@@ -4,7 +4,9 @@ import { LG_SCREEN_SIZE, useMedia } from '../../../hooks/useMedia';
 import SectionCard from '../SectionCard/SectionCard';
 
 export type MasterDetailShellProps = {
-  menu: ReactNode;
+  menuHeader?: ReactNode;
+  menuContent: ReactNode;
+  menuFooter?: ReactNode;
   content: ReactNode;
   contentHeader?: ReactNode;
   contentActions?: ReactNode;
@@ -13,7 +15,9 @@ export type MasterDetailShellProps = {
 };
 
 export default function MasterDetailShell({
-  menu,
+  menuHeader,
+  menuContent,
+  menuFooter,
   content,
   contentHeader,
   contentActions,
@@ -31,10 +35,12 @@ export default function MasterDetailShell({
           className="flex min-h-0 flex-1 flex-col gap-4 lg:flex-row lg:items-stretch"
           style={isDesktop ? { height: desktopViewportHeight } : undefined}
         >
-          <aside className="flex min-h-0 flex-col overflow-hidden rounded-none border-0 bg-transparent lg:w-[350px]">
-            <div ref={menuContentRef} className="scrollbar-hide min-h-0 flex-1 overflow-y-auto">
-              {menu}
+          <aside className="flex min-h-0 flex-col overflow-hidden rounded-none border-0 bg-transparent lg:w-[365px]">
+            {menuHeader ? <div className="shrink-0">{menuHeader}</div> : null}
+            <div ref={menuContentRef} className="min-h-0 flex-1 overflow-y-auto">
+              {menuContent}
             </div>
+            {menuFooter ? <div className="shrink-0 pt-4">{menuFooter}</div> : null}
           </aside>
 
           <SectionCard className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden" withContentWrapper={false}>

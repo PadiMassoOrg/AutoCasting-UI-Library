@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { type ReactNode, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { Icon } from '../../../Brand/Identity/Icon';
 import { Spinner } from '../../../Feedback/Loading/Spinner';
 
@@ -7,7 +8,7 @@ type DetailsViewProps = {
   open: boolean;
   onClose: () => void;
   headerLeft: ReactNode;
-  headerRight?: ReactNode;
+  bottomBar?: ReactNode;
   children?: ReactNode;
   className?: string;
   loading?: boolean;
@@ -19,7 +20,7 @@ export default function DetailsView({
   open,
   onClose,
   headerLeft: navigation,
-  headerRight,
+  bottomBar,
   children,
   className,
   loading = false,
@@ -60,29 +61,30 @@ export default function DetailsView({
 
   if (!open) return null;
 
-  return (
-    <div className="fixed inset-0 z-[140] flex justify-end items-stretch">
+  return createPortal(
+    <div className="fixed inset-0 z-200" style={{ overscrollBehavior: 'contain' }}>
       {/* Overlay */}
-      <button type="button" aria-label="Cerrar" onClick={onClose} className="absolute inset-0 bg-black/60" />
+      <button type="button" aria-label="Cerrar" onClick={onClose} className="absolute inset-0 bg-black/40" />
 
-      {/* Panel derecho */}
+      {/* Panel */}
       <aside
         className={clsx(
-          'relative ml-auto h-full w-full max-w-[550px] bg-(--color-secondary-white) shadow-xl flex flex-col',
+          'fixed right-[10px] top-[10px] bottom-[10px] left-[10px] flex flex-col overflow-hidden rounded-xl bg-white lg:left-auto lg:w-full lg:max-w-[550px]',
           className
         )}
       >
+        {/* Each element handles own paddings: General rule p-6 */}
+
         {/* Header */}
-        <header className="flex items-center justify-between p-5 border-b border-(--color-secondary-outline) bg-(--color-primary-white)">
-          {resolvedHeaderLeft}
-          <div className="flex items-center gap-4">
-            {headerRight}
-            <Icon name="burgerClose" onClick={onClose} />
-          </div>
+        <header className="py-4 px-6 flex items-start justify-between gap-6 border-b border-(--color-secondary-outline) bg-(--color-primary-white)">
+          <div className="min-w-0 flex-1">{resolvedHeaderLeft}</div>
+          <button type="button" aria-label="Cerrar" onClick={onClose} className="cursor-pointer">
+            <Icon name="burgerClose" />
+          </button>
         </header>
 
         {/* Body scrolleable */}
-        <div ref={bodyRef} className="flex-1 min-h-0 overflow-auto px-8 py-10">
+        <div ref={bodyRef} className="px-6 py-6 flex-1 min-h-0 overflow-auto bg-[var(--color-secondary-white)]">
           {showLoading ? (
             <div className="w-full h-full min-h-[220px] flex items-center justify-center">
               <Spinner className="h-8 w-8" />
@@ -91,7 +93,14 @@ export default function DetailsView({
             children
           )}
         </div>
+
+        {bottomBar ? (
+          <footer className="shrink-0 bg-(--color-primary-white) px-6 py-4 shadow-[0_-2px_3px_rgba(0,0,0,0.1)]">
+            {bottomBar}
+          </footer>
+        ) : null}
       </aside>
-    </div>
+    </div>,
+    document.body
   );
 }

@@ -20,10 +20,14 @@ import ClapperManageIconPurple from '../../../../icons/clapper-manage-purple.svg
 import ClapperManageIcon from '../../../../icons/clapper-manage.svg';
 import ClapperIconPurple from '../../../../icons/clapper-purple.svg';
 import ClapperIcon from '../../../../icons/clapper.svg';
+import ClapperCreateIcon from '../../../../icons/clapper-create.svg';
+import ClapperCreateIconPurple from '../../../../icons/clapper-create-purple.svg';
 import ClockIconPurple from '../../../../icons/clock-purple.svg';
 import ClockIcon from '../../../../icons/clock.svg';
 import CopyLinkIconDisabled from '../../../../icons/copy-link-disabled.svg';
 import CopyLinkIconPurple from '../../../../icons/copy-link-purple.svg';
+import CopyIcon from '../../../../icons/copy.svg';
+import CopyIconPurple from '../../../../icons/copy-purple.svg';
 import CopyLinkIcon from '../../../../icons/copy-link.svg';
 import CrossIconPurple from '../../../../icons/cross-purple.svg';
 import CrossIcon from '../../../../icons/cross.svg';
@@ -52,6 +56,7 @@ import MailIcon from '../../../../icons/message.svg';
 import OGIcon from '../../../../icons/og-image.svg';
 import OpenIconDisabled from '../../../../icons/open-disabled.svg';
 import OpenIconPurple from '../../../../icons/open-purple.svg';
+import OpenIconWhite from '../../../../icons/open-white.svg';
 import OpenIcon from '../../../../icons/open.svg';
 import OverflowMenuIconPurple from '../../../../icons/overflowmenu-purple.svg';
 import OverflowMenuIcon from '../../../../icons/overflowmenu.svg';
@@ -109,9 +114,11 @@ export type IconName =
   | 'burgerClose'
   | 'arrowLongLeft'
   | 'catalog'
+  | 'copy'
   | 'copyLink'
   | 'clapper'
   | 'clapperManage'
+  | 'clapperCreate'
   | 'clock'
   | 'file'
   | 'filter'
@@ -175,6 +182,7 @@ const ICONS: Record<IconName, BaseIconConfig> = {
     default: OpenIcon,
     primary: OpenIconPurple,
     disabled: OpenIconDisabled,
+    white: OpenIconWhite,
   },
   burger: {
     default: BurgerIcon,
@@ -208,6 +216,10 @@ const ICONS: Record<IconName, BaseIconConfig> = {
     default: CrossIcon,
     primary: CrossIconPurple,
   },
+  copy: {
+    default: CopyIcon,
+    primary: CopyIconPurple,
+  },
   copyLink: {
     default: CopyLinkIcon,
     primary: CopyLinkIconPurple,
@@ -216,6 +228,10 @@ const ICONS: Record<IconName, BaseIconConfig> = {
   clapper: {
     default: ClapperIcon,
     primary: ClapperIconPurple,
+  },
+  clapperCreate: {
+    default: ClapperCreateIcon,
+    primary: ClapperCreateIconPurple,
   },
   file: {
     default: FileIcon,

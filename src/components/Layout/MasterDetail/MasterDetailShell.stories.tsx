@@ -30,21 +30,22 @@ export const Default: Story = {
       <div className="bg-(--color-secondary-white) p-4">
         <MasterDetailShell
           desktopPaneHeight="70vh"
-          menu={
-            <div className="flex min-h-full flex-col gap-4 bg-(--color-secondary-white) p-4">
-              <div className="sticky top-0 z-10 flex items-center justify-between bg-(--color-secondary-white) pb-4">
-                <h2 className="text-2xl font-semibold text-(--color-primary-black)">Castings</h2>
-                <button
-                  type="button"
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-(--color-secondary-outline) bg-(--color-primary-white)"
-                  onClick={() => setFiltersOpen((value) => !value)}
-                  aria-pressed={filtersOpen}
-                  aria-label={filtersOpen ? 'Cerrar filtros' : 'Abrir filtros'}
-                >
-                  <Icon name="filter" variant="primary" />
-                </button>
-              </div>
-
+          menuHeader={
+            <div className="flex items-center justify-between bg-(--color-secondary-white) pb-4">
+              <h2 className="text-2xl font-semibold text-(--color-primary-black)">Castings</h2>
+              <button
+                type="button"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-(--color-secondary-outline) bg-(--color-primary-white)"
+                onClick={() => setFiltersOpen((value) => !value)}
+                aria-pressed={filtersOpen}
+                aria-label={filtersOpen ? 'Cerrar filtros' : 'Abrir filtros'}
+              >
+                <Icon name="filter" variant="primary" />
+              </button>
+            </div>
+          }
+          menuContent={
+            <div className="flex min-h-full flex-col gap-4 bg-(--color-secondary-white) px-4 pb-4">
               {filtersOpen ? (
                 <section className="rounded-2xl border border-dashed border-(--color-secondary-outline) bg-(--color-primary-white) p-4 text-sm text-(--color-secondary-grey-fonts)">
                   Panel de filtros de ejemplo.

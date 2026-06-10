@@ -19,7 +19,7 @@ export default function SectionCard({
       {...props}
       className={[
         'lg:flex lg:flex-col lg:gap-6 bg-[var(--color-primary-white)]',
-        'rounded-2xl border border-[var(--color-secondary-outline)]',
+        'rounded-xl border border-[var(--color-secondary-outline)]',
         className,
       ].join(' ')}
     >

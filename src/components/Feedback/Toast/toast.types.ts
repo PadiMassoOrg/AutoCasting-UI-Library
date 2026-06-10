@@ -14,6 +14,8 @@ export type ShowToastOptions = ToastContent & {
   position?: ToastPosition;
   durationMs?: number;
   className?: string;
+  fullWidth?: boolean;
+  closable?: boolean;
 };
 
 export type ToastRecord = ToastContent & {
@@ -22,6 +24,8 @@ export type ToastRecord = ToastContent & {
   position: ToastPosition;
   durationMs: number;
   className?: string;
+  fullWidth: boolean;
+  closable: boolean;
 };
 
 export type ToastContextValue = {
