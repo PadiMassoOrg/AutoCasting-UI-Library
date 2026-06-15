@@ -51,8 +51,8 @@ export default function PhotoZoomOverlay({ open, images, initialIndex = 0, onClo
   return createPortal(
     <div className="fixed inset-0 z-[1000]" role="dialog" aria-modal="true" onClick={onClose}>
       <div className="absolute inset-0 bg-black/80" />
-      <div className="relative z-10 flex items-center justify-center h-full px-4">
-        <div className="relative w-[90%] h-[90%] max-w-[600px] max-h-[700px] m-auto rounded-3xl" onClick={(e) => e.stopPropagation()}>
+      <div className="relative z-10 flex items-center justify-center h-full w-full px-0">
+        <div className="relative w-full h-full m-auto" onClick={(e) => e.stopPropagation()}>
           <button
             type="button"
             aria-label="Cerrar"
@@ -61,11 +61,11 @@ export default function PhotoZoomOverlay({ open, images, initialIndex = 0, onClo
           >
             <span className="text-2xl leading-none mb-[10%]">×</span>
           </button>
-          <figure className="relative w-full h-full overflow-hidden rounded-2xl">
+          <figure className="relative w-full h-full overflow-hidden">
             <img
               src={current}
               alt={`Foto ${idx + 1}`}
-              className="absolute inset-0 w-full h-full object-cover select-none"
+              className="absolute inset-0 w-full h-full object-contain select-none"
               draggable={false}
             />
 
