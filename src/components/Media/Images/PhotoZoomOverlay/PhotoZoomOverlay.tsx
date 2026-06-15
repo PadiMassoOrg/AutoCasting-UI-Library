@@ -7,22 +7,30 @@ type Props = {
   images: string[];
   initialIndex?: number;
   onClose: () => void;
-  onIndexChange?: (i: number) => void;
 };
 
-export default function PhotoZoomOverlay({ open, images, initialIndex = 0, onClose, onIndexChange }: Props) {
+export default function PhotoZoomOverlay({ open, images, initialIndex = 0, onClose }: Props) {
   const [idx, setIdx] = useState(initialIndex);
 
   useEffect(() => {
-    if (open) setIdx(initialIndex);
+    if (open) {
+      setIdx(initialIndex);
+    }
   }, [open, initialIndex]);
 
   const total = images.length;
   const current = useMemo(() => images[idx] ?? images[0], [images, idx]);
   const hasArrows = total > 1;
 
-  const prev = useCallback(() => setIdx((i) => (i - 1 + total) % total), [total]);
-  const next = useCallback(() => setIdx((i) => (i + 1) % total), [total]);
+  const prev = useCallback(() => {
+    if (!hasArrows) return;
+    setIdx((currentIdx) => (currentIdx - 1 + total) % total);
+  }, [hasArrows, total]);
+
+  const next = useCallback(() => {
+    if (!hasArrows) return;
+    setIdx((currentIdx) => (currentIdx + 1) % total);
+  }, [hasArrows, total]);
 
   useEffect(() => {
     if (!open) return;
@@ -30,19 +38,13 @@ export default function PhotoZoomOverlay({ open, images, initialIndex = 0, onClo
     document.body.style.overflow = 'hidden';
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
-      if (e.key === 'ArrowLeft') prev();
-      if (e.key === 'ArrowRight') next();
     };
     window.addEventListener('keydown', onKey);
     return () => {
       document.body.style.overflow = prevOverflow;
       window.removeEventListener('keydown', onKey);
     };
-  }, [open, prev, next, onClose]);
-
-  useEffect(() => {
-    onIndexChange?.(idx);
-  }, [idx, onIndexChange]);
+  }, [open, onClose]);
 
   if (!open) return null;
 
@@ -50,12 +52,7 @@ export default function PhotoZoomOverlay({ open, images, initialIndex = 0, onClo
     <div className="fixed inset-0 z-[1000]" role="dialog" aria-modal="true" onClick={onClose}>
       <div className="absolute inset-0 bg-black/80" />
       <div className="relative z-10 flex items-center justify-center h-full px-4">
-        <div
-          className="relative w-[90%] h-[90%] max-w-[600px] max-h-[700px] m-auto rounded-3xl"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-        >
+        <div className="relative w-[90%] h-[90%] max-w-[600px] max-h-[700px] m-auto rounded-3xl" onClick={(e) => e.stopPropagation()}>
           <button
             type="button"
             aria-label="Cerrar"
@@ -67,7 +64,7 @@ export default function PhotoZoomOverlay({ open, images, initialIndex = 0, onClo
           <figure className="relative w-full h-full overflow-hidden rounded-2xl">
             <img
               src={current}
-              alt={`Foto ${idx + 1} de ${total}`}
+              alt={`Foto ${idx + 1}`}
               className="absolute inset-0 w-full h-full object-cover select-none"
               draggable={false}
             />

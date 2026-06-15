@@ -38,7 +38,7 @@ const meta: Meta<typeof ImageCarousel> = {
 
     return (
       <div className={desktopLayout ? 'h-[440px] w-[720px]' : 'w-[320px]'}>
-        <ImageCarousel {...args} className={desktopLayout ? 'h-full' : args.className} />
+        <ImageCarousel {...args} className={desktopLayout ? 'h-full' : undefined} enablePhotoZoomOverlay />
       </div>
     );
   },
@@ -52,5 +52,11 @@ export const Default: Story = {};
 export const Desktop: Story = {
   args: {
     isDesktop: true,
+  },
+};
+
+export const DesktopXL: Story = {
+  args: {
+    isDesktopXL: true,
   },
 };

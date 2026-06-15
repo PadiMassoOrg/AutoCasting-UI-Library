@@ -37,25 +37,16 @@ const meta: Meta<typeof PhotoZoomOverlay> = {
   },
   render: (args) => {
     const [open, setOpen] = useState(args.open);
-    const [selectedIndex, setSelectedIndex] = useState(args.initialIndex ?? 0);
-
-    useEffect(() => {
-      setSelectedIndex(args.initialIndex ?? 0);
-    }, [args.initialIndex]);
 
     return (
       <div className="min-h-screen bg-(--color-secondary-white) p-6">
         <Button variant="primary" onClick={() => setOpen(true)}>
           Open overlay
         </Button>
-        <p className="mt-3 text-sm text-(--color-secondary-grey-fonts)">
-          Current image: {selectedIndex + 1} / {args.images.length}
-        </p>
         <PhotoZoomOverlay
           {...args}
           open={open}
           onClose={() => setOpen(false)}
-          onIndexChange={(index) => setSelectedIndex(index)}
         />
       </div>
     );
