@@ -109,7 +109,7 @@ export function WizardActions({ primaryAction, secondaryAction, className }: Wiz
   if (!primaryAction && !secondaryAction) return null;
 
   return (
-    <div className={clsx('flex flex-col gap-2 sm:flex-row items-center justify-between', className)}>
+    <div className={clsx('w-full flex flex-col gap-2 sm:flex-row items-center justify-between', className)}>
       {secondaryAction}
       {primaryAction}
     </div>

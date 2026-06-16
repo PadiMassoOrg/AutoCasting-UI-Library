@@ -43,11 +43,7 @@ const meta: Meta<typeof PhotoZoomOverlay> = {
         <Button variant="primary" onClick={() => setOpen(true)}>
           Open overlay
         </Button>
-        <PhotoZoomOverlay
-          {...args}
-          open={open}
-          onClose={() => setOpen(false)}
-        />
+        <PhotoZoomOverlay {...args} open={open} onClose={() => setOpen(false)} />
       </div>
     );
   },
