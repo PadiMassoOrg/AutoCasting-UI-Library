@@ -66,7 +66,14 @@ export default function ImageCarousel({
             className={`relative overflow-hidden rounded-xl text-left ${figureClass}`}
             aria-label="Ver imagen 1"
           >
-            <img src={selectedImage} alt="Imagen principal" className="absolute inset-0 w-full h-full object-cover" />
+            <img
+              src={selectedImage}
+              alt="Imagen principal"
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
           </button>
 
           {/* Thumbs mobile (scroll horizontal) */}
@@ -85,7 +92,13 @@ export default function ImageCarousel({
                     disabled={isPlaceholder}
                     className="w-[120px] aspect-[8/10] flex-shrink-0 rounded-lg overflow-hidden border-2 border-transparent disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    <img src={img} alt={`Miniatura ${i + 1}`} className="w-full h-full object-cover" />
+                    <img
+                      src={img}
+                      alt={`Miniatura ${i + 1}`}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover"
+                    />
                   </button>
                 );
               })}
@@ -112,7 +125,13 @@ export default function ImageCarousel({
                   style={{ height: 'calc((100% - 2*var(--g)) / 3)' }}
                   className="relative w-full aspect-[4/5] rounded-xl overflow-hidden border-2 border-transparent flex-shrink-0 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  <img src={img} alt={`Miniatura ${idx + 1}`} className="absolute inset-0 w-full h-full object-cover" />
+                  <img
+                    src={img}
+                    alt={`Miniatura ${idx + 1}`}
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
                 </button>
               );
             })}
