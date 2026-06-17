@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button } from '../../../Actions/Buttons/Button';
 import PhotoZoomOverlay from './PhotoZoomOverlay';
 

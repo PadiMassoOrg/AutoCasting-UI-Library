@@ -41,9 +41,6 @@ const isSameDay = (left?: Date, right?: Date) =>
 const isSingleProps = (props: RangeCalendarProps): props is SingleProps => props.selectionMode === 'single';
 const isRangeProps = (props: RangeCalendarProps): props is RangeProps => props.selectionMode === 'range';
 
-const isDateRangeValue = (value: Date | DateRange | undefined): value is DateRange =>
-  !!value && typeof value === 'object' && ('from' in value || 'to' in value);
-
 const getTargetMonth = (value?: Date | DateRange) => {
   if (!value) return startOfMonth(new Date());
   if (value instanceof Date) return startOfMonth(value);

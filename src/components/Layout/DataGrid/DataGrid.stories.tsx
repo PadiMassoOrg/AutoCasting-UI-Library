@@ -120,6 +120,15 @@ const meta: Meta<typeof DataGrid<ApplicantRow>> = {
       }),
       []
     );
+    const paginationLabels = {
+      results: 'Resultados',
+      page: 'Página',
+      of: 'de',
+      firstPage: 'Primera página',
+      previousPage: 'Página anterior',
+      nextPage: 'Página siguiente',
+      lastPage: 'Última página',
+    };
 
     return (
       <div className="p-4">
@@ -130,17 +139,11 @@ const meta: Meta<typeof DataGrid<ApplicantRow>> = {
           actions={actions}
           pagination={{
             page,
-            hasNext: page === 0,
-            pageCount: 2,
+            hasNext: page < 4,
+            pageCount: 5,
+            totalCount: 41,
+            labels: paginationLabels,
             onPageChange: setPage,
-            labels: {
-              page: 'Página',
-              of: 'de',
-              firstPageAriaLabel: 'Primera página',
-              previousPageAriaLabel: 'Página anterior',
-              nextPageAriaLabel: 'Página siguiente',
-              lastPageAriaLabel: 'Última página',
-            },
           }}
         />
       </div>

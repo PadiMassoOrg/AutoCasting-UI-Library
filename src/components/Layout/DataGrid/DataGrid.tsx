@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { OverflowMenu } from '../../Actions/Menus/OverflowMenu';
 import type { OverflowMenuAlign, OverflowMenuItem, OverflowMenuSide } from '../../Actions/Menus/OverflowMenu';
+import { Label } from '../../Forms';
 import { Spinner } from '../../Feedback/Loading/Spinner';
 import { ChevronLeft, ChevronRight } from '../../Navigation/Indicators/Chevron';
 
@@ -44,16 +45,15 @@ export type DataGridPagination = {
   hasNext: boolean;
   onPageChange: (nextPage: number) => void;
   pageCount?: number | null;
-  pageLabel?: (ctx: { page: number; hasNext: boolean }) => ReactNode;
-  previousLabel?: ReactNode;
-  nextLabel?: ReactNode;
-  labels?: {
-    page?: string;
-    of?: string;
-    firstPageAriaLabel?: string;
-    previousPageAriaLabel?: string;
-    nextPageAriaLabel?: string;
-    lastPageAriaLabel?: string;
+  totalCount?: number | null;
+  labels: {
+    results: string;
+    page: string;
+    of: string;
+    firstPage: string;
+    previousPage: string;
+    nextPage: string;
+    lastPage: string;
   };
 };
 
@@ -79,6 +79,7 @@ type Props<T> = {
   pagination?: DataGridPagination;
   loading?: boolean;
   loadingMessage?: ReactNode;
+  minRows?: number;
 };
 
 function resolveCell<T>(column: DataGridColumn<T>, row: T): ReactNode {
@@ -174,12 +175,13 @@ const DataGrid = <T,>({
   emptyMessage = 'No data',
   pagination,
   loading = false,
-  loadingMessage,
+  minRows,
 }: Props<T>) => {
   const selectionColumnClassName = 'w-[72px]';
   const leadingGutterColumnClassName = 'w-[24px]';
   const headerCheckboxRef = useRef<HTMLInputElement | null>(null);
   const [internalSelectedRowKeys, setInternalSelectedRowKeys] = useState<string[]>([]);
+  const hasRows = data.length > 0;
 
   const resolvedRowKeys = useMemo(
     () =>
@@ -222,10 +224,202 @@ const DataGrid = <T,>({
 
   const showLeadingGutter = !effectiveSelection;
   const colCount = columns.length + (actions ? 1 : 0) + (effectiveSelection ? 1 : 0) + (showLeadingGutter ? 1 : 0);
+  const resolvedMinRows = minRows && minRows > 0 ? Math.floor(minRows) : 0;
+  const placeholderRowCount = hasRows ? Math.max(0, resolvedMinRows - data.length) : 0;
+  const emptyBodyHeightPx = Math.max(1, resolvedMinRows || 1) * 56;
   const totalFlex = useMemo(
     () => columns.reduce((acc, column) => acc + (column.width == null ? (column.flex ?? 1) : 0), 0),
     [columns]
   );
+  const showLoadingOverlay = loading && (hasRows || resolvedMinRows > 0);
+  const resolvedLoadingContent = (
+    <div className="inline-flex items-center justify-center gap-2 text-sm text-[var(--color-secondary-grey-fonts)]">
+      <Spinner className="h-4 w-4" />
+    </div>
+  );
+  const paginationLabels = pagination?.labels;
+  const bodyRows: ReactNode[] = [];
+
+  if (hasRows) {
+    data.forEach((row, index) => {
+      const key = resolvedRowKeys[index];
+
+      bodyRows.push(
+        <tr key={key} className="h-14 border-b border-[var(--color-secondary-outline)] last:border-b-0">
+          {effectiveSelection ? (
+            <td className={[selectionColumnClassName, 'p-0 text-center align-middle'].join(' ')}>
+              <span className="relative inline-flex h-14 w-full items-center justify-center px-4">
+                <input
+                  type="checkbox"
+                  checked={selectedKeySet.has(key)}
+                  onChange={() => handleToggleRow(key, Boolean(effectiveSelection.isRowDisabled?.(key)))}
+                  disabled={Boolean(effectiveSelection.isRowDisabled?.(key))}
+                  aria-label={effectiveSelection.rowAriaLabel?.(key) ?? `Select row ${key}`}
+                  className="
+                    peer
+                    h-6 w-6
+                    rounded-lg
+                    border
+                    border-[var(--color-secondary-outline)]
+                    appearance-none
+                    cursor-pointer
+                    checked:border-[var(--color-primary-purple)]
+                    checked:bg-[var(--color-primary-white)]
+                    transition-colors
+                    disabled:opacity-50
+                    disabled:cursor-not-allowed
+                  "
+                />
+                <svg
+                  viewBox="0 0 16 16"
+                  className="
+                    pointer-events-none
+                    absolute
+                    h-3 w-3
+                    opacity-0
+                    peer-checked:opacity-100
+                  "
+                >
+                  <path
+                    d="M3 8.5L6.5 12L13 4"
+                    fill="none"
+                    stroke="var(--color-primary-purple)"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </span>
+            </td>
+          ) : null}
+          {showLeadingGutter ? <td className={[leadingGutterColumnClassName, 'p-0 align-middle'].join(' ')} /> : null}
+
+          {columns.map((column, columnIndex) => {
+            const columnKey = resolveColumnKey(column, columnIndex);
+            const contentAlign = resolveContentAlign(column);
+            const alignClass = resolveAlignClass(contentAlign);
+
+            return (
+              <td
+                key={`${key}-${columnKey}`}
+                style={resolveColumnStyle(column, totalFlex)}
+                className={[
+                  'p-0 text-sm text-[var(--color-primary-black)] align-middle',
+                  alignClass,
+                  column.cellClassName,
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
+              >
+                <div
+                  className={[
+                    'flex h-14 items-center px-2',
+                    resolveJustifyClass(contentAlign),
+                    column.cellContentClassName,
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
+                >
+                  {resolveCell(column, row)}
+                </div>
+              </td>
+            );
+          })}
+
+          {actions ? (
+            <td
+              style={resolveActionsColumnStyle(actions.columnWidth)}
+              className={['whitespace-nowrap p-0 text-center align-middle', actions.cellClassName]
+                .filter(Boolean)
+                .join(' ')}
+            >
+              <OverflowMenu
+                items={actions.items(row)}
+                align={actions.align ?? 'end'}
+                side={actions.side ?? 'bottom'}
+                triggerClassName={['inline-flex h-14 w-full items-center justify-center px-4', actions.triggerClassName]
+                  .filter(Boolean)
+                  .join(' ')}
+                menuClassName={actions.menuClassName}
+              />
+            </td>
+          ) : null}
+        </tr>
+      );
+    });
+  }
+
+  if (placeholderRowCount > 0) {
+    Array.from({ length: placeholderRowCount }).forEach((_, index) => {
+      const placeholderKey = `placeholder-row-${index}`;
+
+      bodyRows.push(
+        <tr
+          key={placeholderKey}
+          aria-hidden="true"
+          className="h-14 border-b border-[var(--color-secondary-outline)] last:border-b-0"
+        >
+          {effectiveSelection ? (
+            <td className={[selectionColumnClassName, 'p-0 text-center align-middle'].join(' ')} />
+          ) : null}
+          {showLeadingGutter ? <td className={[leadingGutterColumnClassName, 'p-0 align-middle'].join(' ')} /> : null}
+
+          {columns.map((column, columnIndex) => {
+            const columnKey = resolveColumnKey(column, columnIndex);
+            const contentAlign = resolveContentAlign(column);
+            const alignClass = resolveAlignClass(contentAlign);
+
+            return (
+              <td
+                key={`${placeholderKey}-${columnKey}`}
+                style={resolveColumnStyle(column, totalFlex)}
+                className={[
+                  'p-0 text-sm text-[var(--color-primary-black)] align-middle',
+                  alignClass,
+                  column.cellClassName,
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
+              >
+                <div
+                  className={[
+                    'flex h-14 items-center px-2',
+                    resolveJustifyClass(contentAlign),
+                    column.cellContentClassName,
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
+                />
+              </td>
+            );
+          })}
+
+          {actions ? (
+            <td
+              style={resolveActionsColumnStyle(actions.columnWidth)}
+              className={['whitespace-nowrap p-0 text-center align-middle', actions.cellClassName]
+                .filter(Boolean)
+                .join(' ')}
+            />
+          ) : null}
+        </tr>
+      );
+    });
+  }
+
+  if (!hasRows) {
+    bodyRows.push(
+      <tr key="empty-state-row">
+        <td
+          colSpan={colCount}
+          className="p-0 text-center text-(--color-secondary-grey-fonts)"
+          style={{ height: `${emptyBodyHeightPx}px` }}
+        >
+          <Label className="w-full text-center text-(--color-secondary-grey-fonts) pt-10">{emptyMessage}</Label>
+        </td>
+      </tr>
+    );
+  }
 
   const handleToggleAll = () => {
     if (!effectiveSelection) return;
@@ -258,8 +452,13 @@ const DataGrid = <T,>({
         .filter(Boolean)
         .join(' ')}
     >
-      <div className="w-full overflow-x-auto">
-        <table className={['w-full table-auto border-collapse', tableClassName].filter(Boolean).join(' ')}>
+      <div className="relative w-full overflow-x-auto">
+        <table
+          aria-busy={loading}
+          className={['w-full table-auto border-collapse', loading ? 'pointer-events-none' : '', tableClassName]
+            .filter(Boolean)
+            .join(' ')}
+        >
           <thead>
             <tr className="border-b border-[var(--color-secondary-outline)]">
               {effectiveSelection ? (
@@ -385,157 +584,32 @@ const DataGrid = <T,>({
             </tr>
           </thead>
 
-          <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan={colCount} className="px-6 py-10 text-center">
-                  {loadingMessage ?? (
-                    <div className="inline-flex items-center justify-center gap-2 text-sm text-[var(--color-secondary-grey-fonts)]">
-                      <Spinner className="h-4 w-4" />
-                      <span>Cargando...</span>
-                    </div>
-                  )}
-                </td>
-              </tr>
-            ) : data.length > 0 ? (
-              data.map((row, index) => {
-                const key = resolvedRowKeys[index];
-
-                return (
-                  <tr key={key} className="h-14 border-b border-[var(--color-secondary-outline)] last:border-b-0">
-                    {effectiveSelection ? (
-                      <td className={[selectionColumnClassName, 'p-0 text-center align-middle'].join(' ')}>
-                        <span className="relative inline-flex h-14 w-full items-center justify-center px-4">
-                          <input
-                            type="checkbox"
-                            checked={selectedKeySet.has(key)}
-                            onChange={() => handleToggleRow(key, Boolean(effectiveSelection.isRowDisabled?.(key)))}
-                            disabled={Boolean(effectiveSelection.isRowDisabled?.(key))}
-                            aria-label={effectiveSelection.rowAriaLabel?.(key) ?? `Select row ${key}`}
-                            className="
-                              peer
-                              h-6 w-6
-                              rounded-lg
-                              border
-                              border-[var(--color-secondary-outline)]
-                              appearance-none
-                              cursor-pointer
-                              checked:border-[var(--color-primary-purple)]
-                              checked:bg-[var(--color-primary-white)]
-                              transition-colors
-                              disabled:opacity-50
-                              disabled:cursor-not-allowed
-                            "
-                          />
-                          <svg
-                            viewBox="0 0 16 16"
-                            className="
-                              pointer-events-none
-                              absolute
-                              h-3 w-3
-                              opacity-0
-                              peer-checked:opacity-100
-                            "
-                          >
-                            <path
-                              d="M3 8.5L6.5 12L13 4"
-                              fill="none"
-                              stroke="var(--color-primary-purple)"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </span>
-                      </td>
-                    ) : null}
-                    {showLeadingGutter ? (
-                      <td className={[leadingGutterColumnClassName, 'p-0 align-middle'].join(' ')} />
-                    ) : null}
-
-                    {columns.map((column, columnIndex) => {
-                      const columnKey = resolveColumnKey(column, columnIndex);
-                      const contentAlign = resolveContentAlign(column);
-                      const alignClass = resolveAlignClass(contentAlign);
-                      return (
-                        <td
-                          key={`${key}-${columnKey}`}
-                          style={resolveColumnStyle(column, totalFlex)}
-                          className={[
-                            'p-0 text-sm text-[var(--color-primary-black)] align-middle',
-                            alignClass,
-                            column.cellClassName,
-                          ]
-                            .filter(Boolean)
-                            .join(' ')}
-                        >
-                          <div
-                            className={[
-                              'flex h-14 items-center px-2',
-                              resolveJustifyClass(contentAlign),
-                              column.cellContentClassName,
-                            ]
-                              .filter(Boolean)
-                              .join(' ')}
-                          >
-                            {resolveCell(column, row)}
-                          </div>
-                        </td>
-                      );
-                    })}
-
-                    {actions ? (
-                      <td
-                        style={resolveActionsColumnStyle(actions.columnWidth)}
-                        className={['whitespace-nowrap p-0 text-center align-middle', actions.cellClassName]
-                          .filter(Boolean)
-                          .join(' ')}
-                      >
-                        <OverflowMenu
-                          items={actions.items(row)}
-                          align={actions.align ?? 'end'}
-                          side={actions.side ?? 'bottom'}
-                          triggerClassName={[
-                            'inline-flex h-14 w-full items-center justify-center px-4',
-                            actions.triggerClassName,
-                          ]
-                            .filter(Boolean)
-                            .join(' ')}
-                          menuClassName={actions.menuClassName}
-                        />
-                      </td>
-                    ) : null}
-                  </tr>
-                );
-              })
-            ) : (
-              <tr>
-                <td
-                  colSpan={colCount}
-                  className="px-6 py-10 text-center text-sm text-[var(--color-secondary-grey-fonts)]"
-                >
-                  {emptyMessage}
-                </td>
-              </tr>
-            )}
-          </tbody>
+          <tbody>{bodyRows}</tbody>
         </table>
+        {showLoadingOverlay ? (
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-[rgba(255,255,255,0.35)] backdrop-blur-[1px]">
+            {resolvedLoadingContent}
+          </div>
+        ) : null}
       </div>
 
       {pagination ? (
         <footer className="flex items-center justify-end gap-4 border-t border-[var(--color-secondary-outline)] px-6 py-4">
           <span className="text-sm text-[var(--color-primary-black)]">
-            {pagination.pageLabel?.({ page: pagination.page, hasNext: pagination.hasNext }) ??
-              (pagination.pageCount != null
-                ? `${pagination.labels?.page ?? 'Page'} ${pagination.page + 1} ${pagination.labels?.of ?? 'of'} ${pagination.pageCount}`
-                : `${pagination.labels?.page ?? 'Page'} ${pagination.page + 1}`)}
+            {pagination.totalCount != null
+              ? `${paginationLabels?.results ?? 'Resultados'}: ${pagination.totalCount} · ${paginationLabels?.page ?? 'Pagina'} ${
+                  pagination.page + 1
+                }${pagination.pageCount != null ? ` ${paginationLabels?.of ?? 'de'} ${pagination.pageCount}` : ''}`
+              : pagination.pageCount != null
+                ? `${paginationLabels?.page ?? 'Pagina'} ${pagination.page + 1} ${paginationLabels?.of ?? 'de'} ${pagination.pageCount}`
+                : `${paginationLabels?.page ?? 'Pagina'} ${pagination.page + 1}`}
           </span>
           <div className="flex items-center gap-1 text-[var(--color-primary-black)]">
             <button
               type="button"
               onClick={() => pagination.onPageChange(0)}
               disabled={pagination.page <= 0}
-              aria-label={pagination.labels?.firstPageAriaLabel ?? 'First page'}
+              aria-label={paginationLabels?.firstPage ?? 'First page'}
               className="inline-flex h-8 w-8 items-center justify-center rounded-md disabled:cursor-not-allowed disabled:opacity-40"
             >
               <ChevronLeft double sizePx={18} />
@@ -544,7 +618,7 @@ const DataGrid = <T,>({
               type="button"
               onClick={() => pagination.onPageChange(Math.max(0, pagination.page - 1))}
               disabled={pagination.page <= 0}
-              aria-label={pagination.labels?.previousPageAriaLabel ?? 'Previous page'}
+              aria-label={paginationLabels?.previousPage ?? 'Previous page'}
               className="inline-flex h-8 w-8 items-center justify-center rounded-md disabled:cursor-not-allowed disabled:opacity-40"
             >
               <ChevronLeft sizePx={18} />
@@ -553,16 +627,21 @@ const DataGrid = <T,>({
               type="button"
               onClick={() => pagination.onPageChange(pagination.page + 1)}
               disabled={!pagination.hasNext}
-              aria-label={pagination.labels?.nextPageAriaLabel ?? 'Next page'}
+              aria-label={paginationLabels?.nextPage ?? 'Next page'}
               className="inline-flex h-8 w-8 items-center justify-center rounded-md disabled:cursor-not-allowed disabled:opacity-40"
             >
               <ChevronRight sizePx={18} />
             </button>
             <button
               type="button"
-              onClick={() => pagination.onPageChange(pagination.page + 1)}
-              disabled={!pagination.hasNext}
-              aria-label={pagination.labels?.lastPageAriaLabel ?? 'Last page'}
+              onClick={() => {
+                if (pagination.pageCount == null) return;
+                pagination.onPageChange(Math.max(0, pagination.pageCount - 1));
+              }}
+              disabled={
+                pagination.pageCount == null || pagination.pageCount <= 1 || pagination.page >= pagination.pageCount - 1
+              }
+              aria-label={paginationLabels?.lastPage ?? 'Last page'}
               className="inline-flex h-8 w-8 items-center justify-center rounded-md disabled:cursor-not-allowed disabled:opacity-40"
             >
               <ChevronRight double sizePx={18} />
