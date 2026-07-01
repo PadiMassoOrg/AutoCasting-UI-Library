@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import TextareaField from './TextareaField';
 
 const meta: Meta<typeof TextareaField> = {
-  title: 'Forms/Selection/TextareaField',
+  title: 'Forms/Fields/TextareaField',
   component: TextareaField,
   tags: ['autodocs'],
   args: {
