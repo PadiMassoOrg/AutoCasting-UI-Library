@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main, develop, 'release/**']
+  push:
+    branches: [main, develop, 'release/**']
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run lint
+
+      - run: npx prettier --check .
+
+      # scripts/fix-tailwind.mjs (run as part of `npm run build`) only ever downloads the
+      # macOS arm64 Tailwind CLI binary, which can't execute on this Linux runner. Pre-fetch
+      # the correct Linux binary so that script sees it already exists and skips its download.
+      - name: Fetch Tailwind CLI binary (Linux)
+        run: |
+          mkdir -p node_modules/.bin
+          curl -Lo node_modules/.bin/tailwindcss https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64
+          chmod +x node_modules/.bin/tailwindcss
+
+      - run: npm run build
