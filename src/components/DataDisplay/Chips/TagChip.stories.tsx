@@ -20,3 +20,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const Removable: Story = {
+  args: { onRemove: () => undefined },
+};
+
+export const Disabled: Story = {
+  args: { onRemove: () => undefined, disabled: true },
+};

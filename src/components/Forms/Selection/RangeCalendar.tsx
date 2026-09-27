@@ -13,6 +13,7 @@ type SharedProps = {
   displayMode?: 'inline' | 'dropdown';
   placeholder?: string;
   closeOnCommit?: boolean;
+  disabled?: boolean;
 };
 
 type SingleProps = SharedProps & {
@@ -61,6 +62,7 @@ export default function RangeCalendar(props: RangeCalendarProps) {
     displayMode = 'inline',
     placeholder = 'Seleccionar',
     closeOnCommit = true,
+    disabled = false,
   } = props;
 
   const minDate = React.useMemo(() => {
@@ -90,6 +92,10 @@ export default function RangeCalendar(props: RangeCalendarProps) {
       return next;
     });
   }, [props.value]);
+
+  useEffect(() => {
+    if (disabled) setIsOpen(false);
+  }, [disabled]);
 
   useEffect(() => {
     if (displayMode !== 'dropdown' || !isOpen) return;
@@ -138,7 +144,7 @@ export default function RangeCalendar(props: RangeCalendarProps) {
     locale,
     startMonth: startMonthLimit,
     endMonth: endMonthLimit,
-    disabled: [{ before: minDate }, { after: maxDate }],
+    disabled: disabled ? true : [{ before: minDate }, { after: maxDate }],
     formatters: {
       formatWeekdayName: (date: Date) =>
         weekdayLabels?.[date.getDay()] ?? date.toLocaleDateString(language, { weekday: 'short' }),
@@ -229,7 +235,12 @@ export default function RangeCalendar(props: RangeCalendarProps) {
   );
 
   const calendar = (
-    <div className="w-full overflow-hidden rounded-2xl border border-(--color-secondary-outline) bg-(--color-secondary-white)">
+    <div
+      aria-disabled={disabled || undefined}
+      className={`w-full overflow-hidden rounded-2xl border border-(--color-secondary-outline) bg-(--color-secondary-white) ${
+        disabled ? 'pointer-events-none opacity-60' : ''
+      }`}
+    >
       {isSingleProps(props) ? (
         <DayPicker
           {...sharedDayPickerProps}
@@ -276,7 +287,8 @@ export default function RangeCalendar(props: RangeCalendarProps) {
           <button
             type="button"
             onClick={() => setIsOpen((prev) => !prev)}
-            className={`relative h-12 w-full rounded-xl border border-(--color-secondary-outline) px-5 pr-10 text-left text-base transition-colors duration-100 ease-in-out focus:border-(--color-primary-purple) focus:outline-none focus:ring-0 ${
+            disabled={disabled}
+            className={`relative h-12 w-full rounded-xl border border-(--color-secondary-outline) px-5 pr-10 text-left text-base transition-colors duration-100 ease-in-out focus:border-(--color-primary-purple) focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:bg-(--color-secondary-offwhite) ${
               isSingleProps(props)
                 ? !props.value
                   ? 'text-(--color-secondary-grey)'
@@ -289,7 +301,7 @@ export default function RangeCalendar(props: RangeCalendarProps) {
           >
             {triggerLabel}
             <svg
-              className="pointer-events-none absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2"
+              className={`pointer-events-none absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 ${disabled ? 'opacity-40' : ''}`}
               viewBox="0 0 24 24"
               fill="none"
               aria-hidden="true"
@@ -298,7 +310,9 @@ export default function RangeCalendar(props: RangeCalendarProps) {
             </svg>
           </button>
 
-          {isOpen ? <div className="absolute left-0 right-0 top-[calc(100%+12px)] z-20">{calendar}</div> : null}
+          {isOpen && !disabled ? (
+            <div className="absolute left-0 right-0 top-[calc(100%+12px)] z-20">{calendar}</div>
+          ) : null}
         </div>
       ) : (
         calendar

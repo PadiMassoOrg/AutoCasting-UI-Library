@@ -47,7 +47,11 @@ export default function BooleanRadioGroup({
 
   const finalClassName = clsx('flex flex-col gap-1', className);
   const finalLegendClassName = clsx('text-[14px] font-semibold', legendClassName);
-  const finalOptionClassName = clsx('flex items-center gap-2 text-[14px] font-semibold', optionClassName);
+  const finalOptionClassName = clsx(
+    'flex items-center gap-2 text-[14px] font-semibold',
+    disabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer',
+    optionClassName
+  );
   const resolvedOrientation = orientation ?? (includeAnyOption ? 'vertical' : 'horizontal');
   const optionsClassName = clsx('mt-2 pl-1', {
     'flex flex-col gap-2': resolvedOrientation === 'vertical',
@@ -66,7 +70,7 @@ export default function BooleanRadioGroup({
         type="radio"
         checked={checked}
         disabled={disabled}
-        className="peer h-6 w-6 rounded-full border border-(--color-secondary-outline) appearance-none cursor-pointer checked:border-(--color-primary-purple) bg-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+        className="peer h-6 w-6 rounded-full border border-(--color-secondary-outline) appearance-none cursor-pointer checked:border-(--color-primary-purple) bg-white transition-colors disabled:cursor-not-allowed"
       />
       <span className="pointer-events-none absolute h-3 w-3 rounded-full bg-(--color-primary-purple) scale-0 peer-checked:scale-100 transition-transform" />
     </span>
@@ -91,7 +95,7 @@ export default function BooleanRadioGroup({
               name: groupName,
               onChange: () => onChange(anyNext),
             })}
-            <span className="cursor-pointer select-none">{anyOptionLabel}</span>
+            <span className="select-none">{anyOptionLabel}</span>
           </label>
         ) : null}
 
@@ -101,7 +105,7 @@ export default function BooleanRadioGroup({
             name: groupName,
             onChange: () => onChange(true),
           })}
-          <span className="cursor-pointer select-none">{yesLabel}</span>
+          <span className="select-none">{yesLabel}</span>
         </label>
 
         <label htmlFor={idNo} className={finalOptionClassName}>
@@ -110,7 +114,7 @@ export default function BooleanRadioGroup({
             name: groupName,
             onChange: () => onChange(false),
           })}
-          <span className="cursor-pointer select-none">{noLabel}</span>
+          <span className="select-none">{noLabel}</span>
         </label>
       </div>
 

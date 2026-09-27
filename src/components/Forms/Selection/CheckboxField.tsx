@@ -33,7 +33,7 @@ export default function CheckboxField({
           checked={checked}
           disabled={disabled}
           onChange={(e) => onCheckedChange(e.target.checked)}
-          className="peer h-6 w-6 rounded-lg border border-[var(--color-secondary-outline)] appearance-none cursor-pointer checked:border-[var(--color-primary-purple)] checked:bg-[var(--color-primary-white)] transition-colors disabled:cursor-not-allowed"
+          className="peer h-6 w-6 rounded-lg border border-[var(--color-secondary-outline)] appearance-none cursor-pointer checked:border-[var(--color-primary-purple)] checked:bg-[var(--color-primary-white)] transition-colors disabled:cursor-not-allowed disabled:opacity-60"
         />
         <svg
           viewBox="0 0 16 16"
