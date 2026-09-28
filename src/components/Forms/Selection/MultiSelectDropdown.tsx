@@ -17,6 +17,7 @@ type BaseProps<T> = {
   disableCloseOnClickOutside?: boolean;
   selectAllLabel?: string;
   selectionsLabel?: (count: number) => string;
+  disabled?: boolean;
 };
 
 type MultipleSelectProps = {
@@ -51,6 +52,7 @@ export default function MultiSelectDropdown<T>({
   disableCloseOnClickOutside = false,
   selectAllLabel = 'Select all',
   selectionsLabel = (count) => `${count} selections`,
+  disabled = false,
   ...rest
 }: MultiSelectDropdownProps<T>) {
   const single = isSingle(rest);
@@ -87,6 +89,10 @@ export default function MultiSelectDropdown<T>({
   useScrollExitOnEdge(panelRef, { forwardTo });
 
   useEffect(() => {
+    if (disabled) setOpen(false);
+  }, [disabled]);
+
+  useEffect(() => {
     if (!open || disableCloseOnClickOutside) return;
 
     const onPointerDown = (event: PointerEvent) => {
@@ -101,18 +107,25 @@ export default function MultiSelectDropdown<T>({
   }, [disableCloseOnClickOutside, open]);
 
   const containerBorder = error ? 'border-red-500' : 'border-[var(--color-secondary-outline)]';
+  const containerBackground = disabled ? 'bg-(--color-secondary-offwhite)' : 'bg-white';
   const errorId = useId();
   const describedBy = error ? `${errorId}-error` : undefined;
 
   return (
     <>
-      <div ref={containerRef} className={`w-full rounded-xl border ${containerBorder} bg-white ${className}`}>
+      <div
+        ref={containerRef}
+        className={`w-full rounded-xl border ${containerBorder} ${containerBackground} ${className}`}
+      >
         <button
           type="button"
-          className="cursor-pointer relative w-full h-12 rounded-xl px-6 py-3 text-left bg-white"
+          className={`relative w-full h-12 rounded-xl px-6 py-3 text-left ${
+            disabled ? 'cursor-not-allowed bg-transparent' : 'cursor-pointer bg-white'
+          }`}
           aria-expanded={open}
           aria-invalid={!!error}
           aria-describedby={describedBy}
+          disabled={disabled}
           onClick={() => setOpen((v) => !v)}
         >
           <div className="w-full flex items-center justify-between">
@@ -131,7 +144,7 @@ export default function MultiSelectDropdown<T>({
             </div>
 
             <svg
-              className={`pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 transition-transform ${open ? 'rotate-180' : ''}`}
+              className={`pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 transition-transform ${open ? 'rotate-180' : ''} ${disabled ? 'opacity-40' : ''}`}
               viewBox="0 0 24 24"
               fill="none"
               aria-hidden="true"

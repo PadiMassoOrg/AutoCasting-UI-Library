@@ -21,12 +21,13 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
         <select
           ref={ref}
           className={clsx(
-            'cursor-pointer w-full h-12 px-5 pr-10 rounded-xl text-base',
+            'peer cursor-pointer w-full h-12 px-5 pr-10 rounded-xl text-base',
             hasEmptyValue && 'text-base text-(--color-secondary-grey)',
             !hasEmptyValue && 'text-(--color-primary-black)',
             'border border-(--color-secondary-outline)',
             'focus:outline-none focus:ring-0 focus:border-(--color-primary-purple)',
             'appearance-none transition-colors duration-100 ease-in-out',
+            'disabled:cursor-not-allowed disabled:bg-(--color-secondary-offwhite)',
             className
           )}
           {...props}
@@ -46,7 +47,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
         </select>
 
         <svg
-          className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5"
+          className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 peer-disabled:opacity-40"
           viewBox="0 0 24 24"
           fill="none"
           aria-hidden="true"

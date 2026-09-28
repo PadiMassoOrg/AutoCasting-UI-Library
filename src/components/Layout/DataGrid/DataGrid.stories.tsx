@@ -163,3 +163,56 @@ export const Loading: Story = {
     </div>
   ),
 };
+
+type SortKey = 'stageName' | 'role';
+type SortState = { key: SortKey; direction: 'asc' | 'desc' } | null;
+
+const SortableDataGrid = () => {
+  const [sort, setSort] = useState<SortState>(null);
+
+  const toggle = (key: SortKey) =>
+    setSort((current) => {
+      if (current?.key !== key) return { key, direction: 'asc' };
+      return current.direction === 'asc' ? { key, direction: 'desc' } : null;
+    });
+
+  const sortedRows = useMemo(() => {
+    if (!sort) return rows;
+    const factor = sort.direction === 'asc' ? 1 : -1;
+    return [...rows].sort((a, b) => a[sort.key].localeCompare(b[sort.key]) * factor);
+  }, [sort]);
+
+  const sortableColumns: DataGridColumn<ApplicantRow>[] = [
+    {
+      id: 'stageName',
+      header: 'Nombre',
+      render: (row) => row.stageName,
+      sortable: true,
+      sortDirection: sort?.key === 'stageName' ? sort.direction : undefined,
+      onSort: () => toggle('stageName'),
+    },
+    {
+      id: 'role',
+      header: 'Rol',
+      render: (row) => row.role,
+      sortable: true,
+      sortDirection: sort?.key === 'role' ? sort.direction : undefined,
+      onSort: () => toggle('role'),
+    },
+    {
+      id: 'status',
+      header: 'Estado',
+      render: (row) => row.status,
+    },
+  ];
+
+  return (
+    <div className="p-4">
+      <DataGrid columns={sortableColumns} data={sortedRows} rowKey="id" />
+    </div>
+  );
+};
+
+export const Sortable: Story = {
+  render: () => <SortableDataGrid />,
+};

@@ -158,7 +158,7 @@ export default function MultiRadioGroupField({
                     toggle(value);
                   },
                 })}
-                <span className="cursor-pointer select-none">{opt.label}</span>
+                <span className="select-none">{opt.label}</span>
               </label>
             );
           })}

@@ -4,6 +4,7 @@ import type { OverflowMenuAlign, OverflowMenuItem, OverflowMenuSide } from '../.
 import { Label } from '../../Forms';
 import { Spinner } from '../../Feedback/Loading/Spinner';
 import { ChevronLeft, ChevronRight } from '../../Navigation/Indicators/Chevron';
+import SortIndicator from './SortIndicator';
 
 type DataGridAlign = 'left' | 'center' | 'right';
 
@@ -521,12 +522,18 @@ const DataGrid = <T,>({
                 const headerAlign = resolveHeaderAlign(column);
                 const alignClass = resolveAlignClass(headerAlign);
                 const isSortable = Boolean(column.sortable && column.onSort);
-                const sortIndicator =
-                  column.sortDirection === 'asc' ? ' ↑' : column.sortDirection === 'desc' ? ' ↓' : '';
+                const ariaSort = isSortable
+                  ? column.sortDirection === 'asc'
+                    ? 'ascending'
+                    : column.sortDirection === 'desc'
+                      ? 'descending'
+                      : 'none'
+                  : undefined;
 
                 return (
                   <th
                     key={columnKey}
+                    aria-sort={ariaSort}
                     style={resolveColumnStyle(column, totalFlex)}
                     className={[
                       'p-0 text-sm font-semibold text-[var(--color-primary-black)] align-middle',
@@ -549,10 +556,17 @@ const DataGrid = <T,>({
                         <button
                           type="button"
                           onClick={column.onSort}
-                          className="inline-flex items-center gap-1 hover:text-[var(--color-primary-purple)]"
+                          className={[
+                            'inline-flex min-w-0 items-center gap-1.5 rounded-sm cursor-pointer',
+                            'hover:text-[var(--color-primary-purple)]',
+                            'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary-purple)]',
+                            column.sortDirection ? 'text-[var(--color-primary-purple)]' : '',
+                          ]
+                            .filter(Boolean)
+                            .join(' ')}
                         >
-                          <span>{column.header}</span>
-                          <span>{sortIndicator}</span>
+                          <span className="truncate">{column.header}</span>
+                          <SortIndicator direction={column.sortDirection} />
                         </button>
                       ) : (
                         column.header

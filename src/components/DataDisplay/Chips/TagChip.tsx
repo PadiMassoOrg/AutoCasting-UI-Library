@@ -6,11 +6,19 @@ export type TagChipProps = {
   label: string;
   onRemove?: () => void;
   newItem?: boolean;
+  disabled?: boolean;
   className?: string;
   style?: CSSProperties;
 };
 
-export default function TagChip({ label, onRemove, newItem = false, className, style }: TagChipProps) {
+export default function TagChip({
+  label,
+  onRemove,
+  newItem = false,
+  disabled = false,
+  className,
+  style,
+}: TagChipProps) {
   return (
     <span
       className={clsx(
@@ -23,7 +31,12 @@ export default function TagChip({ label, onRemove, newItem = false, className, s
       style={style}
     >
       <span>{label}</span>
-      {onRemove && <Icon name="cross" variant={newItem ? 'primary' : 'default'} size={10} onClick={onRemove} />}
+      {onRemove &&
+        (disabled ? (
+          <Icon name="cross" variant="disabled" size={10} className="opacity-40" aria-disabled="true" />
+        ) : (
+          <Icon name="cross" variant={newItem ? 'primary' : 'default'} size={10} onClick={onRemove} />
+        ))}
     </span>
   );
 }
