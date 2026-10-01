@@ -19,6 +19,8 @@ export type UploadTileClasses = Partial<{
 export type UploadTileProps = {
   label?: React.ReactNode;
   value?: string | null;
+  /** Smaller version of `value` shown instead of it; if it fails to load, `value` is shown. Ignored with `previewUrl` or `renderPreview`. */
+  thumbnailUrl?: string | null;
   previewUrl?: string | null;
   onSelect: (files: File[] | File) => void;
   onClear?: () => void;
@@ -70,6 +72,7 @@ const UploadTile = forwardRef<HTMLDivElement, UploadTileProps>(function UploadTi
   {
     label,
     value,
+    thumbnailUrl,
     previewUrl,
     onSelect,
     onClear,
@@ -99,6 +102,7 @@ const UploadTile = forwardRef<HTMLDivElement, UploadTileProps>(function UploadTi
 ) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragOver, setDragOver] = useState(false);
+  const [failedThumbnailUrl, setFailedThumbnailUrl] = useState<string | null>(null);
 
   const openDialog = useCallback(() => {
     if (!disabled) inputRef.current?.click();
@@ -146,7 +150,11 @@ const UploadTile = forwardRef<HTMLDivElement, UploadTileProps>(function UploadTi
   const baseBorder = dashed ? 'border-1 border-dashed' : 'border';
   const dragCls = dragOver ? 'bg-gray-100 border-gray-400' : 'bg-gray-50 border-gray-300';
 
-  const displayUrl = withBust(previewUrl ?? value ?? undefined, bustKey);
+  const thumbnailSrc =
+    value && thumbnailUrl && !previewUrl && !renderPreview && thumbnailUrl !== failedThumbnailUrl
+      ? thumbnailUrl
+      : undefined;
+  const displayUrl = withBust(previewUrl ?? thumbnailSrc ?? value ?? undefined, bustKey);
   const hasImage = Boolean(displayUrl);
   const rootClickable = !disabled && !busy && !hasImage;
 
@@ -201,6 +209,7 @@ const UploadTile = forwardRef<HTMLDivElement, UploadTileProps>(function UploadTi
               loading="lazy"
               decoding="async"
               crossOrigin="anonymous"
+              onError={thumbnailSrc ? () => setFailedThumbnailUrl(thumbnailSrc) : undefined}
               className={clsx('h-full w-full', roundedClassName, classes?.preview)}
               style={{ objectFit }}
             />

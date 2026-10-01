@@ -16,6 +16,7 @@ export * from './components/Feedback/Toast';
 export * from './components/Forms';
 export * from './components/Media/Images/ImageCarousel';
 export * from './components/Media/Images/PhotoZoomOverlay';
+export * from './components/Media/Images/ThumbnailImage';
 export * from './components/Media/Video';
 export * from './components/Navigation/Indicators/Chevron';
 export * from './components/Navigation/ScrollToTop';

@@ -45,3 +45,19 @@ export const WithPreview: Story = {
     onClear: () => undefined,
   },
 };
+
+export const WithThumbnail: Story = {
+  args: {
+    value: previewUrl,
+    thumbnailUrl: previewUrl.replace('Preview', 'Thumbnail'),
+    onClear: () => undefined,
+  },
+};
+
+export const ThumbnailFallsBackToValue: Story = {
+  args: {
+    value: previewUrl,
+    thumbnailUrl: 'https://invalid.example/missing.thumb.webp',
+    onClear: () => undefined,
+  },
+};
